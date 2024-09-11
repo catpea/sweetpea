@@ -1,0 +1,28 @@
+.flip-horizontal::before {
+  transform: scaleX(-1); /* Flips the icon horizontally */
+}
+
+.flip-vertical::before {
+  transform: scaleY(-1); /* Flips the icon vertically */
+}
+
+.flip-both::before {
+  transform: scaleX(-1); /* Flips the icon horizontally */
+  transform: scaleY(-1); /* Flips the icon vertically */
+}
+
+.rotate-45::before {
+  transform: rotate(45deg);
+}
+
+.rotate-90::before {
+  transform: rotate(90deg);
+}
+
+.rotate-180::before {
+  transform: rotate(180deg);
+}
+
+.rotate-270::before {
+  transform: rotate(270deg);
+}

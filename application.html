@@ -1,0 +1,131 @@
+<loop>
+  <scene>
+
+    <program id="a" type="fetch">
+    <program id="b" type="bash">
+
+    <cable from="#a/#out" to="#b/#in1">
+    <cable from="#a/#out" to="#b/#in2">
+
+  </scene>
+</loop>
+
+
+<template id="scene">
+  <script>
+    class Main {
+      root;
+      constructor({root}){
+        this.root = root;
+      }
+      mount(){
+      }
+      destroy(){
+      }
+      say(el){
+        console.info('Hello from', el);
+      }
+    }
+  </script>
+    <div class="area position-relative overflow-hidden" is="fire" use="pan zoom" style="min-height: 60vh;">
+    <svg class="position-absolute w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+    <slot></slot>
+    <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group me-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
+      </div>
+      <div class="btn-group me-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<template id="fetch">
+
+  <script>
+    class Main {
+
+      root;
+      pipe;
+      url = "package.json";
+
+      constructor({root, pipe, data}){
+        this.root = root;
+        this.data = data;
+        this.pipe = pipe;
+      }
+
+      mount(){
+        this.root.on('play', async ()=>{
+          console.log('Fetch heard play!!!!!!');
+          try {
+            const response = await fetch(this.data.url.get());
+            if (!response.ok) {
+              throw new Error(`Response status: ${response.status}`);
+            }
+            const object = await response.json();
+            this.pipe.emit('out', {object})
+          } catch (error) {
+            console.error(error.message);
+          }
+        })
+      }
+
+      destroy(){
+      }
+
+      say(el){
+        console.info('Hello from', el);
+      }
+
+    }
+  </script>
+
+  <div class="card shadow" is="fire" use="drag resize select" style="width: 18rem; position: absolute; top: 50px; left: 50px;">
+    <div class="card-header drag-handle">
+      JSON Fetch
+    </div>
+
+    <ul class="list-group list-group-flush">
+
+      <li class="list-group-item">JSON Data<span id="out" class="position-absolute p-1 top-50 start-100 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-broadcast"></i></span></li>
+
+      <li class="list-group-item">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">url</span>
+          <input type="text" class="form-control" placeholder="file.json" aria-label="File Name" aria-describedby="basic-addon1" value="data.url">
+        </div>
+      </li>
+
+      <li class="list-group-item">...</li>
+    </ul>
+    <div class="card-footer text-wrap">
+      <small>Will download data from <span>???</span><bind url with="span"> upon play.</small>
+    </div>
+  </div>
+</template>
+
+<template id="bash">
+  <script>
+    class Main {
+    }
+  </script>
+  <div class="card shadow" is="fire" use="drag resize select" style="width: 18rem; position: absolute; top: 100px; left: 500px">
+    <div class="card-header drag-handle">
+      Featured
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">An item</li>
+      <li class="list-group-item">An item<span id="in1" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-bug"></i></span></li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+      <li class="list-group-item">An item<span id="in2" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-bell"></i></span></li>
+    </ul>
+  </div>
+</template>

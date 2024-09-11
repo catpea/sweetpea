@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sweetpea &middot; Signal and Web Component Enhanced Web Apps</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍈</text></svg>">
+    <style>
+      body {
+        background-color: #212529;
+      }
+      data-loop {
+        border: 1px dotted orange;
+      }
+    </style>
+  </head>
+  <script type="module">
+    import {signalize, Signal, install} from "./src/index.js";
+    install();
+    globalThis.root = signalize([
+      {
+        mode: 'primary',
+        name: 'Grandmother',
+        description: 'Outer Loop Text',
+        url: 'package.json',
+        children: [
+          {
+            component: 'stage',
+            mode: 'seondary',
+            name: 'Stage',
+            description: 'Visual Programming Language Stage',
+            children: [
+              //NOTE: only one daughter is shown in screenshot to keep things simple
+              {
+                component: 'node',
+                id: 'a',
+                mode: 'info',
+                name: 'Node #1',
+                description: 'Inner Inner Loop Text for Daughter #1',
+              },
+              {
+                component: 'node',
+                idnt: 'a',
+                mode: 'info',
+                name: 'Node #2',
+                description: 'Inner Inner Loop Text for Daughter #2',
+              },
+              {
+                component: 'line',
+                mode: 'warning',
+                name: 'Connection #2',
+                description: 'Inner Inner Loop Text for Daughter #2',
+                from: 'a/1',
+                from: 'b/0',
+              }
+            ] // close Mother's children (Daughters)
+          } // close mother
+        ] // close grandmother children
+      } // close grandmother
+    ]); // close root array (Signal Tree Root)
+  </script>
+  <body>
+    <data-root name="hello-world" context="root" url="./application.html"></data-root>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "sweetpea",
+  "version": "1.0.0",
+  "description": "Signal and Web Component Enhanced Web Apps",
+  "main": "src/index.js",
+  "scripts": {
+    "save": "git add .; git commit -m 'Updated Release'; git push; npm version patch; npm publish; git push;"
+  },
+  "keywords": [],
+  "author": "@catpea",
+  "license": "ISC"
+}
