@@ -26,7 +26,7 @@ export default class Application extends HTMLElement {
     .unfurlTemplate()
     .clearContent()
     .renderDelegate() // root subscription in application does not change
-    .log('Application Ready!')
+    .success('Application Ready!')
 
   }
 

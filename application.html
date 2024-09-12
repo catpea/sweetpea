@@ -1,11 +1,14 @@
 <loop>
+  <port>
+
   <scene>
 
-    <program id="a" type="fetch">
-    <program id="b" type="bash">
 
-    <cable from="#a/#out" to="#b/#in1">
-    <cable from="#a/#out" to="#b/#in2">
+  <program id="a" type="fetch">
+  <program id="b" type="bash">
+
+  <cable from="a:out" to="b:in1">
+  <cable from="a:out" to="b:in2">
 
   </scene>
 </loop>
@@ -87,7 +90,7 @@
     }
   </script>
 
-  <div class="card shadow" is="fire" use="drag resize select" style="width: 18rem; position: absolute; top: 50px; left: 50px;">
+  <div class="card shadow" is="fire" use="drag resize select" style="width: 18rem; position: absolute; top: 150px; left: 50px;">
     <div class="card-header drag-handle">
       JSON Fetch
     </div>
@@ -97,6 +100,11 @@
       <li class="list-group-item">JSON Data<span id="out" class="position-absolute p-1 top-50 start-100 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-broadcast"></i></span></li>
 
       <li class="list-group-item">
+
+
+        <port id="out2" icon="lightning">
+
+
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">url</span>
           <input type="text" class="form-control" placeholder="file.json" aria-label="File Name" aria-describedby="basic-addon1" value="data.url">
@@ -128,4 +136,20 @@
       <li class="list-group-item">An item<span id="in2" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-bell"></i></span></li>
     </ul>
   </div>
+</template>
+
+<template id="port">
+  <script>
+    class Main {
+      root;
+      pipe;
+      data;
+      constructor({root, pipe, data}){
+        this.root = root;
+        this.data = data;
+        this.pipe = pipe;
+      }
+    }
+  </script>
+  <span id="{{id}}" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
 </template>

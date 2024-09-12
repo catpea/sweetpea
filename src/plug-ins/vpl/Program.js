@@ -21,6 +21,7 @@ export default class Program extends HTMLElement {
     .createElementPipe()
     .wrapAttributeEvents()
     .bindInputs()
+    .bindDoubleCurly()
 
   }
 

@@ -15,7 +15,8 @@ export default class VplSystem extends System {
   #line;
 
   #scripts = [];
-  #pipe;
+  pipe;
+  klass;
 
   locateSvg(){
 
@@ -61,6 +62,7 @@ export default class VplSystem extends System {
     const id = `#${this.host.tagName.toLowerCase().split('-')[1]}`;
     const template = this.getApplication().shadowRoot.querySelector(id);
     this.template = template.content.cloneNode(true);
+    console.log(this.host.tagName, this.template);
     return this;
   }
 
@@ -79,20 +81,21 @@ export default class VplSystem extends System {
   }
 
   createElementPipe(){
-      this.#pipe = new EventEmitter();
+      this.pipe = new EventEmitter();
       return this;
 
   }
 
   wrapAttributeEvents(){
+
     const classContext = {
       root: this.getApplication().pipe,
-      pipe: this.#pipe,
+      pipe: this.pipe,
       data: this.context,
     };
     // theis is the embeded script's class
     const strContextClass = `${this.#scripts[0]}\n return new Main(this);`;
-    const objContextClass = new Function(strContextClass).call(classContext);
+    this.klass = new Function(strContextClass).call(classContext);
     const supportedEvents = ['click'];
     for (const name of supportedEvents) {
       const attributeQuery = `[on${name}]`
@@ -106,13 +109,13 @@ export default class VplSystem extends System {
         match.addEventListener(name, ()=>{
           const codeFunction = new Function(`return ${code}`);
           // execute attribute code in context of class + retrieve user funcion (if any)
-          const userFuncion = codeFunction.call(objContextClass);
+          const userFuncion = codeFunction.call(this.klass);
           // execute user funcion
           if (userFuncion instanceof Function) userFuncion(match, this);
         });
       });
     } // supportedEvents
-    if('mount' in objContextClass) objContextClass.mount();
+    if('mount' in this.klass) this.klass.mount();
     return this;
   }
 
@@ -132,6 +135,46 @@ export default class VplSystem extends System {
       }
     });
     return this;
+  }
+
+  bindDoubleCurly(){
+    const allElements = this.host.shadowRoot.querySelectorAll('*');
+    allElements.forEach(element => {
+      if (element.hasAttributes()) {
+         for (const attr of element.attributes) {
+           const dependencies = this.extractCurlyDependencies( attr.value );
+           console.log(`dependencies ${this.host.tagName}`, dependencies );
+           for (const key of dependencies) {
+             console.log({key}, this.context);
+             const subscription = this.context[key].subscribe(v=>element.setAttribute(attr.name, this.interpolateCurly(attr.value, this.context)));
+             this.subscriptions.push( {type:'set input[value]', id:key, subscription} );
+           }
+         }
+      }
+      console.log({element});
+    });
+    return this;
+  }
+
+  extractCurlyDependencies(template) {
+    const dependencies = [];
+    // Regular expression to match placeholders in the format ${property} or {{property}}
+    const placeholderPattern = /{{([^}]+)}}|\${([^}]+)}/g;
+    // Function to handle replacement
+    const replaceFunction = (match, property) => dependencies.push(property);
+    // Replace all placeholders in the template string using replaceFunction
+    template.replace(placeholderPattern, replaceFunction);
+    return dependencies;
+  }
+
+  interpolateCurly(template, context) {
+    // Regular expression to match placeholders in the format ${property} or {{property}}
+    const placeholderPattern = /{{([^}]+)}}|\${([^}]+)}/g;
+    // Function to handle replacement
+    const replaceFunction = (match, property) => context[property].get();
+    // Replace all placeholders in the template string using replaceFunction
+    const interpolatedString = template.replace(placeholderPattern, replaceFunction);
+    return interpolatedString;
   }
 
 
@@ -216,61 +259,36 @@ export default class VplSystem extends System {
       return cssObject;
   }
 
-//   monitorPosition(attributeName, fun){
-// this.monitorPosition2(attributeName, fun);
-//     const observer = new MutationObserver((mutations) => {
-//       this.monitorPosition2(attributeName, fun);
-//     });
-//
-//     observer.observe(this.host.shadowRoot.host.parentNode, {
-//       childList: true, // Observe direct children additions and removals
-//       subtree: false  // Do not observe subtree changes
-//     });
-//
-//     this.subscriptions.push( {type:'ChildObserver', id:'ancestor', subscription:()=>observer.disconnect()} );
-//
-//   }
 
 
 
 
   monitorPosition(attributeName, fun){
 
-    //
-    // if(this.monitoring){
-    //   // already monitoring
-    //   return this;
-    // }
+    let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
 
-    let [primary, secondary] = this.host.getAttribute(attributeName).split('/');
-    // let targetElement = null;
-    ////console.log({primary, secondary});
-
-    const doc = this.host.shadowRoot.host.parentNode;
-    const targetElement2 = doc.querySelector(primary);
-    const targetElement = targetElement2.shadowRoot.querySelector(secondary);
+    const sceneComponent = this.host.shadowRoot.host.parentNode;
+    const programComponent = sceneComponent.querySelector('#'+componentId);
+    const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
 
 
-
-    if(!targetElement){
-      ////console.log(`${this.host.tagName}, Unable to locate targetElement via selector ${selector}`, this.host.shadowRoot.host.parentNode.innerHTML);
+    if(!portComponent){
+      this.danger(`${this.host.tagName}, Unable to locate portComponent via selector ${componentId}:${portId}`, 'danger');
       return this;
-    }else{
-      ////console.log('GOTIT', targetElement);
     }
 
     // this.monitoring = true;
 
     const calculatorFunction = ()=> {
-      const {x,y, width, height} = targetElement.getBoundingClientRect();
+      const {x,y, width, height} = portComponent.getBoundingClientRect();
       fun(x+width/2, y+height/2);
     }
 
     const resizeObserver = new ResizeObserver( entries => calculatorFunction() );
-    this.resizableAncestors(targetElement).forEach(ancestor=>resizeObserver.observe(ancestor))
+    this.resizableAncestors(portComponent).forEach(ancestor=>resizeObserver.observe(ancestor))
     this.subscriptions.push( {type:'ResizeObserver', id:'resizable-ancestors', subscription:()=>resizeObserver.disconnect()} );
 
-    this.movableAncestors(targetElement).forEach(ancestor=>{
+    this.movableAncestors(portComponent).forEach(ancestor=>{
       const mutationObserver = new MutationObserver( mutations => {
         for (let mutation of mutations) {
           if (mutation.type === 'attributes' && mutation.attributeName === 'style') {

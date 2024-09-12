@@ -9,10 +9,18 @@ export default class Port extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log('PORT!');
     if(this.#system.ready) this.#system
-    .setContextFromString()
     .attachShadow()
-    .renderValue()
+    .setContextFromString()
+    .adoptCss()
+    .injectTemplateFromTagName()
+    .consumeScript()
+    .normalizeTemplate()
+    .unfurlTemplate()
+    .renderDelegate()
+    .wrapAttributeEvents()
+   .bindDoubleCurly()
   }
 
   disconnectedCallback() {

@@ -1,0 +1,203 @@
+[
+  {
+    "title": "Introduction",
+    "sections": [
+      "Hello world",
+      "Dynamic attributes",
+      "Styling",
+      "Nested components",
+      "HTML tags"
+    ]
+  },
+  {
+    "title": "Reactivity",
+    "sections": [
+      "Reactive assignments",
+      "Reactive declarations",
+      "Reactive statements"
+    ]
+  },
+  {
+    "title": "Props",
+    "sections": [
+      "Declaring props",
+      "Default values",
+      "Spread props"
+    ]
+  },
+  {
+    "title": "Logic",
+    "sections": [
+      "If blocks",
+      "Else blocks",
+      "Else-if blocks",
+      "Each blocks",
+      "Keyed each blocks",
+      "Await blocks"
+    ]
+  },
+  {
+    "title": "Events",
+    "sections": [
+      "DOM events",
+      "Inline handlers",
+      "Event modifiers",
+      "Component events",
+      "Event forwarding",
+      "DOM event forwarding"
+    ]
+  },
+  {
+    "title": "Bindings",
+    "sections": [
+      "Text inputs",
+      "Numeric inputs",
+      "Checkbox inputs",
+      "Group inputs",
+      "Textarea inputs",
+      "File inputs",
+      "Select bindings",
+      "Select multiple",
+      "Each block bindings",
+      "Media elements",
+      "Dimensions",
+      "bind:this={canvas}",
+      "Component bindings"
+    ]
+  },
+  {
+    "title": "Lifecycle",
+    "sections": [
+      "onMount",
+      "onDestroy",
+      "beforeUpdate and afterUpdate",
+      "tick"
+    ]
+  },
+  {
+    "title": "Stores",
+    "sections": [
+      "Writable stores",
+      "Auto-subscriptions",
+      "Readable stores",
+      "Derived stores",
+      "Custom stores"
+    ]
+  },
+  {
+    "title": "Motion",
+    "sections": [
+      "Tweened",
+      "Spring"
+    ]
+  },
+  {
+    "title": "Transitions",
+    "sections": [
+      "The transition directive",
+      "Adding parameters",
+      "In and out",
+      "Custom CSS transitions",
+      "Custom JS transitions",
+      "Transition events",
+      "Deferred transitions"
+    ]
+  },
+  {
+    "title": "Animations",
+    "sections": [
+      "The animate directive"
+    ]
+  },
+  {
+    "title": "Easing",
+    "sections": [
+      "Ease Visualiser"
+    ]
+  },
+  {
+    "title": "SVG",
+    "sections": [
+      "Clock",
+      "Bar chart",
+      "Area chart",
+      "Scatterplot",
+      "SVG transitions"
+    ]
+  },
+  {
+    "title": "Actions",
+    "sections": [
+      "The use directive",
+      "Adding parameters",
+      "A more complex action"
+    ]
+  },
+  {
+    "title": "Classes",
+    "sections": [
+      "The class directive",
+      "Shorthand class directive"
+    ]
+  },
+  {
+    "title": "Component composition",
+    "sections": [
+      "Slots",
+      "Slot fallbacks",
+      "Named slots",
+      "Slot props",
+      "Conditional Slots",
+      "Modal"
+    ]
+  },
+  {
+    "title": "Context API",
+    "sections": [
+      "setContext and getContext"
+    ]
+  },
+  {
+    "title": "Special elements",
+    "sections": [
+      "<svelte:self>",
+      "<svelte:component>",
+      "<svelte:element>",
+      "<svelte:window>",
+      "<svelte:window> bindings",
+      "<svelte:document>",
+      "<svelte:body>",
+      "<svelte:head>"
+    ]
+  },
+  {
+    "title": "Module context",
+    "sections": [
+      "Named exports"
+    ]
+  },
+  {
+    "title": "Debugging",
+    "sections": [
+      "The @debug tag"
+    ]
+  },
+  {
+    "title": "7GUIs",
+    "sections": [
+      "Counter",
+      "Temperature Converter",
+      "Flight booker",
+      "Timer",
+      "CRUD",
+      "Circle Drawer"
+    ]
+  },
+  {
+    "title": "Miscellaneous",
+    "sections": [
+      "Hacker News",
+      "Immutable data"
+    ]
+  }
+]

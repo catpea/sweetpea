@@ -13,7 +13,7 @@ import Fire from './plug-ins/fire/Fire.js';
 // For Export
 import Signal      from './plug-ins/variables/Signal.js';
 
-async function install(prefix='data', css=['style.css', './bootstrap.min.css','bootstrap-icons.min.css']){
+async function install(prefix='data', css=['css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css']){
 
   for (const url of css) {
     const response = await fetch(url);

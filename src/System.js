@@ -1,16 +1,16 @@
 class UI {
 
-  alert(message='', title='', type='primary', icon='info-circle'){ //exclamation-triangle
+  alert(message='', title='', type='primary', icon='info-circle', accent='warning'){ //exclamation-triangle
 
     const alert = document.createElement('div');
     alert.classList.add('alert', `alert-${type}`, 'mb-3');
 
     const heading = document.createElement('h4');
-    heading.classList.add('alert-heading');
+    heading.classList.add('alert-heading', `text-${accent}`);
     heading.append(title)
 
     const graphic = document.createElement('i');
-    graphic.classList.add('bi', `bi-${icon}`, 'fs-3', `text-${type}`, 'pe-2');
+    graphic.classList.add('bi', `bi-${icon}`, 'fs-3', `text-${accent}`, 'pe-2');
 
     if(title) alert.append(heading);
     alert.append(graphic, message);
@@ -137,11 +137,14 @@ export default class System {
     let html = await response.text();
 
     for (const name of this.#voidTags) {
-      const seek = new RegExp(`<${name} `, 'g');
-      html = html.replace(seek, `<embed ${name} `);
+      const seek1 = new RegExp(`<${name} `, 'g');
+      html = html.replace(seek1, `<embed ${name} `);
+      const seek2 = new RegExp(`<${name}>`, 'g');
+      html = html.replace(seek2, `<embed ${name}>`);
     }
     html = html.replace(/is="fire" /g, 'is="data-fire"');
     const container = document.createElement('div');
+    console.log(html);
     container.innerHTML = html.trim();
     this.template = container.children;
     return this;
@@ -330,7 +333,7 @@ export default class System {
 
     //console.log('allTags', this.#allTags);
       for (const tag of this.#allTags) {
-        // console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
+        console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
 
 
         for (const el of templateClone.querySelectorAll(`data-${tag}`)) {
@@ -345,7 +348,7 @@ export default class System {
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          // console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
         }
 
 
@@ -364,7 +367,9 @@ export default class System {
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          // console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+
         }
 
 
@@ -540,7 +545,7 @@ export default class System {
     // }
 
     let corona = document.createElement('div');
-    corona.classList.add(...'border border-primary rounded'.split(' '))
+    corona.classList.add(...'border border-primary rounded mb-3'.split(' '))
     let templateClone = this.template.cloneNode(true);
     corona.appendChild(templateClone);
 
@@ -572,10 +577,26 @@ export default class System {
 
 
 
+  success(message){
+    this.log(message, 'Success', 'success', 'yin-yang');
+  }
 
-  log(message, context='info'){
-    const alert = this.#ui.alert(message);
-    this.host.shadowRoot.appendChild(alert);
+  danger(message){
+    this.log(message, 'Danger', 'danger', 'lightning');
+  }
+
+  warning(message){
+    this.log(message, 'Warning', 'warning', 'umbrella');
+  }
+
+  info(message){
+    this.log(message, 'Info', 'info', 'paperclip');
+  }
+
+
+  log(message, title, context='info', icon){
+    const alert = this.#ui.alert(message,title,context,icon);
+    this.getApplication().shadowRoot.appendChild(alert);
     return this;
   };
 
