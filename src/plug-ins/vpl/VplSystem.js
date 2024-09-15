@@ -1,5 +1,5 @@
 import espree from "../../../bundle.js";
-//console.log(espree);
+import Signal from '../variables/Signal.js';
 
 import System from '../../System.js';
 import EventEmitter from '../event-emitter/EventEmitter.js';
@@ -64,7 +64,7 @@ export default class VplSystem extends System {
   injectTemplateFromTagName(){
     const id = `#${this.host.tagName.toLowerCase().split('-')[1]}`;
     const template = this.getApplication().shadowRoot.querySelector(id);
-    console.log(this.host.tagName, 'injectTemplateFromTagName' , this.template);
+    ///console.log(this.host.tagName, 'injectTemplateFromTagName' , this.template);
     this.template = template.content.cloneNode(true);
     return this;
   }
@@ -78,7 +78,7 @@ export default class VplSystem extends System {
        this.#scripts.push(scriptContent);
        script.remove()
      });
-     //////console.log('Consumed scripts', this.#scripts);
+     /////////console.log('Consumed scripts', this.#scripts);
     return this;
 
   }
@@ -124,9 +124,10 @@ export default class VplSystem extends System {
 
   bindInputs(){
     const standardInputs = this.host.shadowRoot.querySelectorAll('input[value^="data"]');
+    console.log('bindInputs', standardInputs);
     standardInputs.forEach(input => {
       const key = input.getAttribute('value').split('.',2)[1];
-      //console.log({key});
+      /////console.log({key});
       if(this.context[key]){
         // send data from signal to input field
         const subscription = this.context[key].subscribe(v=>input.value = v);
@@ -142,19 +143,32 @@ export default class VplSystem extends System {
 
   bindDoubleCurly(){
     const allElements = this.host.shadowRoot.querySelectorAll('*');
+    console.log('bindDoubleCurly', allElements);
     allElements.forEach(element => {
       if (element.hasAttributes()) {
          for (const attr of element.attributes) {
            const originalValue = attr.value;
            const dependencies = this.extractCurlyDependencies( attr.value );
+
+
+           const compositeContext = {};
+
            for (const key of dependencies) {
-             if(!this.context[key]) console.log(`Key ${key} is missing!`);
-             const subscription = this.context[key].subscribe(v=>element.setAttribute(attr.name, this.interpolateCurly(originalValue, this.context)));
+             if(!this.context[key]){
+               compositeContext[key] = new Signal(this.host.getAttribute(key)); // TODO: monitor attribute in host for changes
+             }else{
+               compositeContext[key] = this.context[key];
+             }
+           }
+
+
+           for (const key of dependencies) {
+             const subscription = compositeContext[key].subscribe( v=>element.setAttribute(attr.name, this.interpolateCurly(originalValue, compositeContext)) );
              this.subscriptions.push( {type:'set input[value]', id:key, subscription} );
            }
          }
       }
-      //console.log({element});
+      /////console.log({element});
     });
     return this;
   }
@@ -166,7 +180,7 @@ export default class VplSystem extends System {
     const placeholderPattern = /{{((?:[^{}]|{[^{}]*})*)}}/g; // EXPERIMENTAL
     // Function to handle replacement
     const replaceFunction = (match, property) => {
-      //console.log('QQQ ssss', property, arguments);
+      /////console.log('QQQ ssss', property, arguments);
       const tokens = espree.tokenize(property, { ecmaVersion: 2020 });
       const properties = tokens.filter(o=>o.type==='Identifier').map(o=>o.value)
       dependencies.push(...properties);
@@ -193,8 +207,8 @@ export default class VplSystem extends System {
       const compositeProgram = this.billOfValues(context) + 'return ' + property;
       const result = new Function(compositeProgram).call(context);
 
-      //console.log('XXX', compositeProgram);
-      //console.log('XXX', { result });
+      /////console.log('XXX', compositeProgram);
+      /////console.log('XXX', { result });
       return result;
 
     };
@@ -238,9 +252,9 @@ export default class VplSystem extends System {
     const fromPortName = fromPort.getAttribute('id');
     const toPortName = toPort.getAttribute('id');
 
-    //console.log(`Sending packet from ${fromProgram.getAttribute('id')} on port ${fromPortName}`);
-    //console.log({fromProgram});
-    //console.log({toProgram});
+    /////console.log(`Sending packet from ${fromProgram.getAttribute('id')} on port ${fromPortName}`);
+    /////console.log({fromProgram});
+    /////console.log({toProgram});
 
     fromProgram.pipe.on(fromPortName, packet=>toProgram.pipe.send(toPortName, packet));
 
@@ -250,15 +264,15 @@ export default class VplSystem extends System {
     let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
     // const sceneComponent = this.host.shadowRoot.host.parentNode.parentNode.parentNode.parentNode
     // const sceneComponent = this.getScene()
-    // console.log(this.host.tagName, {sceneComponent});
-    // console.log({componentId, portId});
+    // ///console.log(this.host.tagName, {sceneComponent});
+    // ///console.log({componentId, portId});
     // const programComponent = this.getScene().registry.get(componentId)
     //
     // // const programComponent = sceneComponent.querySelector('#'+componentId);
-    // console.log('getProgramPipe', programComponent.shadowRoot);
-    // console.log({programComponent});
+    // ///console.log('getProgramPipe', programComponent.shadowRoot);
+    // ///console.log({programComponent});
     const sceneComponent = this.host.parentNode;
-    console.log(sceneComponent);
+    ///console.log(sceneComponent);
     const programComponent = sceneComponent.querySelector('#'+componentId);
     const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
     return [programComponent, portComponent];
@@ -286,11 +300,12 @@ export default class VplSystem extends System {
 
   resizableAncestors(el) {
     //console('resizableAncestors', el);
+    if(!el) throw new Error('resizableAncestors requires a starting element to search upwards')
     const response = [];
     const isDataRoot = (el) => el?.tagName?.toLowerCase() !== 'data-root';
 
     while ((el = el.parentNode||el.host) && isDataRoot(el) && el !== document) {
-
+      console.log('XXXXXX', );
       if(el instanceof Element){
         let style = getComputedStyle(el);
         response.push(el);
@@ -328,7 +343,7 @@ export default class VplSystem extends System {
     // const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
     const [programComponent, portComponent] = this.getProgramPipe(attributeName);
     const portPad = portComponent.shadowRoot.querySelector('.port-pad');
-    //console.log({portPad});
+    console.log('portComponent', portComponent.shadowRoot, {portPad});
 
     if(!portComponent){
       // this.danger(`${this.host.tagName}, Unable to locate portComponent via selector ${componentId}:${portId}`, 'danger');

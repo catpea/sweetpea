@@ -32,10 +32,10 @@ export default class System {
   #context;
   set context(v){
     this.#context = v;
-    ////console.log(`${this.host.tagName} set context to:`, this.#context);
+    ///////console.log(`${this.host.tagName} set context to:`, this.#context);
   }
   get context(){
-    ////console.log(`${this.host.tagName} read context`, this.#context);
+    ///////console.log(`${this.host.tagName} read context`, this.#context);
     return this.#context
   }
 
@@ -52,7 +52,7 @@ export default class System {
   constructor(host) {
     this.host = host;
     this.#allTags = this.#allTags.concat(this.#voidTags, this.#containerTags);
-    ////console.log(this.#allTags);
+    ///////console.log(this.#allTags);
   }
 
   get ready(){
@@ -151,7 +151,7 @@ export default class System {
     }
     html = html.replace(/is="fire" /g, 'is="data-fire"');
     const container = document.createElement('div');
-    //console.log(html);
+    /////console.log(html);
     container.innerHTML = html.trim();
     this.template = container.children;
     return this;
@@ -161,11 +161,11 @@ export default class System {
   normalizeTemplate(){
     let templateChildren;
 
-    console.log(this.host.tagName,  this.template, 'normalizeTemplate', this.template )
-    ////console.log('normalizeTemplate typeof this.template:', typeof this.template )
-    ////console.log('normalizeTemplate Array.isArray(this.template):', Array.isArray(this.template) )
-    ////console.log('normalizeTemplate instanceof DocumentFragment:', this.template instanceof DocumentFragment )
-    ////console.log('normalizeTemplate instanceof HTMLCollection:', this.template instanceof HTMLCollection )
+    ///console.log(this.host.tagName,  this.template, 'normalizeTemplate', this.template )
+    ///////console.log('normalizeTemplate typeof this.template:', typeof this.template )
+    ///////console.log('normalizeTemplate Array.isArray(this.template):', Array.isArray(this.template) )
+    ///////console.log('normalizeTemplate instanceof DocumentFragment:', this.template instanceof DocumentFragment )
+    ///////console.log('normalizeTemplate instanceof HTMLCollection:', this.template instanceof HTMLCollection )
 
     if( Array.isArray(this.template) ){
       templateChildren = this.template;
@@ -175,7 +175,7 @@ export default class System {
       templateChildren = [...this.template.children];
     }
 
-    console.log(this.host.tagName, {templateChildren});
+    ///console.log(this.host.tagName, {templateChildren});
 
     let response;
 
@@ -201,7 +201,7 @@ export default class System {
   }
 
   debugTemplate(){
-    ////console.debug(`debugTemplate: BBB ${this.host.tagName} TEMPLATE!`, this.template?.outerHTML, this.host.shadowRoot.querySelector('slot').assignedNodes());
+    ///////console.debug(`debugTemplate: BBB ${this.host.tagName} TEMPLATE!`, this.template?.outerHTML, this.host.shadowRoot.querySelector('slot').assignedNodes());
 
     return this;
   }
@@ -339,7 +339,7 @@ export default class System {
 
   renderDelegate({above}={above:false}){
 
-    if(!this.template) console.log(this.host.tagName, 'template was empty');
+    if(!this.template) ///console.log(this.host.tagName, 'template was empty');
     if(!this.template) return this;
 
     const item = this.context || {};
@@ -377,9 +377,9 @@ export default class System {
     //   source.replaceWith(replacement);
     // });
 
-    ////console.log('allTags', this.#allTags);
+    ///////console.log('allTags', this.#allTags);
       for (const tag of this.#allTags) {
-        //console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
+        /////console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
 
 
         for (const el of templateClone.querySelectorAll(`data-${tag}`)) {
@@ -390,11 +390,11 @@ export default class System {
              parents.push(parent)
              parent = parent.parentNode;
            }
-           // //console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
+           // /////console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          //console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          /////console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
         }
 
 
@@ -402,19 +402,19 @@ export default class System {
            let parent = el.parentNode;
            const parents = [];
            while(parent !== this.host){
-             // //console.log(this.host.tagName, parent.tagName, templateClone.tagName, parent == templateClone);
+             // /////console.log(this.host.tagName, parent.tagName, templateClone.tagName, parent == templateClone);
              // if(parent == templateClone) break;
              parents.push(parent)
              parent = parent.parentNode;
              // if(!parent) break;
            }
-           //console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
+           /////console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
 
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          // //console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
-          //console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          // /////console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          /////console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
 
         }
 
@@ -471,7 +471,7 @@ export default class System {
       return this;
     }
 
-    //console.debug(`renderContext: FROM ${this.host.tagName.toLowerCase()}/${this.host.getAttribute('name')}`, this.context,);
+    /////console.debug(`renderContext: FROM ${this.host.tagName.toLowerCase()}/${this.host.getAttribute('name')}`, this.context,);
     //console(this.context);
     const subscription = this.context.subscribe(contextObject=>this.renderTemplate(contextObject))
     this.subscriptions.push( {type:'context', id:'main', subscription} );
@@ -479,12 +479,12 @@ export default class System {
   }
 
   renderContextDump(){
-    const code = this.billOfValues(this.context);
-    let dump = document.createElement('pre');
-    dump.classList.add(...'border border-danger rounded mb-3'.split(' '))
-    dump.append(code);
+    // const code = this.billOfValues(this.context);
+    // let dump = document.createElement('pre');
+    // dump.classList.add(...'border border-danger rounded mb-3'.split(' '))
+    // dump.append(code);
+    // this.host.shadowRoot.appendChild(dump);
     return this;
-    this.host.shadowRoot.appendChild(dump);
   }
 
   generateTemplate(){
@@ -502,7 +502,7 @@ export default class System {
     const instanceComponent = document.createElement(`${this.#prefix}-${componentName}`);
     for (const attributeName of componentAttributeList) {
 
-      console.log(`${this.host.tagName} fetching ${attributeName} from context`, this.context);
+      ///console.log(`${this.host.tagName} fetching ${attributeName} from context`, this.context);
 
       const attributeValue = this.context[attributeName].get();
       instanceComponent.setAttribute(attributeName, attributeValue)
@@ -528,15 +528,15 @@ export default class System {
   //   corona.append(conditionFuncion, '\n', result)
   //   this.host.shadowRoot.appendChild(corona);
   //
-  //   console.error('NOT USING SIGNALS TODO!!!!!!!!');
+  //   ///console.error('NOT USING SIGNALS TODO!!!!!!!!');
   //   let instanceComponent = document.createElement(`${this.#prefix}-${componentName}`);
   //   for (const attributeName of componentAttributeList) {
-  //     console.log(attributeName);
+  //     ///console.log(attributeName);
   //     const attributeValue = this.context[attributeName].get();
   //     instanceComponent.setAttribute(attributeName, attributeValue)
   //   }
   //   this.host.shadowRoot.appendChild(instanceComponent);
-  //   console.log(instanceComponent);
+  //   ///console.log(instanceComponent);
   // }
 
   renderValue(){
@@ -544,7 +544,7 @@ export default class System {
     const positionalArguments = this.host.getAttribute('arguments');
 
     if(!positionalArguments){
-      console.error(this.host);
+      ///console.error(this.host);
     }
 
     const withSelector = this.host.getAttribute('with');
@@ -552,7 +552,7 @@ export default class System {
     const [propertyName] = positionalArguments.split(' ');
     const matches = upwards(this.host, withSelector);
 
-    //console.log(`${this.host.tagName} -> ${propertyName} with ${withSelector} ... CONTEXT:`, this.context);
+    /////console.log(`${this.host.tagName} -> ${propertyName} with ${withSelector} ... CONTEXT:`, this.context);
 
     //console({limitSpecifier});
     if(limitSpecifier !== null){
@@ -678,7 +678,7 @@ export default class System {
         }else if(attr.name == 'attributes' && attr.value){
           const componentAttributeList = attr.value.split(/ /);
           for (const attributeName of componentAttributeList) {
-            console.log('YYY', listItem, attributeName);
+            ///console.log('YYY', listItem, attributeName);
             const attributeValue = listItem.get()[attributeName].get();
             replacement.setAttribute(attributeName, attributeValue)
           }
@@ -793,7 +793,7 @@ export default class System {
       response = upwards(this.host, 'data-root').pop();
     }
 
-    console.log(`${this.host.tagName} getApplication()`, response);
+    ///console.log(`${this.host.tagName} getApplication()`, response);
 
     return response;
   }
@@ -812,9 +812,11 @@ export default class System {
     const valueSnapshot = [];
     for (const variableName in context) {
       const variableValue = context[variableName].get();
+      // const variableValue = context[variableName].get?context[variableName].get():context[variableName];
       valueSnapshot.push(`const ${variableName} = ${JSON.stringify(variableValue)};`)
     }
     const valueHeader = valueSnapshot.join('\n') + '\n';
+    console.log({valueHeader});
     return valueHeader + '\n';
 
   }
@@ -853,6 +855,6 @@ function upwards(el, selector) {
     }
   }
 
-  console.log({scanned});
+  ///console.log({scanned});
   return response;
 }

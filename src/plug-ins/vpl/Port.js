@@ -9,7 +9,6 @@ export default class Port extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('PORT!');
     if(this.#system.ready) this.#system
     .attachShadow()
     .setContextFromString()

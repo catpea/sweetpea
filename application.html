@@ -3,21 +3,10 @@
 
     <loop children>
       <loop children>
-        LOOP!
         <new program attributes="id type" when="component=='program'">
         <new cable attributes="from to" when="component=='cable'">
-        <!-- <seed of="program" when="component=='program'" attributes="id type"> -->
-        <!-- <seed of="cable" when="component=='cable'" attributes="from to"> -->
       </loop>
     </loop>
-
-
-    <!-- <program id="a" type="fetch">
-    <program id="b" type="bash">
-
-    <cable from="a:out" to="b:in">
-    <cable from="a:out" to="b:in2"> -->
-
 
   </scene>
 </loop>
@@ -167,8 +156,8 @@
       Featured
     </div>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">An item <port id="in"></li>
-      <li class="list-group-item">An item <port id="in2"></li>
+      <li class="list-group-item">An item <port direction="in" icon="gear" id="in"></li>
+      <li class="list-group-item">An item <port direction="in" icon="gear" id="in2"></li>
       <li class="list-group-item">A second item</li>
       <li class="list-group-item">A third item</li>
     </ul>
@@ -190,6 +179,6 @@
 
     }
   </script>
-  <!-- <span class="port-pad position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span> -->
-  <span class="port-pad position-absolute p-1 top-50 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-heart"></i></span>
+  <span class="port-pad position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
+  <!-- <span class="port-pad position-absolute p-1 top-50 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-heart"></i></span> -->
 </template>
