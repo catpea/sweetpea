@@ -32,10 +32,10 @@ export default class System {
   #context;
   set context(v){
     this.#context = v;
-    //console.log(`${this.host.tagName} set context to:`, this.#context);
+    ////console.log(`${this.host.tagName} set context to:`, this.#context);
   }
   get context(){
-    //console.log(`${this.host.tagName} read context`, this.#context);
+    ////console.log(`${this.host.tagName} read context`, this.#context);
     return this.#context
   }
 
@@ -44,14 +44,15 @@ export default class System {
   subscriptions = []; // {type:'list/item/value', id:'', run}
 
   // both of these rely on a different installer
-  #voidTags = ['print', 'bind', 'cable', 'program', 'port'];
+  #prefix = 'data';
+  #voidTags = ['print', 'bind', 'cable', 'program', 'port', 'seed'];
   #containerTags = ['loop', 'scene'];
   #allTags = []
 
   constructor(host) {
     this.host = host;
     this.#allTags = this.#allTags.concat(this.#voidTags, this.#containerTags);
-    //console.log(this.#allTags);
+    ////console.log(this.#allTags);
   }
 
   get ready(){
@@ -137,14 +138,20 @@ export default class System {
     let html = await response.text();
 
     for (const name of this.#voidTags) {
+
+      const seek0 = new RegExp(`<new ${name} `, 'g');
+      html = html.replace(seek0, `<source new ${name} `);
+
       const seek1 = new RegExp(`<${name} `, 'g');
       html = html.replace(seek1, `<embed ${name} `);
+
       const seek2 = new RegExp(`<${name}>`, 'g');
       html = html.replace(seek2, `<embed ${name}>`);
+
     }
     html = html.replace(/is="fire" /g, 'is="data-fire"');
     const container = document.createElement('div');
-    console.log(html);
+    //console.log(html);
     container.innerHTML = html.trim();
     this.template = container.children;
     return this;
@@ -154,11 +161,11 @@ export default class System {
   normalizeTemplate(){
     let templateChildren;
 
-    //console.log('normalizeTemplate', this.template )
-    //console.log('normalizeTemplate typeof this.template:', typeof this.template )
-    //console.log('normalizeTemplate Array.isArray(this.template):', Array.isArray(this.template) )
-    //console.log('normalizeTemplate instanceof DocumentFragment:', this.template instanceof DocumentFragment )
-    //console.log('normalizeTemplate instanceof HTMLCollection:', this.template instanceof HTMLCollection )
+    console.log(this.host.tagName,  this.template, 'normalizeTemplate', this.template )
+    ////console.log('normalizeTemplate typeof this.template:', typeof this.template )
+    ////console.log('normalizeTemplate Array.isArray(this.template):', Array.isArray(this.template) )
+    ////console.log('normalizeTemplate instanceof DocumentFragment:', this.template instanceof DocumentFragment )
+    ////console.log('normalizeTemplate instanceof HTMLCollection:', this.template instanceof HTMLCollection )
 
     if( Array.isArray(this.template) ){
       templateChildren = this.template;
@@ -168,6 +175,8 @@ export default class System {
       templateChildren = [...this.template.children];
     }
 
+    console.log(this.host.tagName, {templateChildren});
+
     let response;
 
     const noTemplate = templateChildren.length === 0;
@@ -175,9 +184,9 @@ export default class System {
     const manyTemplates = templateChildren.length > 0;
 
     if (noTemplate){
-      let blankRoot = document.createElement('div');
-      blankRoot.append('no template!')
-      response = blankRoot;
+      // let blankRoot = document.createElement('div');
+      // blankRoot.append('no template!')
+      // response = blankRoot;
     } else if (manyTemplates){
       let singeRoot = document.createElement('div');
       singeRoot.append(...templateChildren)
@@ -224,6 +233,8 @@ export default class System {
     // <wbr>
 
     // VOID TAG PROCESSING!
+
+
     this.template.querySelectorAll('embed').forEach(directive => {
       const attributes = [...directive.attributes];
       const {name} = attributes.shift(); // the first argument is the tag kind
@@ -326,14 +337,49 @@ export default class System {
 
 
 
-  renderDelegate(){
+  renderDelegate({above}={above:false}){
+
+    if(!this.template) console.log(this.host.tagName, 'template was empty');
+    if(!this.template) return this;
+
     const item = this.context || {};
     let templateClone = this.template.cloneNode(true);
     templateClone.dataset.key = item.key;
 
-    //console.log('allTags', this.#allTags);
+    // // THIS MUST RUN FOR EVEY ITERATION OF A LOOP
+    // templateClone.querySelectorAll('source').forEach(source => {
+    //   // Capture Native Order
+    //   const attributes = [ ...source.attributes ]; // capture order
+    //   const {name:directiveName} = attributes.shift(); // the first argument is the tag kind
+    //   const {name:tagName} = attributes.shift(); // the first argument is the tag kind
+    //
+    //   // Conditionally
+    //   const conditionCode = source.getAttribute('when');
+    //   const conditionFuncion = this.billOfValues(this.context) + `return ${conditionCode};`
+    //   let conditionFulfilled = new Function(conditionFuncion).call(this.context);
+    //
+    //   if(!conditionFulfilled) continue; // condition not fullfilled!
+    //
+    //   // copy attributes
+    //   const replacement = document.createElement(`data-${tagName}`);
+    //   for (const attr of source.attributes) {
+    //     if(attr.name == directiveName){
+    //       // ignore "new"
+    //     }else if(attr.name == tagName){
+    //       // ignore name of thing to be instantiated
+    //     }else if(attr.name == 'when'){
+    //       // ignore condition to be evaluated
+    //     }else{
+    //       replacement.setAttribute(attr.name, attr.value);
+    //     }
+    //   }
+    //   // replace the source tag with the real tag (if condition passed!)
+    //   source.replaceWith(replacement);
+    // });
+
+    ////console.log('allTags', this.#allTags);
       for (const tag of this.#allTags) {
-        console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
+        //console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
 
 
         for (const el of templateClone.querySelectorAll(`data-${tag}`)) {
@@ -344,11 +390,11 @@ export default class System {
              parents.push(parent)
              parent = parent.parentNode;
            }
-           // console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
+           // //console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          //console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
         }
 
 
@@ -356,19 +402,19 @@ export default class System {
            let parent = el.parentNode;
            const parents = [];
            while(parent !== this.host){
-             // console.log(this.host.tagName, parent.tagName, templateClone.tagName, parent == templateClone);
+             // //console.log(this.host.tagName, parent.tagName, templateClone.tagName, parent == templateClone);
              // if(parent == templateClone) break;
              parents.push(parent)
              parent = parent.parentNode;
              // if(!parent) break;
            }
-           console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
+           //console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
 
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          // console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
-          console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          // //console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          //console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
 
         }
 
@@ -376,32 +422,22 @@ export default class System {
 
       }
 
-    this.host.shadowRoot.appendChild(templateClone);
-
-
-    return this;
-
-  }
-  renderDelegate2(){
-    const item = this.context || {};
-    let templateClone = this.template.cloneNode(true);
-    templateClone.dataset.key = item.key;
-
-    //console.log('allTags', this.#allTags);
-      for (const tag of this.#allTags) {
-        console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
-
-
-
-
+      if(above){
+        this.host.shadowRoot.host.appendChild(templateClone);
+      }else{
+        this.host.shadowRoot.appendChild(templateClone);
       }
 
-    this.host.shadowRoot.appendChild(templateClone);
-
 
     return this;
 
   }
+
+  registerWithScene(){
+    this.getScene().registry.set(this.host.getAttribute('id'), this.host)
+    this.subscriptions.push( {type:'scene-registrant', id:this.host.getAttribute('id'), subscription:()=>this.getScene().registry.delete(this.host.getAttribute('id'), this.host)} );
+  }
+
 
   // renderTemplateDelegate(){
   //   let templateClone = this.template.cloneNode(true);
@@ -442,6 +478,67 @@ export default class System {
     return this;
   }
 
+  renderContextDump(){
+    const code = this.billOfValues(this.context);
+    let dump = document.createElement('pre');
+    dump.classList.add(...'border border-danger rounded mb-3'.split(' '))
+    dump.append(code);
+    return this;
+    this.host.shadowRoot.appendChild(dump);
+  }
+
+  generateTemplate(){
+    const root = document.createElement(`div`);
+
+    const componentName = this.host.getAttribute('of');
+    const conditionCode = this.host.getAttribute('when');
+    const componentAttributes = this.host.getAttribute('attributes');
+    const componentAttributeList = componentAttributes.split(/ /);
+    const conditionFuncion = this.billOfValues(this.context) + `return ${conditionCode};`
+
+    let conditionFulfilled = new Function(conditionFuncion).call(this.context);
+    if(!conditionFulfilled) return this;
+
+    const instanceComponent = document.createElement(`${this.#prefix}-${componentName}`);
+    for (const attributeName of componentAttributeList) {
+
+      console.log(`${this.host.tagName} fetching ${attributeName} from context`, this.context);
+
+      const attributeValue = this.context[attributeName].get();
+      instanceComponent.setAttribute(attributeName, attributeValue)
+    }
+
+    root.appendChild(instanceComponent);
+    this.template = root.children
+
+    return this;
+
+  }
+
+  // renderInstance(){
+  //   const componentName = this.host.getAttribute('of');
+  //   const conditionCode = this.host.getAttribute('when');
+  //   const componentAttributes = this.host.getAttribute('attributes');
+  //   const componentAttributeList = componentAttributes.split(/ /);
+  //
+  //   const conditionFuncion = this.billOfValues(this.context) + `return ${conditionCode};`
+  //   let result = new Function(conditionFuncion).call(this.context);
+  //   let corona = document.createElement('pre');
+  //   corona.classList.add(...'border border-danger rounded mb-3'.split(' '))
+  //   corona.append(conditionFuncion, '\n', result)
+  //   this.host.shadowRoot.appendChild(corona);
+  //
+  //   console.error('NOT USING SIGNALS TODO!!!!!!!!');
+  //   let instanceComponent = document.createElement(`${this.#prefix}-${componentName}`);
+  //   for (const attributeName of componentAttributeList) {
+  //     console.log(attributeName);
+  //     const attributeValue = this.context[attributeName].get();
+  //     instanceComponent.setAttribute(attributeName, attributeValue)
+  //   }
+  //   this.host.shadowRoot.appendChild(instanceComponent);
+  //   console.log(instanceComponent);
+  // }
+
   renderValue(){
 
     const positionalArguments = this.host.getAttribute('arguments');
@@ -455,7 +552,7 @@ export default class System {
     const [propertyName] = positionalArguments.split(' ');
     const matches = upwards(this.host, withSelector);
 
-    console.log(`${this.host.tagName} -> ${propertyName} with ${withSelector} ... CONTEXT:`, this.context);
+    //console.log(`${this.host.tagName} -> ${propertyName} with ${withSelector} ... CONTEXT:`, this.context);
 
     //console({limitSpecifier});
     if(limitSpecifier !== null){
@@ -502,20 +599,20 @@ export default class System {
 
 
   // INTERMEDIATE.. continuing to drill down templates
-  renderTemplate(signalValue){
+  renderTemplate(listOfValues){
     ////////console({signalValue});
 
 
 
-    const arriving = signalValue.map(o=>[o.key, o])
+    const arriving = listOfValues.map(o=>[o.key, o])
     const existing = Object.fromEntries([...this.host.shadowRoot.children].map(o=>[o.dataset.key, o]));
 
     // -- Addition -- //
     // TODO: this must be in order in the DOM as well insertAfter...
-    signalValue.forEach(item => {
-      const missing = existing[item.key] === undefined;
+    listOfValues.forEach(listItem => {
+      const missing = existing[listItem.key] === undefined;
       if(missing){
-        this.renderObject(item);
+        this.renderObject(listItem);
       }
     });
 
@@ -533,25 +630,73 @@ export default class System {
   }
 
   // Rendering a piece of the array, or object with a key.
-  renderObject(item){
-
-    // if(!this.template){
-    //   ////////console(`${this.host.tagName} HAS NO TEMPLATE!`, this.template);
-    //   this.host.shadowRoot.appendChild(this.#ui.alert(`key=${item.key}: <${this.host.tagName.toLowerCase()}> name=${this.host.getAttribute('name')} does not have a template`));
-    //   return;
-    // }else{
-    //   this.host.shadowRoot.appendChild(this.#ui.alert(`key=${item.key}: <${this.host.tagName.toLowerCase()}> name=${this.host.getAttribute('name')} does have a template: ${this.template.outerHTML}`));
-    //
-    // }
+  renderObject(listItem){
 
     let corona = document.createElement('div');
     corona.classList.add(...'border border-primary rounded mb-3'.split(' '))
     let templateClone = this.template.cloneNode(true);
-    corona.appendChild(templateClone);
 
-    //console(item);
-    templateClone.dataset.key = item.key;
-    const subscription = item.subscribe(c=>{
+
+    // THIS MUST RUN FOR EVEY ITERATION OF A LOOP
+    templateClone.querySelectorAll('source').forEach(source => {
+
+
+      const parents = [];
+      let parent = source.parentNode;
+      while(parent !== templateClone){
+        parents.push(source.parentNode)
+        parent = parent.parentNode;
+      }
+      const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
+     if(!isOutermost) return; // only interested in outermost
+
+
+      // Capture Native Order
+      const attributes = [ ...source.attributes ]; // capture order
+      const {name:directiveName} = attributes.shift(); // the first argument is the tag kind
+      const {name:tagName} = attributes.shift(); // the first argument is the tag kind
+
+      // Conditionally
+      const conditionCode = source.getAttribute('when');
+      const conditionFuncion = this.billOfValues(listItem.get()) + `return ${conditionCode};`
+      let conditionFulfilled = new Function(conditionFuncion).call(listItem);
+
+      if(!conditionFulfilled){
+        source.remove();
+        return; // condition not fullfilled!
+      }
+
+      // copy attributes
+      const replacement = document.createElement(`data-${tagName}`);
+      for (const attr of source.attributes) {
+        if(attr.name == directiveName){
+          // ignore "new"
+        }else if(attr.name == tagName){
+          // ignore name of thing to be instantiated
+        }else if(attr.name == 'when'){
+          // ignore condition to be evaluated
+        }else if(attr.name == 'attributes' && attr.value){
+          const componentAttributeList = attr.value.split(/ /);
+          for (const attributeName of componentAttributeList) {
+            console.log('YYY', listItem, attributeName);
+            const attributeValue = listItem.get()[attributeName].get();
+            replacement.setAttribute(attributeName, attributeValue)
+          }
+        }else{
+          replacement.setAttribute(attr.name, attr.value);
+        }
+      }
+      // replace the source tag with the real tag (if condition passed!)
+      source.replaceWith(replacement);
+    });
+
+
+    //console(listItem);
+    templateClone.dataset.key = listItem.key;
+    const subscription = listItem.subscribe(c=>{
+
+
+
       for (const tag of this.#allTags) {
         for (const el of templateClone.querySelectorAll(`data-${tag}`)) {
            const parents = [];
@@ -568,10 +713,13 @@ export default class System {
           ////////console(el.context);
         }
       }
+
+
+
     });
 
-    this.subscriptions.push( {type:'item', id:item.key, subscription} );
-    this.host.shadowRoot.appendChild(corona);
+    this.subscriptions.push( {type:'item', id:listItem.key, subscription} );
+    this.host.shadowRoot.append(...templateClone.children);
   };
 
 
@@ -614,6 +762,28 @@ export default class System {
     return false;
   }
 
+  // getSvg(){
+  //   let response = null;
+  //
+  //   if(this.host.tagName.toLowerCase() == 'svg'){
+  //     response =  this.host;
+  //   }else{
+  //     response = upwards(this.host, 'svg').pop();
+  //   }
+  //   return response;
+  // }
+
+  getScene(){
+    let response = null;
+
+    if(this.host.tagName.toLowerCase() == 'data-scene'){
+      response =  this.host;
+    }else{
+      response = upwards(this.host, 'data-scene').pop();
+    }
+    return response;
+  }
+
   getApplication(){
     let response = null;
 
@@ -622,6 +792,9 @@ export default class System {
     }else{
       response = upwards(this.host, 'data-root').pop();
     }
+
+    console.log(`${this.host.tagName} getApplication()`, response);
+
     return response;
   }
 
@@ -629,6 +802,21 @@ export default class System {
   isInputControl(el) {
     const tagName = el.tagName;  // Gets the tag name in uppercase form
     return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT';
+  }
+
+
+
+
+
+  billOfValues(context){
+    const valueSnapshot = [];
+    for (const variableName in context) {
+      const variableValue = context[variableName].get();
+      valueSnapshot.push(`const ${variableName} = ${JSON.stringify(variableValue)};`)
+    }
+    const valueHeader = valueSnapshot.join('\n') + '\n';
+    return valueHeader + '\n';
+
   }
 
 }
@@ -657,7 +845,7 @@ function guid() {
 function upwards(el, selector) {
   const response = [];
   const scanned = [];
-  while ((el = el.parentNode||el.host) && el !== document) {
+  while ((el = el.parentNode||el.host) && el !== document ) {
     const selectables = [el, ...el.children].reverse();
     for (const el of selectables) {
       scanned.push(el)
@@ -665,6 +853,6 @@ function upwards(el, selector) {
     }
   }
 
-  ////console({scanned});
+  console.log({scanned});
   return response;
 }

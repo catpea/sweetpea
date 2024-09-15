@@ -6,6 +6,7 @@ export default class Scene extends HTMLElement {
   constructor() {
     super();
     this.#system = new System(this);
+    this.registry = new Map();
   }
 
   connectedCallback() {

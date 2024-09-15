@@ -1,14 +1,23 @@
 <loop>
-  <port>
-
   <scene>
 
+    <loop children>
+      <loop children>
+        LOOP!
+        <new program attributes="id type" when="component=='program'">
+        <new cable attributes="from to" when="component=='cable'">
+        <!-- <seed of="program" when="component=='program'" attributes="id type"> -->
+        <!-- <seed of="cable" when="component=='cable'" attributes="from to"> -->
+      </loop>
+    </loop>
 
-  <program id="a" type="fetch">
-  <program id="b" type="bash">
 
-  <cable from="a:out" to="b:in1">
-  <cable from="a:out" to="b:in2">
+    <!-- <program id="a" type="fetch">
+    <program id="b" type="bash">
+
+    <cable from="a:out" to="b:in">
+    <cable from="a:out" to="b:in2"> -->
+
 
   </scene>
 </loop>
@@ -55,8 +64,8 @@
     class Main {
 
       root;
+      data;
       pipe;
-      url = "package.json";
 
       constructor({root, pipe, data}){
         this.root = root;
@@ -72,8 +81,8 @@
             if (!response.ok) {
               throw new Error(`Response status: ${response.status}`);
             }
-            const object = await response.json();
-            this.pipe.emit('out', {object})
+            const data = await response.json();
+            this.pipe.emit('out', {data})
           } catch (error) {
             console.error(error.message);
           }
@@ -97,22 +106,35 @@
 
     <ul class="list-group list-group-flush">
 
-      <li class="list-group-item">JSON Data<span id="out" class="position-absolute p-1 top-50 start-100 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-broadcast"></i></span></li>
+      <!-- <li class="list-group-item">JSON Data<span id="out11" class="position-absolute p-1 top-50 start-100 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-broadcast"></i></span></li> -->
 
       <li class="list-group-item">
+        <port id="out" direction="out" icon="lightning">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="floatingInput" value="data.url">
+          <label for="floatingInput">URL</label>
+        </div>
 
-
-        <port id="out2" icon="lightning">
-
-
+      </li>
+      <!-- <li class="list-group-item">
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">url</span>
-          <input type="text" class="form-control" placeholder="file.json" aria-label="File Name" aria-describedby="basic-addon1" value="data.url">
+          <input type="text" class="form-control" placeholder="file.json" aria-label="File Name" aria-describedby="basic-addon1" value="data.direction">
+          <small>direction of port is <span>???</span><bind direction with="span"></small>
+
         </div>
-      </li>
+      </li> -->
 
       <li class="list-group-item">...</li>
     </ul>
+
+
+    <!-- <div class="card-body">
+      <button type="button" class="btn btn-outline-success {{direction=='in'?'d-none':'d-block'}}">Off</button>
+      <button type="button" class="btn btn-outline-secondary {{direction=='out'?'d-none':'d-block'}}">On</button>
+    </div> -->
+
+
     <div class="card-footer text-wrap">
       <small>Will download data from <span>???</span><bind url with="span"> upon play.</small>
     </div>
@@ -122,6 +144,22 @@
 <template id="bash">
   <script>
     class Main {
+      root;
+      data;
+      pipe;
+
+      constructor({root, pipe, data}){
+        this.root = root;
+        this.data = data;
+        this.pipe = pipe;
+      }
+
+      mount(){
+        this.pipe.on('in', packet=>{
+          console.log('Bash intercepted a packet', packet);
+        })
+      }
+
     }
   </script>
   <div class="card shadow" is="fire" use="drag resize select" style="width: 18rem; position: absolute; top: 100px; left: 500px">
@@ -129,11 +167,10 @@
       Featured
     </div>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">An item</li>
-      <li class="list-group-item">An item<span id="in1" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-bug"></i></span></li>
+      <li class="list-group-item">An item <port id="in"></li>
+      <li class="list-group-item">An item <port id="in2"></li>
       <li class="list-group-item">A second item</li>
       <li class="list-group-item">A third item</li>
-      <li class="list-group-item">An item<span id="in2" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-bell"></i></span></li>
     </ul>
   </div>
 </template>
@@ -144,12 +181,15 @@
       root;
       pipe;
       data;
+
       constructor({root, pipe, data}){
         this.root = root;
         this.data = data;
         this.pipe = pipe;
       }
+
     }
   </script>
-  <span id="{{id}}" class="position-absolute p-1 top-50 start-0 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
+  <!-- <span class="port-pad position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span> -->
+  <span class="port-pad position-absolute p-1 top-50 translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-heart"></i></span>
 </template>

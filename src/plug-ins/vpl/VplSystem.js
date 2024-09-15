@@ -1,3 +1,6 @@
+import espree from "../../../bundle.js";
+//console.log(espree);
+
 import System from '../../System.js';
 import EventEmitter from '../event-emitter/EventEmitter.js';
 
@@ -20,7 +23,7 @@ export default class VplSystem extends System {
 
   locateSvg(){
 
-    this.#svg = this.host.shadowRoot.host.parentNode.shadowRoot.querySelector('svg');
+    this.#svg = this.getScene().shadowRoot.querySelector('svg');
 
     // const doc = this.host.shadowRoot.host.parentNode;
     // const targetElement2 = doc.querySelector('');
@@ -61,8 +64,8 @@ export default class VplSystem extends System {
   injectTemplateFromTagName(){
     const id = `#${this.host.tagName.toLowerCase().split('-')[1]}`;
     const template = this.getApplication().shadowRoot.querySelector(id);
+    console.log(this.host.tagName, 'injectTemplateFromTagName' , this.template);
     this.template = template.content.cloneNode(true);
-    console.log(this.host.tagName, this.template);
     return this;
   }
 
@@ -75,7 +78,7 @@ export default class VplSystem extends System {
        this.#scripts.push(scriptContent);
        script.remove()
      });
-     ////console.log('Consumed scripts', this.#scripts);
+     //////console.log('Consumed scripts', this.#scripts);
     return this;
 
   }
@@ -123,7 +126,7 @@ export default class VplSystem extends System {
     const standardInputs = this.host.shadowRoot.querySelectorAll('input[value^="data"]');
     standardInputs.forEach(input => {
       const key = input.getAttribute('value').split('.',2)[1];
-      console.log({key});
+      //console.log({key});
       if(this.context[key]){
         // send data from signal to input field
         const subscription = this.context[key].subscribe(v=>input.value = v);
@@ -142,16 +145,16 @@ export default class VplSystem extends System {
     allElements.forEach(element => {
       if (element.hasAttributes()) {
          for (const attr of element.attributes) {
+           const originalValue = attr.value;
            const dependencies = this.extractCurlyDependencies( attr.value );
-           console.log(`dependencies ${this.host.tagName}`, dependencies );
            for (const key of dependencies) {
-             console.log({key}, this.context);
-             const subscription = this.context[key].subscribe(v=>element.setAttribute(attr.name, this.interpolateCurly(attr.value, this.context)));
+             if(!this.context[key]) console.log(`Key ${key} is missing!`);
+             const subscription = this.context[key].subscribe(v=>element.setAttribute(attr.name, this.interpolateCurly(originalValue, this.context)));
              this.subscriptions.push( {type:'set input[value]', id:key, subscription} );
            }
          }
       }
-      console.log({element});
+      //console.log({element});
     });
     return this;
   }
@@ -159,9 +162,15 @@ export default class VplSystem extends System {
   extractCurlyDependencies(template) {
     const dependencies = [];
     // Regular expression to match placeholders in the format ${property} or {{property}}
-    const placeholderPattern = /{{([^}]+)}}|\${([^}]+)}/g;
+    // const placeholderPattern = /{{([^}]+)}}|\${([^}]+)}/g;
+    const placeholderPattern = /{{((?:[^{}]|{[^{}]*})*)}}/g; // EXPERIMENTAL
     // Function to handle replacement
-    const replaceFunction = (match, property) => dependencies.push(property);
+    const replaceFunction = (match, property) => {
+      //console.log('QQQ ssss', property, arguments);
+      const tokens = espree.tokenize(property, { ecmaVersion: 2020 });
+      const properties = tokens.filter(o=>o.type==='Identifier').map(o=>o.value)
+      dependencies.push(...properties);
+    }
     // Replace all placeholders in the template string using replaceFunction
     template.replace(placeholderPattern, replaceFunction);
     return dependencies;
@@ -169,9 +178,26 @@ export default class VplSystem extends System {
 
   interpolateCurly(template, context) {
     // Regular expression to match placeholders in the format ${property} or {{property}}
-    const placeholderPattern = /{{([^}]+)}}|\${([^}]+)}/g;
+    // const placeholderPattern = /{{([^}]+)}}|\${([^}]+)}/g;
+    const placeholderPattern = /{{((?:[^{}]|{[^{}]*})*)}}/g; // EXPERIMENTAL
+
     // Function to handle replacement
-    const replaceFunction = (match, property) => context[property].get();
+    const replaceFunction = (match, property) => {
+
+      // const valueSnapshot = [];
+      // for (const variableName in context) {
+      //   const variableValue = context[variableName].get();
+      //   valueSnapshot.push(`const ${variableName} = ${JSON.stringify(variableValue)};`)
+      // }
+      // const valueHeader = valueSnapshot.join('\n') + '\n';
+      const compositeProgram = this.billOfValues(context) + 'return ' + property;
+      const result = new Function(compositeProgram).call(context);
+
+      //console.log('XXX', compositeProgram);
+      //console.log('XXX', { result });
+      return result;
+
+    };
     // Replace all placeholders in the template string using replaceFunction
     const interpolatedString = template.replace(placeholderPattern, replaceFunction);
     return interpolatedString;
@@ -205,7 +231,38 @@ export default class VplSystem extends System {
     return this;
   }
 
+  connectPipes(){
+    const [fromProgram, fromPort] = this.getProgramPipe('from');
+    const [toProgram, toPort] = this.getProgramPipe('to');
 
+    const fromPortName = fromPort.getAttribute('id');
+    const toPortName = toPort.getAttribute('id');
+
+    //console.log(`Sending packet from ${fromProgram.getAttribute('id')} on port ${fromPortName}`);
+    //console.log({fromProgram});
+    //console.log({toProgram});
+
+    fromProgram.pipe.on(fromPortName, packet=>toProgram.pipe.send(toPortName, packet));
+
+  }
+
+  getProgramPipe(attributeName){
+    let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+    // const sceneComponent = this.host.shadowRoot.host.parentNode.parentNode.parentNode.parentNode
+    // const sceneComponent = this.getScene()
+    // console.log(this.host.tagName, {sceneComponent});
+    // console.log({componentId, portId});
+    // const programComponent = this.getScene().registry.get(componentId)
+    //
+    // // const programComponent = sceneComponent.querySelector('#'+componentId);
+    // console.log('getProgramPipe', programComponent.shadowRoot);
+    // console.log({programComponent});
+    const sceneComponent = this.host.parentNode;
+    console.log(sceneComponent);
+    const programComponent = sceneComponent.querySelector('#'+componentId);
+    const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
+    return [programComponent, portComponent];
+  }
 
 
 
@@ -265,30 +322,31 @@ export default class VplSystem extends System {
 
   monitorPosition(attributeName, fun){
 
-    let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
-
-    const sceneComponent = this.host.shadowRoot.host.parentNode;
-    const programComponent = sceneComponent.querySelector('#'+componentId);
-    const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
-
+    // let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+    // const sceneComponent = this.host.shadowRoot.host.parentNode;
+    // const programComponent = sceneComponent.querySelector('#'+componentId);
+    // const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
+    const [programComponent, portComponent] = this.getProgramPipe(attributeName);
+    const portPad = portComponent.shadowRoot.querySelector('.port-pad');
+    //console.log({portPad});
 
     if(!portComponent){
-      this.danger(`${this.host.tagName}, Unable to locate portComponent via selector ${componentId}:${portId}`, 'danger');
+      // this.danger(`${this.host.tagName}, Unable to locate portComponent via selector ${componentId}:${portId}`, 'danger');
       return this;
     }
 
     // this.monitoring = true;
 
     const calculatorFunction = ()=> {
-      const {x,y, width, height} = portComponent.getBoundingClientRect();
+      const {x,y, width, height} = portPad.getBoundingClientRect();
       fun(x+width/2, y+height/2);
     }
 
     const resizeObserver = new ResizeObserver( entries => calculatorFunction() );
-    this.resizableAncestors(portComponent).forEach(ancestor=>resizeObserver.observe(ancestor))
+    this.resizableAncestors(portPad).forEach(ancestor=>resizeObserver.observe(ancestor))
     this.subscriptions.push( {type:'ResizeObserver', id:'resizable-ancestors', subscription:()=>resizeObserver.disconnect()} );
 
-    this.movableAncestors(portComponent).forEach(ancestor=>{
+    this.movableAncestors(portPad).forEach(ancestor=>{
       const mutationObserver = new MutationObserver( mutations => {
         for (let mutation of mutations) {
           if (mutation.type === 'attributes' && mutation.attributeName === 'style') {

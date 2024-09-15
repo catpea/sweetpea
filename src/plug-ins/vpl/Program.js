@@ -12,13 +12,14 @@ export default class Program extends HTMLElement {
     if(this.#system.ready) this.#system
     .attachShadow()
     .adoptCss()
+    // .registerWithScene()
+    .createElementPipe()
     .injectTemplateFromAttribute()
     .consumeScript()
     .normalizeTemplate()
     .unfurlTemplate()
     .setContextFromString()
     .renderDelegate()
-    .createElementPipe()
     .wrapAttributeEvents()
     .bindInputs()
     .bindDoubleCurly()
@@ -30,6 +31,9 @@ export default class Program extends HTMLElement {
     .removeSubscription();
   }
 
+  get pipe(){
+    return this.#system.pipe
+  }
   get context(){
     return this.#system.retrieveContext()
   }

@@ -3,6 +3,7 @@ import Root from './plug-ins/language/Root.js';
 import Bind from './plug-ins/language/Bind.js';
 import Loop from './plug-ins/language/Loop.js';
 import Echo from './plug-ins/language/Echo.js';
+import Seed from './plug-ins/language/Seed.js';
 
 import { Scene, Program, Port, Cable } from './plug-ins/vpl/import.js';
 
@@ -28,6 +29,7 @@ async function install(prefix='data', css=['css/style.css', 'css/bootstrap.min.c
   customElements.define(`${prefix}-loop`, Loop);
   customElements.define(`${prefix}-echo`, Echo);
   customElements.define(`${prefix}-bind`, Bind);
+  customElements.define(`${prefix}-seed`, Seed);
 
   customElements.define(`${prefix}-scene`, Scene);
   customElements.define(`${prefix}-program`, Program);

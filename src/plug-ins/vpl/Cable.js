@@ -16,6 +16,7 @@ export default class Cable extends HTMLElement {
     .drawLine()
     .monitorSourcePosition()
     .monitorTargetPosition()
+    .connectPipes()
 
   }
 

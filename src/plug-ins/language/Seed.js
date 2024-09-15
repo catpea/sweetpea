@@ -1,6 +1,6 @@
-import System from './VplSystem.js';
+import System from '../../System.js';
 
-export default class Port extends HTMLElement {
+export default class Seed extends HTMLElement {
   #system;
 
   constructor() {
@@ -9,28 +9,23 @@ export default class Port extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('PORT!');
     if(this.#system.ready) this.#system
-    .attachShadow()
     .setContextFromString()
-    .adoptCss()
-    .injectTemplateFromTagName()
-    .consumeScript()
-    .normalizeTemplate()
-    .unfurlTemplate()
-    .renderDelegate()
-    .createElementPipe()
-    .wrapAttributeEvents()
-    .bindDoubleCurly()
+    .attachShadow()
+    .generateTemplate()
+
+  .normalizeTemplate()
+  .unfurlTemplate()
+  .renderDelegate()
+
+
   }
 
   disconnectedCallback() {
     if(this.#system.ready) this.#system
     .removeSubscription();
   }
-  get pipe(){
-    return this.#system.pipe
-  }
+
   get context(){
     return this.#system.retrieveContext()
   }

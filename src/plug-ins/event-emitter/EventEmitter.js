@@ -52,6 +52,9 @@ export default class EventEmitter {
         }
     }
 
+    send(...a){
+      this.emit(...a)
+    }
     off(...a){
       this.removeListener(...a)
     }

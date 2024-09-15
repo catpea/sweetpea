@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sweetpea &middot; Signal and Web Component Enhanced Web Apps</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍈</text></svg>">
+    <script type="importmap">
+    {
+      "imports": {
+      }
+    }
+    </script>
     <style>
       body {
         background-color: #212529;
@@ -19,14 +25,11 @@
     install();
     globalThis.root = signalize([
       {
+        id: 'out',
         mode: 'primary',
         name: 'Visual Programming',
-        description: 'A simple visual programming environment.',
         url: 'menu.json',
-        id: 'XXX',
-
-        icon: 'heart',
-
+        description: 'A simple visual programming environment.',
 
         children: [
           {
@@ -37,26 +40,34 @@
             children: [
               //NOTE: only one daughter is shown in screenshot to keep things simple
               {
-                component: 'node',
+                component: 'program',
                 id: 'a',
+                type: 'fetch',
                 mode: 'info',
                 name: 'Node #1',
+                direction:'out',
+                icon: 'heart',
                 description: 'Inner Inner Loop Text for Daughter #1',
               },
               {
-                component: 'node',
-                idnt: 'a',
+                component: 'program',
+                id: 'b',
+                type: 'bash',
                 mode: 'info',
                 name: 'Node #2',
+                direction:'out',
+                icon: 'heart',
                 description: 'Inner Inner Loop Text for Daughter #2',
               },
               {
-                component: 'line',
+                id:'x',
+                component: 'cable',
                 mode: 'warning',
                 name: 'Connection #2',
                 description: 'Inner Inner Loop Text for Daughter #2',
-                from: 'a/1',
-                from: 'b/0',
+                icon: 'heart',
+                from: 'a:out',
+                to: 'b:in',
               }
             ] // close Mother's children (Daughters)
           } // close mother
