@@ -14,3 +14,33 @@ Signal and Web Component Enhanced Web Apps
 - zoom
 - minimap
 - generalize data-binding into a shared function so that bind and auto-bind use the same code
+
+
+```JavaScript
+
+function collectParents(element, root) {
+    const parents = [];
+    let parent = element.parentNode;
+    while (parent !== root) {
+        parents.push(parent);
+        parent = parent.parentNode;
+    }
+    return parents;
+}
+
+function isOutermostElement(parents) {
+    const hasInnerDataTag = !!parents.map(p => p.tagName).find(tag => tag.match(/^DATA-/));
+    return !hasInnerDataTag;
+}
+
+// Main logic refactored for readability
+templateClone.querySelectorAll('source').forEach(source => {
+    const parents = collectParents(source, templateClone);
+    const isOutermost = isOutermostElement(parents);
+
+    if(!isOutermost) return; // only interested in outermost
+
+    console.log('PASSED');
+});
+
+```

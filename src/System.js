@@ -1,3 +1,6 @@
+import Movable from './plug-ins/mouse/Movable.js';
+import Connectable from './plug-ins/mouse/Connectable.js';
+
 class UI {
 
   alert(message='', title='', type='primary', icon='info-circle', accent='warning'){ //exclamation-triangle
@@ -32,10 +35,10 @@ export default class System {
   #context;
   set context(v){
     this.#context = v;
-    ///////console.log(`${this.host.tagName} set context to:`, this.#context);
+    /////////////console.log(`${this.host.tagName} set context to:`, this.#context);
   }
   get context(){
-    ///////console.log(`${this.host.tagName} read context`, this.#context);
+    /////////////console.log(`${this.host.tagName} read context`, this.#context);
     return this.#context
   }
 
@@ -43,16 +46,23 @@ export default class System {
 
   subscriptions = []; // {type:'list/item/value', id:'', run}
 
+  //NOTE: <new> is not a real tak it is an anchor that gets replaced
   // both of these rely on a different installer
   #prefix = 'data';
   #voidTags = ['print', 'bind', 'cable', 'program', 'port', 'seed'];
   #containerTags = ['loop', 'scene'];
+  #passiveTags = ['space'];
   #allTags = []
+
+  extensions = {
+    movable: Movable,
+    connectable: Connectable,
+  };
 
   constructor(host) {
     this.host = host;
     this.#allTags = this.#allTags.concat(this.#voidTags, this.#containerTags);
-    ///////console.log(this.#allTags);
+    /////////////console.log(this.#allTags);
   }
 
   get ready(){
@@ -137,6 +147,13 @@ export default class System {
     const response = await fetch(url);
     let html = await response.text();
 
+    for (const name of this.#passiveTags) {
+      const seek0 = new RegExp(`<${name}`, 'g');
+      html = html.replace(seek0, `<root-${name}`);
+      const seek1 = new RegExp(`</${name}`, 'g');
+      html = html.replace(seek1, `</root-${name}`);
+    }
+
     for (const name of this.#voidTags) {
 
       const seek0 = new RegExp(`<new ${name} `, 'g');
@@ -151,7 +168,7 @@ export default class System {
     }
     html = html.replace(/is="fire" /g, 'is="data-fire"');
     const container = document.createElement('div');
-    /////console.log(html);
+    ///////////console.log(html);
     container.innerHTML = html.trim();
     this.template = container.children;
     return this;
@@ -161,11 +178,11 @@ export default class System {
   normalizeTemplate(){
     let templateChildren;
 
-    ///console.log(this.host.tagName,  this.template, 'normalizeTemplate', this.template )
-    ///////console.log('normalizeTemplate typeof this.template:', typeof this.template )
-    ///////console.log('normalizeTemplate Array.isArray(this.template):', Array.isArray(this.template) )
-    ///////console.log('normalizeTemplate instanceof DocumentFragment:', this.template instanceof DocumentFragment )
-    ///////console.log('normalizeTemplate instanceof HTMLCollection:', this.template instanceof HTMLCollection )
+    /////////console.log(this.host.tagName,  this.template, 'normalizeTemplate', this.template )
+    /////////////console.log('normalizeTemplate typeof this.template:', typeof this.template )
+    /////////////console.log('normalizeTemplate Array.isArray(this.template):', Array.isArray(this.template) )
+    /////////////console.log('normalizeTemplate instanceof DocumentFragment:', this.template instanceof DocumentFragment )
+    /////////////console.log('normalizeTemplate instanceof HTMLCollection:', this.template instanceof HTMLCollection )
 
     if( Array.isArray(this.template) ){
       templateChildren = this.template;
@@ -175,7 +192,7 @@ export default class System {
       templateChildren = [...this.template.children];
     }
 
-    ///console.log(this.host.tagName, {templateChildren});
+    /////////console.log(this.host.tagName, {templateChildren});
 
     let response;
 
@@ -201,7 +218,7 @@ export default class System {
   }
 
   debugTemplate(){
-    ///////console.debug(`debugTemplate: BBB ${this.host.tagName} TEMPLATE!`, this.template?.outerHTML, this.host.shadowRoot.querySelector('slot').assignedNodes());
+    /////////////console.debug(`debugTemplate: BBB ${this.host.tagName} TEMPLATE!`, this.template?.outerHTML, this.host.shadowRoot.querySelector('slot').assignedNodes());
 
     return this;
   }
@@ -255,38 +272,7 @@ export default class System {
       //console(`EMBED PROCESSING created ${`<data-${name}`}>`);
     });
 
-    // this.template.querySelectorAll('link').forEach(directive => {
-    //   const attributes = [...directive.attributes];
-    //   const {name} = attributes.shift();
-    //   const replacement = document.createElement(`data-print`);
-    //   replacement.setAttribute('signal', name);
-    //   attributes.forEach(attr => {
-    //         replacement.setAttribute(attr.name, attr.value);
-    //   });
-    //   directive.replaceWith(replacement);
-    // });
 
-
-    //
-    // html = html.replace(/\{\{(\w+)\}\}/g, (_, propName) => `<data-print property="${propName}"></data-print>`);
-    // html = html.replace(/<bug\/>/g, (_, propName) => `<data-bug></data-bug>`);
-    //
-    // this.template.innerText = html;
-
-    // Tag Rendering
-    // for (const selector in this.#fire) {
-    //   this.template.querySelectorAll(selector).forEach(el => {
-    //     const isAttribute = el.getAttribute('is');
-    //     const allowed = this.#fire[selector]
-    //     for (const transform of allowed) {
-    //       if(isAttribute == transform){
-    //         el.setAttribute('is', 'data-'+isAttribute)
-    //         //console(isAttribute, transform);
-    //         //console(el, 'data-'+isAttribute);
-    //       }
-    //     }
-    //   });
-    // }
 
     for (const tag of this.#containerTags) {
       this.template.querySelectorAll(tag).forEach(directive => {
@@ -339,7 +325,7 @@ export default class System {
 
   renderDelegate({above}={above:false}){
 
-    if(!this.template) ///console.log(this.host.tagName, 'template was empty');
+    if(!this.template) /////////console.log(this.host.tagName, 'template was empty');
     if(!this.template) return this;
 
     const item = this.context || {};
@@ -377,9 +363,9 @@ export default class System {
     //   source.replaceWith(replacement);
     // });
 
-    ///////console.log('allTags', this.#allTags);
+    /////////////console.log('allTags', this.#allTags);
       for (const tag of this.#allTags) {
-        /////console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
+        ///////////console.log(`${this.host.tagName} Scanning for data-${tag} and found ${this.host.querySelectorAll(`data-${tag}`).length}`);
 
 
         for (const el of templateClone.querySelectorAll(`data-${tag}`)) {
@@ -390,11 +376,11 @@ export default class System {
              parents.push(parent)
              parent = parent.parentNode;
            }
-           // /////console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
+           // ///////////console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          /////console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          ///////////console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
         }
 
 
@@ -402,19 +388,19 @@ export default class System {
            let parent = el.parentNode;
            const parents = [];
            while(parent !== this.host){
-             // /////console.log(this.host.tagName, parent.tagName, templateClone.tagName, parent == templateClone);
+             // ///////////console.log(this.host.tagName, parent.tagName, templateClone.tagName, parent == templateClone);
              // if(parent == templateClone) break;
              parents.push(parent)
              parent = parent.parentNode;
              // if(!parent) break;
            }
-           /////console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
+           ///////////console.log(`Found ${el.tagName} with parents`, parents.map(o=>o.tagName));
 
           const isOutermost = !parents.map(o=>o.tagName).find(o=>o.match(/^DATA-/));
           if(!isOutermost) continue; // only interested in outermost
           el.context = item;
-          // /////console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
-          /////console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          // ///////////console.log(`${this.host.tagName} found ${el.tagName} and set context to`, el.context);
+          ///////////console.log(`DELEGATE: ${this.host.tagName} found ${el.tagName} and set context to`, el.context);
 
         }
 
@@ -464,15 +450,39 @@ export default class System {
   //
   // }
 
+  useExtensions(){
+    const extensionRequests = this.host.shadowRoot.querySelectorAll('*[use]');
+    ///console.log('useExtensions', extensionRequests);
+
+    for (const element of extensionRequests) {
+      const parents = this.collectParents(element, this.host.shadowRoot);
+      const isOutermost = this.isOutermostElement(parents);
+      if(!isOutermost) return; // only interested in outermost
+      const extensions = element.getAttribute('use').split(/ /);
+
+      for (const extension of extensions) {
+        if(!this.extensions[extension]) {
+          continue;
+          throw new TypeError(`Unknown extension ${extension}`)
+        }
+        console.log(`Installing ${extension} for`, element);
+        const ext = new this.extensions[extension](element, this);
+        ext.connectedCallback();
+        this.subscriptions.push( {type:'use/ext/disconnectedCallback', id:extension, subscription:()=>ext.disconnectedCallback()} );
+      }
+    }
+
+  }
+
+
   renderContext(){
 
     if(!this.context){
-      //////console(`Tag ${this.host.tagName} has no context`);
+      console(`Tag ${this.host.tagName} has no context`);
       return this;
     }
 
-    /////console.debug(`renderContext: FROM ${this.host.tagName.toLowerCase()}/${this.host.getAttribute('name')}`, this.context,);
-    //console(this.context);
+    console.debug(`renderContext: FROM ${this.host.tagName.toLowerCase()}/${this.host.getAttribute('name')}`, this.context,);
     const subscription = this.context.subscribe(contextObject=>this.renderTemplate(contextObject))
     this.subscriptions.push( {type:'context', id:'main', subscription} );
     return this;
@@ -502,7 +512,7 @@ export default class System {
     const instanceComponent = document.createElement(`${this.#prefix}-${componentName}`);
     for (const attributeName of componentAttributeList) {
 
-      ///console.log(`${this.host.tagName} fetching ${attributeName} from context`, this.context);
+      /////////console.log(`${this.host.tagName} fetching ${attributeName} from context`, this.context);
 
       const attributeValue = this.context[attributeName].get();
       instanceComponent.setAttribute(attributeName, attributeValue)
@@ -528,15 +538,15 @@ export default class System {
   //   corona.append(conditionFuncion, '\n', result)
   //   this.host.shadowRoot.appendChild(corona);
   //
-  //   ///console.error('NOT USING SIGNALS TODO!!!!!!!!');
+  //   /////////console.error('NOT USING SIGNALS TODO!!!!!!!!');
   //   let instanceComponent = document.createElement(`${this.#prefix}-${componentName}`);
   //   for (const attributeName of componentAttributeList) {
-  //     ///console.log(attributeName);
+  //     /////////console.log(attributeName);
   //     const attributeValue = this.context[attributeName].get();
   //     instanceComponent.setAttribute(attributeName, attributeValue)
   //   }
   //   this.host.shadowRoot.appendChild(instanceComponent);
-  //   ///console.log(instanceComponent);
+  //   /////////console.log(instanceComponent);
   // }
 
   renderValue(){
@@ -544,7 +554,7 @@ export default class System {
     const positionalArguments = this.host.getAttribute('arguments');
 
     if(!positionalArguments){
-      ///console.error(this.host);
+      /////////console.error(this.host);
     }
 
     const withSelector = this.host.getAttribute('with');
@@ -552,7 +562,7 @@ export default class System {
     const [propertyName] = positionalArguments.split(' ');
     const matches = upwards(this.host, withSelector);
 
-    /////console.log(`${this.host.tagName} -> ${propertyName} with ${withSelector} ... CONTEXT:`, this.context);
+    ///////////console.log(`${this.host.tagName} -> ${propertyName} with ${withSelector} ... CONTEXT:`, this.context);
 
     //console({limitSpecifier});
     if(limitSpecifier !== null){
@@ -678,7 +688,7 @@ export default class System {
         }else if(attr.name == 'attributes' && attr.value){
           const componentAttributeList = attr.value.split(/ /);
           for (const attributeName of componentAttributeList) {
-            ///console.log('YYY', listItem, attributeName);
+            /////////console.log('YYY', listItem, attributeName);
             const attributeValue = listItem.get()[attributeName].get();
             replacement.setAttribute(attributeName, attributeValue)
           }
@@ -793,7 +803,7 @@ export default class System {
       response = upwards(this.host, 'data-root').pop();
     }
 
-    ///console.log(`${this.host.tagName} getApplication()`, response);
+    /////////console.log(`${this.host.tagName} getApplication()`, response);
 
     return response;
   }
@@ -816,10 +826,71 @@ export default class System {
       valueSnapshot.push(`const ${variableName} = ${JSON.stringify(variableValue)};`)
     }
     const valueHeader = valueSnapshot.join('\n') + '\n';
-    console.log({valueHeader});
+    //////console.log({valueHeader});
     return valueHeader + '\n';
 
   }
+
+
+
+
+
+
+
+
+
+
+  getParent(element){
+    let parent;
+
+    if(element.parentNode){
+      parent = element.parentNode;
+    }else if(element instanceof ShadowRoot){
+      parent = element.host;
+    }
+    // else if(element.host){
+    //   parent = element.host;
+    // }
+    return parent;
+  }
+
+    collectParents(element, root) {
+        const parents = [];
+
+        let parent = this.getParent(element);
+        let c = 0;
+        while (parent && parent !== document && parent !== root) {
+          if (c++>100) {
+            break;
+          }
+          parents.push(parent);
+          parent = this.getParent(parent);
+        }
+        return parents;
+    }
+
+    isOutermostElement(parents) {
+        const hasInnerDataTag = !!parents.map(p => p.tagName).find(tag => tag.match(/^DATA-/));
+        return !hasInnerDataTag;
+    }
+
+
+    findOut(element, selector) {
+        let parent = this.getParent(element);
+        let c = 0;
+        while (parent && parent !== document && parent !== root) {
+          if (parent.matches && parent.matches(selector)) return parent;
+          if (c++>100) {
+            break;
+          }
+          parent = this.getParent(parent);
+        }
+        return null;
+    }
+
+
+
+
 
 }
 
@@ -855,6 +926,6 @@ function upwards(el, selector) {
     }
   }
 
-  ///console.log({scanned});
+  /////////console.log({scanned});
   return response;
 }

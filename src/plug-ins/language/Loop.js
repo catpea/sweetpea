@@ -15,6 +15,8 @@ export default class Loop extends HTMLElement {
     .clearContent()
     .setContextFromProperty()
     .renderContext()
+    .useExtensions()
+
   }
   disconnectedCallback() {
     if(this.#system.ready) this.#system

@@ -23,6 +23,7 @@ export default class Program extends HTMLElement {
     .wrapAttributeEvents()
     .bindInputs()
     .bindDoubleCurly()
+    .useExtensions()
 
   }
 

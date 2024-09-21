@@ -20,6 +20,8 @@ export default class Scene extends HTMLElement {
     .unfurlTemplate()
     .renderDelegate()
     .wrapAttributeEvents()
+    .useExtensions()
+
   }
 
   disconnectedCallback() {

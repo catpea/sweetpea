@@ -21,6 +21,7 @@ export default class Port extends HTMLElement {
     .createElementPipe()
     .wrapAttributeEvents()
     .bindDoubleCurly()
+      .useExtensions()
   }
 
   disconnectedCallback() {
