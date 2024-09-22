@@ -1,7 +1,7 @@
 import Theoretical from './Theoretical.js';
 import StateMachine from 'state-machine';
 
-export default class Cable extends Theoretical {
+export default class Actor extends Theoretical {
   machine;
 
   constructor(host) {
@@ -28,12 +28,8 @@ export default class Cable extends Theoretical {
       connected: {
         enter: () => this
           .log('Entering Connected state')
-          .locateSvg()
-          .drawLine(),
-
-          // .monitorSourcePosition()
-          // .monitorTargetPosition()
-          // .connectPipes()
+          .getTemplate()
+          .installTemplate(),
 
          exit: () => console.log('Exiting Connected state'),
       },

@@ -24,49 +24,125 @@
   <script type="module">
 
     import masticator from 'masticator';
-    import {StageElement, CableElement} from 'theoretical';
+    // import {BindElement} from './src/plugins/elements/index.js';
+    import {StageElement, CableElement, ValveElement, ActorElement} from 'theoretical';
 
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
 
+    // customElements.define('x-bind', BindElement);
     customElements.define('x-stage', StageElement);
-    customElements.define('x-cable', CableElement);
+    customElements.define('x-actor', ActorElement);
+    // customElements.define('x-valve', ValveElement);
+    // customElements.define('x-cable', CableElement);
 
-    // customElements.define('x-program', Program);
-    // customElements.define('x-port',    Port);
-    // customElements.define('x-root',    Root);
+
 
   </script>
 
   <body>
 
     <x-stage src="templates/my-program.json" controls minimap template="stage">
-      
-      <x-actor id="a"></x-actor>
-      <x-actor id="a"></x-actor>
 
+      <x-actor id="a" template="fetch"></x-actor>
+      <x-actor id="b" template="parse"></x-actor>
       <x-cable link="a:out b:in"></x-cable>
+      
     </x-stage>
 
   </body>
 
   <template id="stage">
     <style>
-        :host {
-          display: block;
-          overflow: hidden;
-          position: relative;
+      :host {
+        display: block;
+        overflow: hidden;
+        position: relative;
 
-          touch-action: none;
-          user-select: none;
-        }
-        .content {
-            transform-origin: 0 0;
-            /* adds smoothness: transition: transform 0.1s; */
-        }
+        touch-action: none;
+        user-select: none;
+      }
+      .content {
+          transform-origin: 0 0;
+          /* adds smoothness: transition: transform 0.1s; */
+      }
     </style>
     <div class="content" style="min-height: 75vh;">
     <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
     <slot></slot>
+    </div>
+  </template>
+
+  <template id="port">
+    <style>
+      .port {
+      }
+    </style>
+    <span use="connectable" class="port position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
+  </template>
+
+  <template id="fetch">
+    <style>
+      .card {
+        width: 18rem;
+        position: absolute;
+        top: 150px;
+        left: 50px;
+      }
+    </style>
+    <div class="card shadow" use="movable">
+      <div class="card-header drag-handle">
+        JSON Fetch
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <x-valve id="out" direction="out" icon="lightning"></x-valve>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput">
+            <x-bind name="url" closest="input"></x-bind>
+            <label for="floatingInput">URL</label>
+          </div>
+        </li>
+        <li class="list-group-item">...</li>
+      </ul>
+      <div class="card-footer text-wrap">
+        <small>
+          Will download data from <span>???</span> upon play.
+          <x-bind name="url" closest="span"></x-bind>
+        </small>
+      </div>
+    </div>
+  </template>
+
+  <template id="parse">
+    <style>
+      .card {
+        width: 18rem;
+        position: absolute;
+        top: 150px;
+        left: 50px;
+      }
+    </style>
+    <div class="card shadow" use="movable">
+      <div class="card-header drag-handle">
+        Parse Data
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <x-valve id="out" direction="in" icon="lightning"></x-valve>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput">
+            <x-bind name="url" closest="input"></x-bind>
+            <label for="floatingInput">URL</label>
+          </div>
+        </li>
+        <li class="list-group-item">...</li>
+      </ul>
+      <div class="card-footer text-wrap">
+        <small>
+          Will download data from <span>???</span> upon play.
+          <x-bind name="url" closest="span"></x-bind>
+        </small>
+      </div>
     </div>
   </template>
 

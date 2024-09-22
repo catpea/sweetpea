@@ -1,4 +1,4 @@
-import Theoretical from '../Theoretical.js';
+import Theoretical from './Theoretical.js';
 import StateMachine from 'state-machine';
 
 export default class Stage extends Theoretical {

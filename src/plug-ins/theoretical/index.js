@@ -1,12 +1,11 @@
 import StageElement from './StageElement.js';
-// import Program from './Program.js';
-// import Port from './Port.js';
-// import Cable from './Cable.js';
-// import Space from './Space.js';
+import CableElement from './CableElement.js';
+import ValveElement from './ValveElement.js';
+import ActorElement from './ActorElement.js';
+
 export {
   StageElement,
-  // Program,
-  // Port,
-  // Cable,
-  // Space
+  CableElement,
+  ValveElement,
+  ActorElement,
 };
