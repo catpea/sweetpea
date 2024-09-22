@@ -1,4 +1,17 @@
 <loop>
+  <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group me-2" role="group" aria-label="First group">
+      <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
+      <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
+      <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
+      <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
+    </div>
+    <div class="btn-group me-2" role="group" aria-label="First group">
+      <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
+      <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
+    </div>
+  </div>
+
   <space>
     <scene>
 
@@ -59,18 +72,6 @@
     <div class="area overflow-hidden" style="min-height: 60vh;">
       <svg class="position-absolute w-100 h-100" xmlns="http://www.w3.org/2000/svg" overflow="visible"></svg>
       <slot></slot>
-      <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group me-2" role="group" aria-label="First group">
-          <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
-        </div>
-        <div class="btn-group me-2" role="group" aria-label="First group">
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
-        </div>
-      </div>
     </div>
 </template>
 

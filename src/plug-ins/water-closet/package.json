@@ -1,0 +1,21 @@
+{
+  "name": "water-closet",
+  "version": "1.0.0",
+  "description": "Fluid Web Component Utilities",
+  "main": "WaterCloset.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "save": "git add .; git commit -m 'New Release'; git push; npm version patch; npm publish; git push;",
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/catpea/water-closet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/catpea/water-closet/issues"
+  },
+  "homepage": "https://github.com/catpea/water-closet#readme"
+}

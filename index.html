@@ -8,70 +8,66 @@
     <script type="importmap">
     {
       "imports": {
+        "state-machine": "./src/plug-ins/state-machine/StateMachine.js",
+        "event-emitter": "./src/plug-ins/event-emitter/EventEmitter.js",
+
+        "theoretical": "./src/plug-ins/theoretical/index.js",
+        "masticator": "./src/plug-ins/masticator/index.js",
+
+        "water-closet": "./src/plug-ins/water-closet/WaterCloset.js"
       }
     }
     </script>
     <style>
-      body {
-        background-color: #212529;
-      }
-      data-loop {
-        border: 1px dotted orange;
-      }
     </style>
   </head>
   <script type="module">
-    import {signalize, Signal, install} from "./src/index.js";
-    install();
-    globalThis.root = signalize([
-      {
-        id: 'out',
-        mode: 'primary',
-        name: 'Visual Programming',
-        url: 'menu.json',
-        description: 'A simple visual programming environment.',
 
-        children: [
-          {
-            component: 'stage',
-            mode: 'seondary',
-            name: 'Stage',
-            description: 'Visual Programming Language Stage',
-            children: [
-              //NOTE: only one daughter is shown in screenshot to keep things simple
-              {
-                component: 'program',
-                id: 'a',
-                type: 'fetch',
-                mode: 'info',
-                name: 'Node #1',
-                url: 'menu.json',
-                description: 'Inner Inner Loop Text for Daughter #1',
-              },
-              {
-                component: 'program',
-                id: 'b',
-                type: 'bash',
-                mode: 'info',
-                name: 'Node #2',
-                description: 'Inner Inner Loop Text for Daughter #2',
-              },
-              {
-                id:'x',
-                component: 'cable',
-                mode: 'warning',
-                name: 'Connection #2',
-                description: 'Inner Inner Loop Text for Daughter #2',
-                from: 'a:out',
-                to: 'b:in',
-              }
-            ] // close Mother's children (Daughters)
-          } // close mother
-        ] // close grandmother children
-      } // close grandmother
-    ]); // close root array (Signal Tree Root)
+    import masticator from 'masticator';
+    import {StageElement, CableElement} from 'theoretical';
+
+    await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
+
+    customElements.define('x-stage', StageElement);
+    customElements.define('x-cable', CableElement);
+
+    // customElements.define('x-program', Program);
+    // customElements.define('x-port',    Port);
+    // customElements.define('x-root',    Root);
+
   </script>
+
   <body>
-    <data-root name="hello-world" context="root" url="./application.html"></data-root>
+
+    <x-stage src="templates/my-program.json" controls minimap template="stage">
+      
+      <x-actor id="a"></x-actor>
+      <x-actor id="a"></x-actor>
+
+      <x-cable link="a:out b:in"></x-cable>
+    </x-stage>
+
   </body>
+
+  <template id="stage">
+    <style>
+        :host {
+          display: block;
+          overflow: hidden;
+          position: relative;
+
+          touch-action: none;
+          user-select: none;
+        }
+        .content {
+            transform-origin: 0 0;
+            /* adds smoothness: transition: transform 0.1s; */
+        }
+    </style>
+    <div class="content" style="min-height: 75vh;">
+    <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+    <slot></slot>
+    </div>
+  </template>
+
 </html>

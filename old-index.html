@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sweetpea &middot; Signal and Web Component Enhanced Web Apps</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍈</text></svg>">
+    <script type="importmap">
+    {
+      "imports": {
+      }
+    }
+    </script>
+    <style>
+      body {
+        background-color: #212529;
+      }
+      data-loop {
+        border: 1px dotted orange;
+      }
+    </style>
+  </head>
+  <script type="module">
+    import {signalize, Signal, install} from "./src/index.js";
+    install();
+    globalThis.root = signalize([
+      {
+        id: 'out',
+        mode: 'primary',
+        name: 'Visual Programming',
+        url: 'menu.json',
+        description: 'A simple visual programming environment.',
+
+        children: [
+          {
+            component: 'stage',
+            mode: 'seondary',
+            name: 'Stage',
+            description: 'Visual Programming Language Stage',
+            children: [
+              //NOTE: only one daughter is shown in screenshot to keep things simple
+              {
+                component: 'program',
+                id: 'a',
+                type: 'fetch',
+                mode: 'info',
+                name: 'Node #1',
+                url: 'menu.json',
+                description: 'Inner Inner Loop Text for Daughter #1',
+              },
+              {
+                component: 'program',
+                id: 'b',
+                type: 'bash',
+                mode: 'info',
+                name: 'Node #2',
+                description: 'Inner Inner Loop Text for Daughter #2',
+              },
+              {
+                id:'x',
+                component: 'cable',
+                mode: 'warning',
+                name: 'Connection #2',
+                description: 'Inner Inner Loop Text for Daughter #2',
+                from: 'a:out',
+                to: 'b:in',
+              }
+            ] // close Mother's children (Daughters)
+          } // close mother
+        ] // close grandmother children
+      } // close grandmother
+    ]); // close root array (Signal Tree Root)
+  </script>
+  <body>
+    <data-root name="hello-world" context="root" url="./application.html"></data-root>
+  </body>
+</html>
