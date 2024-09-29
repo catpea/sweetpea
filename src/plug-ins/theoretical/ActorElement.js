@@ -14,4 +14,8 @@ export default class ActorElement extends HTMLElement {
     this.instance.machine.transition('disconnected');
   }
 
+  get pipe(){
+    return this.instance.pipe
+  }
+
 }

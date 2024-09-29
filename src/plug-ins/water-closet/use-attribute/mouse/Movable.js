@@ -48,30 +48,34 @@ export default class Movable {
 
     if (this.#dragging) {
 
-    // Calculate Relative Delta
-    // NOTE: this depends on "Update previousN" and we just substract to get a -n or +n from the last few dozen miliseconds
-    let deltaX = (this.#previousX - event.screenX);
-    let deltaY = (this.#previousY - event.screenY);
+      // Calculate Relative Delta
+      // NOTE: this depends on "Update previousN" and we just substract to get a -n or +n from the last few dozen miliseconds
+      let deltaX = (this.#previousX - event.screenX);
+      let deltaY = (this.#previousY - event.screenY);
 
-    // Apply scale transformation if any to delta (which uses screen pixels)
-    // NOTE: deltaN calculations use screenN which is an untransformed pixel, but we maybe zoomed in/out so we account for that.
-    const scale = this.element.getBoundingClientRect().width / this.element.offsetWidth;
-    deltaX = deltaX / scale;
-    deltaY = deltaY / scale;
+      // Apply scale transformation if any to delta (which uses screen pixels)
+      // NOTE: deltaN calculations use screenN which is an untransformed pixel, but we maybe zoomed in/out so we account for that.
+      const scale = this.element.getBoundingClientRect().width / this.element.offsetWidth;
+      deltaX = deltaX / scale;
+      deltaY = deltaY / scale;
 
-    // Apply the delta to element being dragged
-    // NOTE: we are only adding the updated delta to existing x and y - think of it as matching the motion that the cursor made since the last sampling of previousN
-    let x = parseFloat(this.element.style.left) - deltaX;
-    let y = parseFloat(this.element.style.top) - deltaY;
+      // RARE: if there is no style set, initialize values
+      if(this.element.style.left === '') this.element.style.left = (this.element.offsetLeft) + 'px';
+      if(this.element.style.top === '') this.element.style.top = (this.element.offsetTop) + 'px';
 
-    // Apply the updated x and y to the element
-    // NOTE: x and y are updated by the scaled delta
-    this.element.style.left = `${x}px`;
-    this.element.style.top = `${y}px`;
+      // Apply the delta to element being dragged
+      // NOTE: we are only adding the updated delta to existing x and y - think of it as matching the motion that the cursor made since the last sampling of previousN
+      let x = parseFloat(this.element.style.left) - deltaX;
+      let y = parseFloat(this.element.style.top) - deltaY;
 
-    // Update previousN - get ready for next update
-    this.#previousX = event.screenX;
-    this.#previousY = event.screenY;
+      // Apply the updated x and y to the element
+      // NOTE: x and y are updated by the scaled delta
+      this.element.style.left = `${x}px`;
+      this.element.style.top = `${y}px`;
+
+      // Update previousN - get ready for next update
+      this.#previousX = event.screenX;
+      this.#previousY = event.screenY;
 
     }
 

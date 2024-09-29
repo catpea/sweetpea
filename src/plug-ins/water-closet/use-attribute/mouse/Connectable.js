@@ -54,7 +54,7 @@ export default class Connectable {
     let centeredX = elementX+centerW;
     let centeredY = elementY+centerH;
 
-    const panZoom = this.system.findOut(this.element, 'root-space');
+    const panZoom = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-stage`);
     let {x:panX,y:panY} = panZoom.pan;
     panX = panX / scale;
     panY = panY / scale;
@@ -83,7 +83,7 @@ export default class Connectable {
     console.log('touchdownArea', elementW, elementH);
     console.log('touchdownOffset', this.#touchdownOffsetX, this.#touchdownOffsetY);
 
-    this.#svg = this.system.getScene().shadowRoot.querySelector('svg');
+    this.#svg = this.system.getStage().shadowRoot.querySelector('svg');
     this.#line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     this.#line.setAttribute('x1', x1);
     this.#line.setAttribute('y1', y1);

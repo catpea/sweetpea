@@ -13,6 +13,10 @@ export default class StageElement extends HTMLElement {
   disconnectedCallback() {
     this.instance.machine.transition('disconnected');
   }
+  
+  get pipe(){
+    return this.instance.pipe
+  }
 
   get pan() {
       return this.instance.pan;

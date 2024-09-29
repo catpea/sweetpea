@@ -11,8 +11,12 @@
         "state-machine": "./src/plug-ins/state-machine/StateMachine.js",
         "event-emitter": "./src/plug-ins/event-emitter/EventEmitter.js",
 
+        "movable": "./src/plug-ins/mouse/Movable.js",
+        "connectable": "./src/plug-ins/mouse/Connectable.js",
+
         "theoretical": "./src/plug-ins/theoretical/index.js",
         "masticator": "./src/plug-ins/masticator/index.js",
+        "signal": "./src/plug-ins/signal/Signal.js",
 
         "water-closet": "./src/plug-ins/water-closet/WaterCloset.js"
       }
@@ -23,30 +27,35 @@
   </head>
   <script type="module">
 
+    globalThis.sweetpea = {
+      prefix: 'x',
+    };
+
     import masticator from 'masticator';
     // import {BindElement} from './src/plugins/elements/index.js';
     import {StageElement, CableElement, ValveElement, ActorElement} from 'theoretical';
 
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
 
-    // customElements.define('x-bind', BindElement);
-    customElements.define('x-stage', StageElement);
-    customElements.define('x-actor', ActorElement);
-    // customElements.define('x-valve', ValveElement);
-    // customElements.define('x-cable', CableElement);
-
-
+    // RISC
+    customElements.define(`${globalThis.sweetpea.prefix}-stage`, StageElement);
+    customElements.define(`${globalThis.sweetpea.prefix}-actor`, ActorElement);
+    customElements.define(`${globalThis.sweetpea.prefix}-valve`, ValveElement);
+    customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement);
 
   </script>
 
   <body>
 
+
+
     <x-stage src="templates/my-program.json" controls minimap template="stage">
 
-      <x-actor id="a" template="fetch"></x-actor>
+      <x-actor id="a" template="fetch" data-url="./menu.json"></x-actor>
       <x-actor id="b" template="parse"></x-actor>
-      <x-cable link="a:out b:in"></x-cable>
-      
+
+      <x-cable from="a:out" to="b:in"></x-cable>
+
     </x-stage>
 
   </body>
@@ -67,20 +76,74 @@
       }
     </style>
     <div class="content" style="min-height: 75vh;">
-    <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
-    <slot></slot>
+      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+
+
+      <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-2" role="group" aria-label="First group">
+          <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
+          <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
+          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
+          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
+        </div>
+        <div class="btn-group me-2" role="group" aria-label="First group">
+          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
+          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
+        </div>
+      </div>
+
+      <slot></slot>
     </div>
   </template>
 
-  <template id="port">
+  <template id="valve">
     <style>
-      .port {
+      .valve {
       }
     </style>
-    <span use="connectable" class="port position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
+    <span use="connectable" class="valve position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
   </template>
 
   <template id="fetch">
+    <script type="app">
+      class Main {
+
+        root;
+        pipe;
+        data;
+
+        constructor({root, pipe, data}){
+          this.root = root;
+          this.pipe = pipe;
+          this.data = data;
+        }
+
+        mount(){
+          console.log('MOUNT!!!');
+          this.root.on('play', async ()=>{
+            console.log('Fetch heard play!!!!!!');
+            try {
+              const response = await fetch(this.data.url);
+              if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+              }
+              const data = await response.json();
+              this.pipe.emit('out', {data})
+            } catch (error) {
+              console.error(error.message);
+            }
+          })
+        }
+
+        destroy(){
+        }
+
+        say(el){
+          console.info('Hello from', el);
+        }
+
+      }
+    </script>
     <style>
       .card {
         width: 18rem;
@@ -95,10 +158,12 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          <x-valve id="out" direction="out" icon="lightning"></x-valve>
+
+          <x-valve id="out" data-direction="out" data-icon="lightning"></x-valve>
+
           <div class="form-floating">
             <input type="text" class="form-control" id="floatingInput">
-            <x-bind name="url" closest="input"></x-bind>
+            <x-bind data-name="url" data-closest="input"></x-bind>
             <label for="floatingInput">URL</label>
           </div>
         </li>
@@ -106,14 +171,36 @@
       </ul>
       <div class="card-footer text-wrap">
         <small>
-          Will download data from <span>???</span> upon play.
-          <x-bind name="url" closest="span"></x-bind>
+          working on binding
+          <!-- Will download data from <span>???</span> upon play.
+          <x-bind data-name="url" data-closest="span"></x-bind> -->
         </small>
       </div>
     </div>
   </template>
 
   <template id="parse">
+
+    <script type="app">
+      class Main {
+        root;
+        data;
+        pipe;
+
+        constructor({root, pipe, data}){
+          this.root = root;
+          this.data = data;
+          this.pipe = pipe;
+        }
+
+        mount(){
+          this.pipe.on('in', packet=>{
+            console.log('Bash intercepted a packet', packet);
+          })
+        }
+
+      }
+    </script>
     <style>
       .card {
         width: 18rem;
@@ -122,25 +209,26 @@
         left: 50px;
       }
     </style>
-    <div class="card shadow" use="movable">
+    <div class="card shadow" use="movable" style="left: 500px;">
       <div class="card-header drag-handle">
         Parse Data
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          <x-valve id="out" direction="in" icon="lightning"></x-valve>
-          <div class="form-floating">
+          <x-valve id="in" data-direction="in" data-icon="lightning"></x-valve>
+          <!-- <div class="form-floating">
             <input type="text" class="form-control" id="floatingInput">
-            <x-bind name="url" closest="input"></x-bind>
+            <x-bind data-name="url" data-closest="input"></x-bind>
             <label for="floatingInput">URL</label>
-          </div>
+          </div> -->
         </li>
         <li class="list-group-item">...</li>
       </ul>
       <div class="card-footer text-wrap">
         <small>
-          Will download data from <span>???</span> upon play.
-          <x-bind name="url" closest="span"></x-bind>
+          binding is under construction
+          <!-- Will download data from <span>???</span> upon play.
+          <x-bind data-name="url" data-closest="span"></x-bind> -->
         </small>
       </div>
     </div>

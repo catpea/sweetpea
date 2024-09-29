@@ -13,6 +13,7 @@ export default class Actor extends Theoretical {
           .log('Entering Idle state...')
           .attachShadow()
           .adoptCss()
+          .createElementPipe()
           .log('Entered Idle state'),
         exit: () => this
           .log('Exiting Idle state'),
@@ -29,8 +30,11 @@ export default class Actor extends Theoretical {
         enter: () => this
           .log('Entering Connected state')
           .getTemplate()
-          .installTemplate(),
-
+          .readAndDestroyScript()
+          .installTemplate()
+          .wrapAttributeEvents()
+          .useExtensions()
+          .done,
          exit: () => console.log('Exiting Connected state'),
       },
     };

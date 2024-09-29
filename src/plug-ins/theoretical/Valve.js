@@ -24,9 +24,10 @@ export default class Valve extends Theoretical {
       connected: {
         enter: () => this
           .log('Entering Connected state')
-          .getTemplate()
-          .useExtensionsInTemplate()
-          .installTemplate(),
+          .getTemplate({selector: '#'+this.constructor.name.toLowerCase()})
+          .installTemplate()
+          .bindDoubleCurly()
+          .useExtensions(),
 
          exit: () => console.log('Exiting Connected state'),
       },

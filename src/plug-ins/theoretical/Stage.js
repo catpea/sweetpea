@@ -13,7 +13,8 @@ export default class Stage extends Theoretical {
           .log('Entering Idle state...')
           .attachShadow()
           .adoptCss()
-          .log('Entered Idle state'),
+          .createElementPipe()
+          .done,
         exit: () => this
           .log('Exiting Idle state'),
       },
@@ -29,8 +30,11 @@ export default class Stage extends Theoretical {
         enter: () => this
           .log('Entering Connected state')
           .getTemplate()
+          .readAndDestroyScript()
           .installTemplate()
-          .installStageListeners(),
+          .installStageListeners()
+          .wrapAttributeEvents()
+          .done,
          exit: () => console.log('Exiting Connected state'),
       },
     };
@@ -38,7 +42,6 @@ export default class Stage extends Theoretical {
   }
 
   installStageListeners(){
-    console.log(this);
     this.content = this.host.shadowRoot.querySelector('.content');
 
     this.host.addEventListener('mousedown',  this.#onMouseDown.bind(this));
@@ -49,6 +52,7 @@ export default class Stage extends Theoretical {
     this.host.addEventListener('touchmove',  this.#onTouchMove.bind(this));
     this.host.addEventListener('touchend',   this.#onTouchEnd.bind(this));
 
+    return this;
   }
 
 

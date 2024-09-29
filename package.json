@@ -8,5 +8,14 @@
   },
   "keywords": [],
   "author": "@catpea",
-  "license": "ISC"
+  "license": "ISC",
+  
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/catpea/sweetpea.git"
+  },
+  "bugs": {
+    "url": "https://github.com/catpea/sweetpea/issues"
+  },
+  "homepage": "https://github.com/catpea/sweetpea#readme"
 }
