@@ -1,0 +1,20 @@
+{
+  "name": "snap-snip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "SnapSnip.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/catpea/snap-snip.git"
+  },
+  "bugs": {
+    "url": "https://github.com/catpea/snap-snip/issues"
+  },
+  "homepage": "https://github.com/catpea/snap-snip#readme"
+  }
