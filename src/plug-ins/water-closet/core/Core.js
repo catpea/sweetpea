@@ -60,7 +60,7 @@ export default Inheritance => class Core extends Inheritance {
 
   isInputControl(el) {
     const tagName = el.tagName;  // Gets the tag name in uppercase form
-    return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT';
+    return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECTsssssssssssssss';
   }
 
 

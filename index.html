@@ -75,22 +75,23 @@
           /* adds smoothness: transition: transform 0.1s; */
       }
     </style>
+    <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group me-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
+      </div>
+      <div class="btn-group me-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
+      </div>
+    </div>
     <div class="content" style="min-height: 75vh;">
       <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
 
 
-      <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group me-2" role="group" aria-label="First group">
-          <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
-        </div>
-        <div class="btn-group me-2" role="group" aria-label="First group">
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
-          <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
-        </div>
-      </div>
+
 
       <slot></slot>
     </div>
@@ -138,44 +139,122 @@
         destroy(){
         }
 
-        say(el){
-          console.info('Hello from', el);
+        say(element){
+          console.info('Hello from', element);
+        }
+
+        flip(component){
+          const perspectiveElement = component.searchShadow('.perspective').pop();
+          perspectiveElement.classList.toggle('flipped');
         }
 
       }
     </script>
     <style>
-      .card {
+
+    .perspective {
+      perspective: 1000px;
+      top: 150px;
+      left: 50px;
+    }
+
+    /* flip the pane when hovered */
+    .perspective.flipped .flipper {
+        transform: rotateY(180deg);
+    }
+
+    .perspective, .card.primary, .card.secondary {
         width: 18rem;
+    }
+
+    /* flip speed goes here */
+    .flipper {
+        transition: 0.5s;
+        transform-style: preserve-3d;
+        position: relative;
+    }
+
+    /* hide back of pane during swap */
+    .card.primary, .card.secondary {
+        backface-visibility: hidden;
         position: absolute;
-        top: 150px;
-        left: 50px;
-      }
+        top: 0;
+        left: 0;
+    }
+
+    /* front pane, placed above back */
+    .card.primary {
+        z-index: 2;
+        /* for firefox 31 */
+        transform: rotateY(0deg);
+    }
+
+    /* back, initially hidden pane */
+    .card.secondary {
+        transform: rotateY(180deg);
+    }
+
     </style>
-    <div class="card shadow" use="movable">
-      <div class="card-header drag-handle">
-        JSON Fetch
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
 
-          <x-valve id="out" data-direction="out" data-icon="lightning"></x-valve>
+    <div class="perspective" use="movable">
+    <div class="flipper">
 
-          <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput">
-            <x-bind data-name="url" data-closest="input"></x-bind>
-            <label for="floatingInput">URL</label>
-          </div>
-        </li>
-        <li class="list-group-item">...</li>
-      </ul>
-      <div class="card-footer text-wrap">
-        <small>
-          working on binding
-          <!-- Will download data from <span>???</span> upon play.
-          <x-bind data-name="url" data-closest="span"></x-bind> -->
-        </small>
+      <div class="card primary shadow">
+        <div class="card-header drag-handle">
+          JSON Fetch <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+
+            <x-valve id="out" data-direction="out" data-icon="lightning"></x-valve>
+
+            <div class="form-floating">
+              <input type="text" class="form-control" id="floatingInput">
+              <x-bind data-name="url" data-closest="input"></x-bind>
+              <label for="floatingInput">URL</label>
+            </div>
+          </li>
+          <li class="list-group-item">...</li>
+        </ul>
+        <div class="card-footer text-wrap">
+          <small>
+            working on binding
+            <!-- Will download data from <span>???</span> upon play.
+            <x-bind data-name="url" data-closest="span"></x-bind> -->
+          </small>
+        </div>
       </div>
+
+      <div class="card secondary shadow">
+        <div class="card-header drag-handle">
+          Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <select class="form-select form-select-sm mb-2">
+              <option selected>Worker Category</option>
+              <option value="1">HTTP</option>
+              <option value="2">JSON</option>
+              <option value="3">DATA</option>
+            </select>
+
+            <select class="form-select form-select-sm mb-2">
+              <option selected>Worker</option>
+              <option value="1">Download File</option>
+              <option value="2">Save File</option>
+              <option value="3">Append To Log</option>
+            </select>
+          </li>
+          <li class="list-group-item">...</li>
+        </ul>
+        <div class="card-footer text-wrap">
+          <small class="muted">
+          Configure your component
+          </small>
+        </div>
+      </div>
+
+    </div>
     </div>
   </template>
 

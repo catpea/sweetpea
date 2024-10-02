@@ -153,6 +153,7 @@ export default class Cable extends Theoretical {
           }
         }
       } // while
+      console.log('resizableAncestors', response);
       return response;
     }
 
@@ -197,6 +198,16 @@ export default class Cable extends Theoretical {
 
         // The Element.getBoundingClientRect() method returns a DOMRect object providing information about the size of an element and its position relative to the viewport.
         let {x:elementX,y:elementY, width:elementW, height:elementH} = portPad.getBoundingClientRect();
+
+        // const transform = getComputedStyle(portPad).transform;
+        //
+        //   if (transform !== 'none') {
+        //         const rect = portPad.getBoundingClientRect();
+        //       const matrix = new DOMMatrix(transform);
+        //       const transformedPoint = matrix.transformPoint(new DOMPoint(rect.left, rect.top));
+        //       elementX = transformedPoint.x;
+        //       elementY = transformedPoint.y;
+        //   }
 
         elementX = elementX / scale;
         elementY = elementY / scale;
@@ -250,6 +261,30 @@ export default class Cable extends Theoretical {
         });
         this.subscriptions.push( {type:'ResizeObserver', id:'ancestor', subscription:()=>mutationObserver.disconnect()} );
       });
+
+      window.addEventListener('resize', calculatorFunction);
+      this.subscriptions.push( {type:'addEventListener/resize', id:'window-resize', subscription:()=>window.removeEventListener('resize', calculatorFunction)} );
+
+
+
+      const target = this.findOut(portPad, '.perspective');
+      if(target){
+        target.addEventListener('transitionstart', () => {
+          if(target.classList.contains('flipped')) this.#line.setAttribute('opacity', 0);
+        });
+        target.addEventListener('transitionend', () => {
+          if(!target.classList.contains('flipped')){
+            // TODO: this is a hack
+              setTimeout(()=>this.#line.setAttribute('opacity', 1), 50)
+          }
+
+        });
+
+        this.subscriptions.push( {type:'addEventListener/transitionstart', id:'transition', subscription:()=>target.removeEventListener('transitionstart', calculatorFunction)} );
+        this.subscriptions.push( {type:'addEventListener/transitionend', id:'transition', subscription:()=>target.removeEventListener('transitionend', calculatorFunction)} );
+
+
+      }
 
       window.addEventListener('resize', calculatorFunction);
       this.subscriptions.push( {type:'addEventListener/resize', id:'window-resize', subscription:()=>window.removeEventListener('resize', calculatorFunction)} );

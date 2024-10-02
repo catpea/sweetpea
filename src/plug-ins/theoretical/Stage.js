@@ -75,6 +75,10 @@ export default class Stage extends Theoretical {
 
     // Protected
     #onMouseDown(event) {
+
+        console.log(event.target);
+        if(event.target !== this.host) return
+
         this.#isPanning = true;
         this.#startMousePos = { x: event.clientX, y: event.clientY };
         this.#startPan = { ...this.pan };

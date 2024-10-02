@@ -1,16 +1,35 @@
 export default Inheritance => class ElementSearch extends Inheritance {
 
 
+  searchShadow(selector='*'){
+    return this.search(selector, {shadow:true, dom:false});
+  }
+
   search(selector='*', {shadow, dom}={shadow:true, dom:true}){
     const matches = [];
 
-    const root = this.host.shadowRoot;
-    const elements = root.querySelectorAll(selector);
-    for (const element of elements) {
-      const parents = this.collectParents(element, root);
-      const isOutermost = this.isOutermostElement(parents);
-      if(!isOutermost) continue; // only interested in outermost
-      matches.push(element)
+    if(shadow){
+      const root = this.host.shadowRoot;
+      
+      const elements = root.querySelectorAll(selector);
+      for (const element of elements) {
+        const parents = this.collectParents(element, root);
+        const isOutermost = this.isOutermostElement(parents);
+        if(!isOutermost) continue; // only interested in outermost
+        matches.push(element)
+      }
+    }
+
+    if(dom){
+      const root = this.host;
+      
+      const elements = root.querySelectorAll(selector);
+      for (const element of elements) {
+        const parents = this.collectParents(element, root);
+        const isOutermost = this.isOutermostElement(parents);
+        if(!isOutermost) continue; // only interested in outermost
+        matches.push(element)
+      }
     }
 
     return matches;
