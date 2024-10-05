@@ -23,7 +23,7 @@
     }
     </script>
     <style>
-
+    body { background-color: #123; }
     </style>
   </head>
   <script type="module">
@@ -46,7 +46,7 @@
 
   </script>
 
-  <body>
+  <body style="">
 
 
 
@@ -74,27 +74,48 @@
       .content {
         transform-origin: 0 0;
       }
+
+      .vertical {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+
+      }
     </style>
-    <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
-      <div class="btn-group me-2" role="group" aria-label="First group">
+
+
+
+    <div class="content" style="min-height: 100vh;">
+      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+      <slot></slot>
+
+    <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; top: 0px; z-index: 10;">
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
       </div>
-      <div class="btn-group me-2" role="group" aria-label="First group">
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-folder2-open"></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-floppy"></i></button>
       </div>
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-primary" onclick="console.log(this)"><i class="bi bi-plus-circle text-primary-emphasis"></i></button>
+      </div>
     </div>
-    <div class="content" style="min-height: 75vh;">
-      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
 
+    <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; bottom: 0px; z-index: 10;">
 
-
-
-      <slot></slot>
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-in"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-out"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-fullscreen"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-lock"></i></button>
+      </div>
     </div>
+  </div>
+
   </template>
 
   <template id="valve">
@@ -160,7 +181,7 @@
     /* card coordinates */
     .perspective {
       top: 150px;
-      left: 50px;
+      left: 150px;
     }
 
     /* enable perspective and make the container a relative parent for absolute positioning */
@@ -288,8 +309,8 @@
       .card {
         width: 18rem;
         position: absolute;
-        top: 150px;
-        left: 50px;
+        top: 250px;
+        left: 350px;
       }
     </style>
     <div class="card shadow" use="movable" style="left: 500px;">
