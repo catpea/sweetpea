@@ -26,3 +26,11 @@
 .rotate-270::before {
   transform: rotate(270deg);
 }
+
+
+
+
+
+.glow-sm { box-shadow: rgba(45, 255, 196, 0.4) 0px 0px 5px 2px !important }
+.glow-md { box-shadow: rgba(45, 255, 196, 0.4) 0px 0px 7px 2px !important }
+.glow-lg { box-shadow: rgba(45, 255, 196, 0.4) 0px 0px 10px 2px !important }

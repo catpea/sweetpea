@@ -164,6 +164,7 @@ export default class Cable extends Theoretical {
 
 
     cssStringToObject(cssString) {
+      if(!cssString) return {}
         const cssObject = {};
         const declarations = cssString.split(';').map(part => part.trim()).filter(part => part.length > 0);
 
@@ -267,24 +268,62 @@ export default class Cable extends Theoretical {
 
 
 
-      const target = this.findOut(portPad, '.perspective');
-      if(target){
-        target.addEventListener('transitionstart', () => {
-          if(target.classList.contains('flipped')) this.#line.setAttribute('opacity', 0);
-        });
-        target.addEventListener('transitionend', () => {
-          if(!target.classList.contains('flipped')){
-            // TODO: this is a hack
-              setTimeout(()=>this.#line.setAttribute('opacity', 1), 50)
-          }
+      // const target = this.findOut(portPad, '.perspective');
+      // const flipper = this.findOut(portPad, '.flipper');
+      //
+      // if(target){
+      //
+      //   const card1 = flipper.querySelector('.card.primary');
+      //   const card2 = flipper.querySelector('.card.secondary');
+      //     target.addEventListener('transitionend', () => {
+      //       console.log('VVV', flipper);
+      //       // flipper.style.position = 'absolute';
+      //       // flipper.style.transformStyle = 'flat';
+      //       flipper.style.opacity = '.1';
+      //       card1.style.opacity = '.1';
+      //       card2.style.opacity = '.1';
+      //       requestAnimationFrame(() => {
+      //         // flipper.style.position = 'relative';
+      //         // flipper.style.transformStyle = 'preserve-3d'; /* Forces a reflow and clears pixelation */
+      //         flipper.style.opacity = '1'; /* Forces a reflow and clears pixelation */
+      //         card1.style.opacity = '1'; /* Forces a reflow and clears pixelation */
+      //         card2.style.opacity = '1'; /* Forces a reflow and clears pixelation */
+      //       });
+      //   });
+      // }
 
-        });
-
-        this.subscriptions.push( {type:'addEventListener/transitionstart', id:'transition', subscription:()=>target.removeEventListener('transitionstart', calculatorFunction)} );
-        this.subscriptions.push( {type:'addEventListener/transitionend', id:'transition', subscription:()=>target.removeEventListener('transitionend', calculatorFunction)} );
 
 
-      }
+
+      // if(target){
+      //
+      //   target.addEventListener('transitionstart', () => {
+      //     if(target.classList.contains('flipped')) this.#line.setAttribute('opacity', 0);
+      //   });
+      //
+      //   target.addEventListener('transitionend', () => {
+      //
+      //     flipper.style.transformStyle = 'none';
+      //     requestAnimationFrame(() => {
+      //       // flipper.style.transformStyle = 'preserve-3d'; /* Forces a reflow and clears pixelation */
+      //     });
+      //
+      //     // if(!target.classList.contains('flipped')){
+      //       // TODO: this is a hack
+      //         // setTimeout(()=>this.#line.setAttribute('opacity', 1), 50)
+      //             // target2.style.display = 'none';
+      //             // requestAnimationFrame(() => {
+      //             //   target2.style.display = 'block'; /* Forces a reflow and clears pixelation */
+      //             // });
+      //     // }
+      //
+      //   });
+
+        // this.subscriptions.push( {type:'addEventListener/transitionstart', id:'transition', subscription:()=>target.removeEventListener('transitionstart', calculatorFunction)} );
+        // this.subscriptions.push( {type:'addEventListener/transitionend', id:'transition', subscription:()=>target.removeEventListener('transitionend', calculatorFunction)} );
+
+
+      // }
 
       window.addEventListener('resize', calculatorFunction);
       this.subscriptions.push( {type:'addEventListener/resize', id:'window-resize', subscription:()=>window.removeEventListener('resize', calculatorFunction)} );

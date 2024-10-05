@@ -23,6 +23,7 @@
     }
     </script>
     <style>
+
     </style>
   </head>
   <script type="module">
@@ -102,7 +103,7 @@
       .valve {
       }
     </style>
-    <span use="connectable" class="valve position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success shadow-sm"><i class="bi bi-{{icon}}"></i></span>
+    <span use="connectable" class="valve glow-sm d-inline-block position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success"><i class="bi bi-{{icon}}"></i></span>
   </template>
 
   <template id="fetch">
@@ -160,11 +161,16 @@
 
     /* flip the pane when hovered */
     .perspective.flipped .flipper {
-        transform: rotateY(180deg);
+        transform: rotateY(180deg) ;
     }
 
     .perspective, .card.primary, .card.secondary {
         width: 18rem;
+    }
+
+    @keyframes rerender {
+      from {opacity: .9;}
+      to {opacity: 1;}
     }
 
     /* flip speed goes here */
@@ -172,6 +178,8 @@
         transition: 0.5s;
         transform-style: preserve-3d;
         position: relative;
+        animation-name: rerender;
+        animation-duration: 0.5s;
     }
 
     /* hide back of pane during swap */
@@ -185,13 +193,16 @@
     /* front pane, placed above back */
     .card.primary {
         z-index: 2;
-        /* for firefox 31 */
         transform: rotateY(0deg);
+        animation-name: rerender;
+        
     }
 
     /* back, initially hidden pane */
     .card.secondary {
         transform: rotateY(180deg);
+        animation-duration: 0.5s;
+        
     }
 
     </style>
@@ -295,6 +306,7 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <x-valve id="in" data-direction="in" data-icon="lightning"></x-valve>
+          Data Parsing...
           <!-- <div class="form-floating">
             <input type="text" class="form-control" id="floatingInput">
             <x-bind data-name="url" data-closest="input"></x-bind>
