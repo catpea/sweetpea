@@ -195,35 +195,28 @@ export default class Cable extends Theoretical {
 
       const calculatorFunction = ()=> {
 
-        const scale = portPad.getBoundingClientRect().width / portPad.offsetWidth;
-
-        // The Element.getBoundingClientRect() method returns a DOMRect object providing information about the size of an element and its position relative to the viewport.
         let {x:elementX,y:elementY, width:elementW, height:elementH} = portPad.getBoundingClientRect();
 
-        // const transform = getComputedStyle(portPad).transform;
-        //
-        //   if (transform !== 'none') {
-        //         const rect = portPad.getBoundingClientRect();
-        //       const matrix = new DOMMatrix(transform);
-        //       const transformedPoint = matrix.transformPoint(new DOMPoint(rect.left, rect.top));
-        //       elementX = transformedPoint.x;
-        //       elementY = transformedPoint.y;
-        //   }
+        const scrollLeft = window.scrollX || window.pageXOffset;
+        const scrollTop = window.scrollY || window.pageYOffset;
+        elementX = elementX + scrollLeft;
+        elementY = elementY + scrollTop;
 
-        elementX = elementX / scale;
-        elementY = elementY / scale;
+        const panZoom = this.getStage()
+        let {x:panX,y:panY} = panZoom.pan;
+        let zoom = panZoom.zoom;
 
-        elementW = elementW / scale;
-        elementH = elementH / scale;
+        elementX = elementX / zoom;
+        elementY = elementY / zoom;
+
+        elementW = elementW / zoom;
+        elementH = elementH / zoom;
 
         const centerW = elementW/2;
         const centerH = elementH/2;
 
-
-        const panZoom = this.getStage()
-        let {x:panX,y:panY} = panZoom.pan;
-        panX = panX / scale;
-        panY = panY / scale;
+        panX = panX / zoom;
+        panY = panY / zoom;
 
         const positionedX = elementX-panX;
         const positionedY = elementY-panY;

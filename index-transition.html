@@ -72,7 +72,8 @@
         user-select: none;
       }
       .content {
-        transform-origin: 0 0;
+          transform-origin: 0 0;
+          transition: transform 1s;
       }
     </style>
     <div class="position-absolute btn-toolbar m-3" role="toolbar" aria-label="Toolbar with button groups">
@@ -144,53 +145,50 @@
         }
 
         flip(component){
-          const container = component.searchShadow('.perspective').pop();
-          const frontCard = container.querySelector('.primary');
-          const backCard = container.querySelector('.secondary');
-          component.flipCard(frontCard, backCard);
+          const perspectiveElement = component.searchShadow('.perspective').pop();
+          perspectiveElement.classList.toggle('flipped');
         }
 
       }
     </script>
     <style>
 
-
-
-
-    /* card coordinates */
     .perspective {
       top: 150px;
       left: 50px;
-    }
-
-    /* enable perspective and make the container a relative parent for absolute positioning */
-    .perspective {
       perspective: 400px;
-      position: relative;
+
     }
 
-    /* set all width to equal */
-    .perspective, .card {
-      width: 18rem;
+    /* flip the pane when hovered */
+    .perspective.flipped .flipper {
+        transform: rotateY(180deg) ;
+
     }
 
-    /* set absolute position, and stack cards relative to .perspective */
-    .card {
-      position: absolute ! important;
-      top: 1px;
-      left: 1px;
-      backface-visibility: hidden;
+    .perspective, .card.primary, .card.secondary {
+        width: 18rem;
     }
-    /*
-    position: relative;
-    transform-style: preserve-3d;
-    */
 
+    /* flip speed goes here */
+    .flipper {
+        transition: 0.5s;
+        transform-style: preserve-3d;
+        position: relative;
+    }
+
+    /* hide back of pane during swap */
+    .card.primary, .card.secondary {
+        backface-visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 
     /* front pane, placed above back */
     .card.primary {
         z-index: 2;
-        /* transform: rotateY(0deg); */
+        transform: rotateY(0deg);
     }
 
     /* back, initially hidden pane */
@@ -201,7 +199,7 @@
     </style>
 
     <div class="perspective" use="movable">
-
+    <div class="flipper">
 
       <div class="card primary shadow">
         <div class="card-header drag-handle">
@@ -258,7 +256,7 @@
         </div>
       </div>
 
-
+    </div>
     </div>
   </template>
 

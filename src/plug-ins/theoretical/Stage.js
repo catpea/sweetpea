@@ -70,7 +70,7 @@ export default class Stage extends Theoretical {
 
     // Public
     updateTransform() {
-        this.content.style.transform = `translate(${this.pan.x}px, ${this.pan.y}px) scale(${this.zoom})`;
+        this.content.style.transform = `translate(${this.pan.x}px, ${this.pan.y}px) scale(${this.zoom})`; //NOTE: rotateY(0deg) rotateY(0deg) prevents blurring in certain conditions
     }
 
     // Protected

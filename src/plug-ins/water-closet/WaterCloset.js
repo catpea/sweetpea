@@ -5,6 +5,7 @@ import Logging from './logging/Logging.js';
 import Curlies from './curlies/Curlies.js';
 import ElementEvents from './element-events/ElementEvents.js';
 import UseAttribute from './use-attribute/UseAttribute.js';
+import Animation from './animation/Animation.js';
 
 export default function(){
 
@@ -15,7 +16,8 @@ export default function(){
     Logging,       // .log functionality and related methods
     Curlies,       // Sigh, {{}} bracket expansion and interpolation
     ElementEvents, // Sigh, onclick="()=>" events
-    UseAttribute   // <element use="feature1, feature2"> support
+    UseAttribute,   // <element use="feature1, feature2"> support
+    Animation,   // flipCard()
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );
