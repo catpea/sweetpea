@@ -72,6 +72,9 @@ export default class Movable {
       // NOTE: x and y are updated by the scaled delta
       this.element.style.left = `${x}px`;
       this.element.style.top = `${y}px`;
+      console.log(this.system.host);
+      this.system.host.setAttribute('x', x);
+      this.system.host.setAttribute('y', y);
 
       // Update previousN - get ready for next update
       this.#previousX = event.screenX;

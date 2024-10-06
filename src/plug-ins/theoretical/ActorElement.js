@@ -1,7 +1,11 @@
 import Actor from './Actor.js';
 
-export default class ActorElement extends HTMLElement {
+export default class ActorElement extends HTMLElement{
   instance;
+
+  static get observedAttributes() {
+    return ['x', 'y'];
+  }
 
   constructor() {
     super();
@@ -9,13 +13,36 @@ export default class ActorElement extends HTMLElement {
   }
   connectedCallback() {
     this.instance.machine.transition('connected');
+    this.updatePosition();
   }
   disconnectedCallback() {
     this.instance.machine.transition('disconnected');
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this.updatePosition();
+    }
+  }
+
+  updatePosition() {
+    const x = this.getAttribute('x') || '0';
+    const y = this.getAttribute('y') || '0';
+    console.log('PP', {x,y});
+    const movable = this.shadowRoot.querySelector('.movable');
+    console.log('PP', movable, this.shadowRoot);
+    if (movable) {
+      movable.style.left = `${x}px`;
+      movable.style.top = `${y}px`;
+    }
+  }
+
   get pipe(){
     return this.instance.pipe
   }
+
+
+
+
 
 }

@@ -37,7 +37,11 @@ export default class Cable extends Theoretical {
           .done,
 
          exit: () => console.log('Exiting Connected state'),
-      },
+       },
+       disconnected: {
+        enter: () => this.collectGarbage(),
+          exit: () => console.log('Exiting disconnected'),
+       },
     };
     this.machine = new StateMachine(states, 'idle');
   }
@@ -61,6 +65,7 @@ export default class Cable extends Theoretical {
     return this;
   }
 
+
   drawLine(){
     this.#line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     this.#line.setAttribute('x1', this.#x1);
@@ -70,9 +75,10 @@ export default class Cable extends Theoretical {
     this.#line.setAttribute('stroke', this.#stroke);
     this.#line.setAttribute('stroke-width', this.#strokeWidth);
     this.#svg.appendChild(this.#line);
+
+    this.subscriptions.push( {type:'svg/line', id:'cable', subscription:()=>this.#line.remove()} );
     return this;
   }
-
 
 
 
@@ -203,6 +209,7 @@ export default class Cable extends Theoretical {
         elementY = elementY + scrollTop;
 
         const panZoom = this.getStage()
+        if(!panZoom) return; // component destroyed
         let {x:panX,y:panY} = panZoom.pan;
         let zoom = panZoom.zoom;
 

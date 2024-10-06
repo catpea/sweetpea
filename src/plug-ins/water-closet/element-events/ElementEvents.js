@@ -17,6 +17,7 @@ export default Inheritance => class ElementEvents extends Inheritance {
   wrapAttributeEvents(){
 
     const classContext = {
+      core: this,
       root: this.getStage().pipe,
       pipe: this.pipe,
       data: this.host.dataset,

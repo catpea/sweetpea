@@ -36,7 +36,11 @@ export default class Stage extends Theoretical {
           .wrapAttributeEvents()
           .done,
          exit: () => console.log('Exiting Connected state'),
-      },
+       },
+       disconnected: {
+        enter: () => this.collectGarbage(),
+          exit: () => console.log('Exiting disconnected'),
+       },
     };
     this.machine = new StateMachine(states, 'idle');
   }
