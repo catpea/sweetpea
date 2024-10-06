@@ -52,7 +52,7 @@ export default Inheritance => class Core extends Inheritance {
       arr[8] = (arr[8] & 0x3f) | 0x80; // Variant bits (10xx, meaning variant 1)
 
       // Convert to hexadecimal format
-      return Array.from(arr, byte => byte.toString(16).padStart(2, '0'))
+      return 'guid-'+Array.from(arr, byte => byte.toString(16).padStart(2, '0'))
           .join('')
           .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5'); // Insert hyphen as per UUID formatting
   }

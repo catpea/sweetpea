@@ -64,7 +64,13 @@ export default Inheritance => class ElementEvents extends Inheritance {
         });
       });
     } // supportedEvents
+
     if('mount' in this.klass) this.klass.mount();
+    // this.subscriptions.push( {type:'klass/destroy', id:'klass', subscription:()=>{
+    //   if('destroy' in this.klass) this.klass.destroy();
+    // }} );
+    this.subscriptions.push({type:'klass/destroy', id:'klass', subscription:()=>this.klass?.destroy()});
+
     return this;
   }
 

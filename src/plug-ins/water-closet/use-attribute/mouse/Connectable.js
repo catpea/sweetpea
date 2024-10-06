@@ -156,17 +156,36 @@ export default class Connectable {
   }
 
   mouseUpHandler(event) {
+
     if (this.#dragging){
 
       this.#svg.removeChild(this.#line);
-      console.info(`Dropped element at ${this.finalX}x${this.finalY}.`);
-      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('r', 10);
-      circle.setAttribute('cx', this.finalX);
-      circle.setAttribute('cy', this.finalY);
-      circle.setAttribute('fill', 'none');
-      circle.setAttribute('stroke', 'green');
-      this.#svg.appendChild(circle);
+      console.info(`Dropped element at ${this.finalX}x${this.finalY}.`, event.target, event.currentTarget, event.composedPath());
+
+      const fromActor = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-actor`);
+      const fromValve = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-valve`);
+      const from = [fromActor.getAttribute('id'), fromValve.getAttribute('id')].join(':');
+
+      const composedPath = event.composedPath().filter(el=>el instanceof HTMLElement).filter(el=>el.hasAttribute('id'))
+      const toActor = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-actor`))
+      const toValve = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-valve`))
+      const to = [toActor.getAttribute('id'), toValve.getAttribute('id')].join(':');
+
+      const cable = document.createElement(`${globalThis.sweetpea.prefix}-cable`);
+      // cable.setAttribute('id', this.system.guid());
+      cable.setAttribute('from', from);
+      cable.setAttribute('to', to);
+      this.system.getStage().appendChild(cable);
+
+      // NOTE: can be use for some animated effect
+      // const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      // circle.setAttribute('r', 10);
+      // circle.setAttribute('cx', this.finalX);
+      // circle.setAttribute('cy', this.finalY);
+      // circle.setAttribute('fill', 'none');
+      // circle.setAttribute('stroke', 'green');
+      // this.#svg.appendChild(circle);
+
     }
 
     this.#dragging = false;

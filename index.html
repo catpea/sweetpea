@@ -50,12 +50,20 @@
 
 
 
-    <x-stage src="templates/my-program.json" controls minimap template="stage">
+    <!--
+    <x-actor id="xena" x="100" y="300" template="fetch" data-url="./menu.json"></x-actor>
+    <x-actor id="troi" x="500" y="300" template="parse"></x-actor>
+    <x-actor id="bork" x="700" y="500" template="write"></x-actor>
 
-      <x-actor id="a" x="100" y="300" template="fetch" data-url="./menu.json"></x-actor>
-      <x-actor id="b" x="500" y="300" template="parse"></x-actor>
+    <x-cable from="xena:out" to="troi:in"></x-cable>
+  -->
+    <x-stage controls minimap template="stage">
 
-      <x-cable from="a:out" to="b:in"></x-cable>
+      <x-actor id="xena" x="90" y="63" template="fetch" data-url="./menu.json"> </x-actor>
+      <x-actor id="troi" x="510" y="161" template="parse"> </x-actor>
+      <x-actor id="bork" x="935" y="87" template="write"> </x-actor>
+      <x-cable from="xena:out" to="troi:in"></x-cable>
+      <x-cable from="troi:out" to="bork:in"></x-cable>
 
     </x-stage>
 
@@ -194,11 +202,13 @@
     <script type="app">
       class Main {
 
+        core;
         root;
-        pipe;
         data;
+        pipe;
 
-        constructor({root, pipe, data}){
+        constructor({core, root, pipe, data}){
+          this.core = core;
           this.root = root;
           this.pipe = pipe;
           this.data = data;
@@ -206,10 +216,10 @@
 
         mount(){
           console.log('MOUNT!!!');
-          this.root.on('play', async ()=>{
+          this.forgetPlay = this.root.on('play', async ()=>{
             console.log('Fetch heard play!!!!!!');
             try {
-              const response = await fetch(this.data.url);
+              const response = await fetch(this.data.url||'menu.json');
               if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
               }
@@ -222,6 +232,7 @@
         }
 
         destroy(){
+          this.forgetPlay();
         }
 
         say(element){
@@ -295,10 +306,10 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
 
-            <x-valve id="out" data-direction="out" data-icon="lightning"></x-valve>
+            <x-valve id="out" data-direction="out" data-icon="fire"></x-valve>
 
             <div class="form-floating">
-              <input type="text" class="form-control" id="floatingInput">
+              <input type="text" class="form-control" id="floatingInput" value="menu.json">
               <x-bind data-name="url" data-closest="input"></x-bind>
               <label for="floatingInput">URL</label>
             </div>
@@ -347,24 +358,338 @@
     </div>
   </template>
 
-  <template id="parse">
 
+
+  <template id="parse">
     <script type="app">
       class Main {
+
+        core;
         root;
         data;
         pipe;
 
-        constructor({root, pipe, data}){
+        constructor({core, root, pipe, data}){
+          this.core = core;
+          this.root = root;
+          this.pipe = pipe;
+          this.data = data;
+        }
+
+        mount(){
+          this.forgetIn = this.pipe.on('in', packet=>{
+            console.log(`Data Change intercepted a packet ${this.core.host.getAttribute('id')}`, packet);
+            this.pipe.emit('out', packet)
+
+          })
+        }
+
+        destroy(){
+          this.forgetIn();
+        }
+
+        say(element){
+          console.info('Hello from', element);
+        }
+
+        flip(component){
+          const container = component.searchShadow('.perspective').pop();
+          const frontCard = container.querySelector('.primary');
+          const backCard = container.querySelector('.secondary');
+          component.flipCard(frontCard, backCard);
+        }
+
+      }
+    </script>
+    <style>
+
+
+
+
+    /* card coordinates */
+    .movable {
+      top: 0px;
+      left: 0px;
+    }
+
+    /* enable perspective and make the container a relative parent for absolute positioning */
+    .perspective {
+      perspective: 400px;
+      position: relative;
+    }
+
+    /* set all width to equal */
+    .perspective, .card {
+      width: 18rem;
+    }
+
+    /* set absolute position, and stack cards relative to .perspective */
+    .card {
+      position: absolute ! important;
+      top: 1px;
+      left: 1px;
+      backface-visibility: hidden;
+    }
+    /*
+    position: relative;
+    transform-style: preserve-3d;
+    */
+
+
+    /* front pane, placed above back */
+    .card.primary {
+        z-index: 2;
+        /* transform: rotateY(0deg); */
+    }
+
+    /* back, initially hidden pane */
+    .card.secondary {
+        transform: rotateY(180deg);
+    }
+
+    </style>
+
+    <div class="perspective movable" use="movable">
+
+
+      <div class="card primary shadow">
+        <div class="card-header drag-handle">
+          Object Change <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+
+            <x-valve id="in" data-direction="in" data-icon="lightning"></x-valve>
+            <x-valve id="out" data-direction="out" data-icon="capsule"></x-valve>
+
+            <div class="form-floating">
+              <input type="text" class="form-control" id="floatingInput" value="data.payload = 123">
+              <x-bind data-name="url" data-closest="input"></x-bind>
+              <label for="floatingInput">code</label>
+            </div>
+          </li>
+          <li class="list-group-item">...</li>
+        </ul>
+        <div class="card-footer text-wrap">
+          <small>
+            working on binding
+            <!-- Will download data from <span>???</span> upon play.
+            <x-bind data-name="url" data-closest="span"></x-bind> -->
+          </small>
+        </div>
+      </div>
+
+      <div class="card secondary shadow">
+        <div class="card-header drag-handle">
+          Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <select class="form-select form-select-sm mb-2">
+              <option selected>Worker Category</option>
+              <option value="1">HTTP</option>
+              <option value="2">JSON</option>
+              <option value="3">DATA</option>
+            </select>
+
+            <select class="form-select form-select-sm mb-2">
+              <option selected>Worker</option>
+              <option value="1">Download File</option>
+              <option value="2">Save File</option>
+              <option value="3">Append To Log</option>
+            </select>
+          </li>
+          <li class="list-group-item">...</li>
+        </ul>
+        <div class="card-footer text-wrap">
+          <small class="muted">
+          Configure your component
+          </small>
+        </div>
+      </div>
+
+
+    </div>
+  </template>
+
+
+  <template id="write">
+    <script type="app">
+      class Main {
+
+        core;
+        root;
+        data;
+        pipe;
+
+        constructor({core, root, pipe, data}){
+          this.core = core;
+          this.root = root;
+          this.pipe = pipe;
+          this.data = data;
+        }
+
+        mount(){
+          // console.log('MOUNT!!!');
+          // this.forgetPlay = this.root.on('play', async ()=>{
+          // })
+          this.forgetIn = this.pipe.on('in', packet=>{
+            console.log(`Data Writer intercepted a packet ${this.core.host.getAttribute('id')}`, packet);
+          })
+        }
+
+        destroy(){
+          this.forgetIn();
+        }
+
+        say(element){
+          console.info('Hello from', element);
+        }
+
+        flip(component){
+          const container = component.searchShadow('.perspective').pop();
+          const frontCard = container.querySelector('.primary');
+          const backCard = container.querySelector('.secondary');
+          component.flipCard(frontCard, backCard);
+        }
+
+      }
+    </script>
+    <style>
+
+
+
+
+    /* card coordinates */
+    .movable {
+      top: 0px;
+      left: 0px;
+    }
+
+    /* enable perspective and make the container a relative parent for absolute positioning */
+    .perspective {
+      perspective: 400px;
+      position: relative;
+    }
+
+    /* set all width to equal */
+    .perspective, .card {
+      width: 18rem;
+    }
+
+    /* set absolute position, and stack cards relative to .perspective */
+    .card {
+      position: absolute ! important;
+      top: 1px;
+      left: 1px;
+      backface-visibility: hidden;
+    }
+    /*
+    position: relative;
+    transform-style: preserve-3d;
+    */
+
+
+    /* front pane, placed above back */
+    .card.primary {
+        z-index: 2;
+        /* transform: rotateY(0deg); */
+    }
+
+    /* back, initially hidden pane */
+    .card.secondary {
+        transform: rotateY(180deg);
+    }
+
+    </style>
+
+    <div class="perspective movable" use="movable">
+
+
+      <div class="card primary shadow">
+        <div class="card-header drag-handle">
+          Data Writer <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+
+            <x-valve id="in" data-direction="in" data-icon="lightning"></x-valve>
+
+            <div class="form-floating">
+              <input type="text" class="form-control" id="floatingInput" value="data.txt">
+              <x-bind data-name="url" data-closest="input"></x-bind>
+              <label for="floatingInput">file</label>
+            </div>
+          </li>
+          <li class="list-group-item">...</li>
+        </ul>
+        <div class="card-footer text-wrap">
+          <small>
+            working on binding
+            <!-- Will download data from <span>???</span> upon play.
+            <x-bind data-name="url" data-closest="span"></x-bind> -->
+          </small>
+        </div>
+      </div>
+
+      <div class="card secondary shadow">
+        <div class="card-header drag-handle">
+          Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <select class="form-select form-select-sm mb-2">
+              <option selected>Worker Category</option>
+              <option value="1">HTTP</option>
+              <option value="2">JSON</option>
+              <option value="3">DATA</option>
+            </select>
+
+            <select class="form-select form-select-sm mb-2">
+              <option selected>Worker</option>
+              <option value="1">Download File</option>
+              <option value="2">Save File</option>
+              <option value="3">Append To Log</option>
+            </select>
+          </li>
+          <li class="list-group-item">...</li>
+        </ul>
+        <div class="card-footer text-wrap">
+          <small class="muted">
+          Configure your component
+          </small>
+        </div>
+      </div>
+
+
+    </div>
+  </template>
+
+
+  <template id="worker">
+
+    <script type="app">
+      class Main {
+        core;
+        root;
+        data;
+        pipe;
+
+        constructor({core, root, pipe, data}){
+          this.core = core;
           this.root = root;
           this.data = data;
           this.pipe = pipe;
         }
 
+
         mount(){
-          this.pipe.on('in', packet=>{
-            console.log('Bash intercepted a packet', packet);
+          this.forgetIn = this.pipe.on('in', packet=>{
+            console.log(`Bash intercepted a packet ${this.core.host.getAttribute('id')}`, packet);
           })
+        }
+        destroy(){
+          this.forgetIn()
         }
 
       }
