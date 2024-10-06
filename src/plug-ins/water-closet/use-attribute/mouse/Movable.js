@@ -70,9 +70,9 @@ export default class Movable {
 
       // Apply the updated x and y to the element
       // NOTE: x and y are updated by the scaled delta
+      // TODO: should only assign to attribute
       this.element.style.left = `${x}px`;
       this.element.style.top = `${y}px`;
-      console.log(this.system.host);
       this.system.host.setAttribute('x', x);
       this.system.host.setAttribute('y', y);
 

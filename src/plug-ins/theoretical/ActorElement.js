@@ -28,9 +28,7 @@ export default class ActorElement extends HTMLElement{
   updatePosition() {
     const x = this.getAttribute('x') || '0';
     const y = this.getAttribute('y') || '0';
-    console.log('PP', {x,y});
     const movable = this.shadowRoot.querySelector('.movable');
-    console.log('PP', movable, this.shadowRoot);
     if (movable) {
       movable.style.left = `${x}px`;
       movable.style.top = `${y}px`;

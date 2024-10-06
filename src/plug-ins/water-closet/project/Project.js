@@ -7,7 +7,7 @@ export default Inheritance => class Project extends Inheritance {
     file: 'untitled.txt',
   }
 
-  create(){
+  blank(){
     this.getStage().replaceChildren();
   }
 
@@ -19,6 +19,7 @@ export default Inheritance => class Project extends Inheritance {
         const contents = await file.text();
         const [rawJson, rawHtml] = contents.split(/\n---\n/, 2);
         console.log(rawHtml);
+        this.getStage().replaceChildren();
         this.getStage().innerHTML = rawHtml;
         console.log(this.getStage().shadowDom);
         const projectData = JSON.parse(`{${rawJson}}`)

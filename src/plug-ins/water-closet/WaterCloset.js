@@ -8,6 +8,7 @@ import ElementEvents from './element-events/ElementEvents.js';
 import UseAttribute from './use-attribute/UseAttribute.js';
 import Animation from './animation/Animation.js';
 import Project from './project/Project.js';
+import VisualProgramming from './visual-programming/VisualProgramming.js';
 
 export default function(){
 
@@ -21,7 +22,8 @@ export default function(){
     ElementEvents, // Sigh, onclick="()=>" events
     UseAttribute,   // <element use="feature1, feature2"> support
     Animation,   // flipCard()
-    Project,   // flipCard()
+    Project,   // open/save()
+    VisualProgramming,   // addSupervisor()
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );
