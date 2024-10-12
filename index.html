@@ -8,6 +8,8 @@
     <script type="importmap">
     {
       "imports": {
+        "actor": "./src/plug-ins/actor/Actor.js",
+
         "state-machine": "./src/plug-ins/state-machine/StateMachine.js",
         "event-emitter": "./src/plug-ins/event-emitter/EventEmitter.js",
 
@@ -34,34 +36,32 @@
 
     import masticator from 'masticator';
     // import {BindElement} from './src/plugins/elements/index.js';
-    import {StageElement, CableElement, ValveElement, ActorElement} from 'theoretical';
+    import {StageElement, CableElement, ValveElement, SuperElement} from 'theoretical';
 
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
 
+    await StageElement.load();
+    await ValveElement.load();
+    await CableElement.load();
+    await SuperElement.load();
+
     // RISC
     customElements.define(`${globalThis.sweetpea.prefix}-stage`, StageElement);
-    customElements.define(`${globalThis.sweetpea.prefix}-actor`, ActorElement);
     customElements.define(`${globalThis.sweetpea.prefix}-valve`, ValveElement);
     customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement);
+    customElements.define(`${globalThis.sweetpea.prefix}-super`, SuperElement);
 
   </script>
 
   <body style="">
 
 
-
-    <!--
-    <x-actor id="xena" x="100" y="300" template="fetch" data-url="./menu.json"></x-actor>
-    <x-actor id="troi" x="500" y="300" template="parse"></x-actor>
-    <x-actor id="bork" x="700" y="500" template="write"></x-actor>
-
-    <x-cable from="xena:out" to="troi:in"></x-cable>
-  -->
     <x-stage controls minimap template="stage">
 
-      <x-actor id="xena" x="90" y="63" template="fetch" data-url="./menu.json"> </x-actor>
-      <x-actor id="troi" x="510" y="161" template="parse"> </x-actor>
-      <x-actor id="bork" x="935" y="87" template="write"> </x-actor>
+      <x-super id="xena" x="90" y="63" worker="http/fetch" data-url="./menu.json"> </x-super>
+      <x-super id="troi" x="510" y="161" worker="parse"> </x-super>
+      <x-super id="bork" x="935" y="87" worker="write"> </x-super>
+
       <x-cable from="xena:out" to="troi:in"></x-cable>
       <x-cable from="troi:out" to="bork:in"></x-cable>
 
@@ -198,167 +198,7 @@
     <span use="connectable" class="valve glow-sm d-inline-block position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success"><i class="bi bi-{{icon}}"></i></span>
   </template>
 
-  <template id="fetch">
-    <script type="app">
-      class Main {
-
-        core;
-        root;
-        data;
-        pipe;
-
-        constructor({core, root, pipe, data}){
-          this.core = core;
-          this.root = root;
-          this.pipe = pipe;
-          this.data = data;
-        }
-
-        mount(){
-          console.log('MOUNT!!!');
-          this.forgetPlay = this.root.on('play', async ()=>{
-            console.log('Fetch heard play!!!!!!');
-            try {
-              const response = await fetch(this.data.url||'menu.json');
-              if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-              }
-              const data = await response.json();
-              this.pipe.emit('out', {data})
-            } catch (error) {
-              console.error(error.message);
-            }
-          })
-        }
-
-        destroy(){
-          this.forgetPlay();
-        }
-
-        say(element){
-          console.info('Hello from', element);
-        }
-
-        flip(component){
-          const container = component.searchShadow('.perspective').pop();
-          const frontCard = container.querySelector('.primary');
-          const backCard = container.querySelector('.secondary');
-          component.flipCard(frontCard, backCard);
-        }
-
-      }
-    </script>
-    <style>
-
-
-
-
-    /* card coordinates */
-    .movable {
-      top: 0px;
-      left: 0px;
-    }
-
-    /* enable perspective and make the container a relative parent for absolute positioning */
-    .perspective {
-      perspective: 400px;
-      position: relative;
-    }
-
-    /* set all width to equal */
-    .perspective, .card {
-      width: 18rem;
-    }
-
-    /* set absolute position, and stack cards relative to .perspective */
-    .card {
-      position: absolute ! important;
-      top: 1px;
-      left: 1px;
-      backface-visibility: hidden;
-    }
-    /*
-    position: relative;
-    transform-style: preserve-3d;
-    */
-
-
-    /* front pane, placed above back */
-    .card.primary {
-        z-index: 2;
-        /* transform: rotateY(0deg); */
-    }
-
-    /* back, initially hidden pane */
-    .card.secondary {
-        transform: rotateY(180deg);
-    }
-
-    </style>
-
-    <div class="perspective movable" use="movable">
-
-
-      <div class="card primary shadow">
-        <div class="card-header drag-handle">
-          JSON Fetch <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-
-            <x-valve id="out" data-direction="out" data-icon="fire"></x-valve>
-
-            <div class="form-floating">
-              <input type="text" class="form-control" id="floatingInput" value="menu.json">
-              <x-bind data-name="url" data-closest="input"></x-bind>
-              <label for="floatingInput">URL</label>
-            </div>
-          </li>
-          <li class="list-group-item">...</li>
-        </ul>
-        <div class="card-footer text-wrap">
-          <small>
-            working on binding
-            <!-- Will download data from <span>???</span> upon play.
-            <x-bind data-name="url" data-closest="span"></x-bind> -->
-          </small>
-        </div>
-      </div>
-
-      <div class="card secondary shadow">
-        <div class="card-header drag-handle">
-          Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <select class="form-select form-select-sm mb-2">
-              <option selected>Worker Category</option>
-              <option value="1">HTTP</option>
-              <option value="2">JSON</option>
-              <option value="3">DATA</option>
-            </select>
-
-            <select class="form-select form-select-sm mb-2">
-              <option selected>Worker</option>
-              <option value="1">Download File</option>
-              <option value="2">Save File</option>
-              <option value="3">Append To Log</option>
-            </select>
-          </li>
-          <li class="list-group-item">...</li>
-        </ul>
-        <div class="card-footer text-wrap">
-          <small class="muted">
-          Configure your component
-          </small>
-        </div>
-      </div>
-
-
-    </div>
-  </template>
-
-
+   
 
   <template id="parse">
     <script type="app">

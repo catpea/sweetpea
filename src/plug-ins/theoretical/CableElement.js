@@ -3,6 +3,9 @@ import Cable from './Cable.js';
 export default class CableElement extends HTMLElement {
   instance;
 
+  static async load() {
+  }
+
   constructor() {
     super();
     this.instance = new Cable(this);

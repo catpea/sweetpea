@@ -1,0 +1,36 @@
+/* card coordinates */
+.movable {
+  top: 0px;
+  left: 0px;
+}
+
+/* enable perspective and make the container a relative parent for absolute positioning */
+.perspective {
+  perspective: 400px;
+  position: relative;
+}
+
+/* set all width to equal */
+.perspective, .card {
+  width: 18rem;
+}
+
+/* set absolute position, and stack cards relative to .perspective */
+.card {
+  position: absolute ! important;
+  top: 1px;
+  left: 1px;
+  backface-visibility: hidden;
+}
+
+
+/* front pane, placed above back */
+.card.primary {
+    z-index: 2;
+    /* transform: rotateY(0deg); */
+}
+
+/* back, initially hidden pane */
+.card.secondary {
+    transform: rotateY(180deg);
+}

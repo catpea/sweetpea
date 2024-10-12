@@ -3,6 +3,9 @@ import Stage from './Stage.js';
 export default class StageElement extends HTMLElement {
   instance;
 
+  static async load() {
+  }
+
   constructor() {
     super();
     this.instance = new Stage(this);
@@ -13,7 +16,7 @@ export default class StageElement extends HTMLElement {
   disconnectedCallback() {
     this.instance.machine.transition('disconnected');
   }
-  
+
   get pipe(){
     return this.instance.pipe
   }

@@ -63,10 +63,15 @@ export default Inheritance => class Core extends Inheritance {
   }
 
 
-
-
-
-
+  dispatchReady(){
+    const event = new CustomEvent('ready', {
+        detail: { message: 'ready!' },
+        bubbles: true,
+        composed: true
+    });
+    this.host.dispatchEvent(event);
+    return this;
+  }
 
 
 
@@ -117,7 +122,6 @@ export default Inheritance => class Core extends Inheritance {
   installTemplate(){
     this.host.shadowRoot.appendChild(this.template);
     return this;
-
   }
 
 

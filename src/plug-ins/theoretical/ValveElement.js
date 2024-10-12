@@ -3,6 +3,9 @@ import Valve from './Valve.js';
 export default class ValveElement extends HTMLElement {
   instance;
 
+  static async load() {
+  }
+
   constructor() {
     super();
     this.instance = new Valve(this);

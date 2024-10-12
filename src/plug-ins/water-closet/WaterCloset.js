@@ -9,6 +9,7 @@ import UseAttribute from './use-attribute/UseAttribute.js';
 import Animation from './animation/Animation.js';
 import Project from './project/Project.js';
 import VisualProgramming from './visual-programming/VisualProgramming.js';
+import ActorIntegration from './actor-integration/ActorIntegration.js';
 
 export default function(){
 
@@ -24,6 +25,7 @@ export default function(){
     Animation,   // flipCard()
     Project,   // open/save()
     VisualProgramming,   // addSupervisor()
+    ActorIntegration,   // installActor()
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );

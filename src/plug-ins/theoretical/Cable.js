@@ -54,8 +54,8 @@ export default class Cable extends Theoretical {
 
   #x1 = 0;
   #y1 = 0;
-  #x2 = 256;
-  #y2 = 256;
+  #x2 = 0;
+  #y2 = 0;
   #stroke = 'green';
   #strokeWidth = '2';
 
@@ -88,20 +88,40 @@ export default class Cable extends Theoretical {
 
 
     monitorSourcePosition(){
-      this.monitorPosition('from', (x,y)=>{
-        this.#line.setAttribute('x1', x); this.#line.setAttribute('y1', y);
-      });
+      this.monitorPosition('from', (x,y)=>{ this.#line.setAttribute('x1', x); this.#line.setAttribute('y1', y); });
       return this;
     }
 
     monitorTargetPosition(){
-      this.monitorPosition('to', (x,y)=>{
-        this.#line.setAttribute('x2', x); this.#line.setAttribute('y2', y);
-      });
+      this.monitorPosition('to', (x,y)=>{ this.#line.setAttribute('x2', x); this.#line.setAttribute('y2', y); });
       return this;
     }
 
     connectPipes(){
+      let counter = 0;
+
+      const fromProgram = this.programPipe('from');
+      const toProgram = this.programPipe('to');
+
+      const resume = function(){
+        console.log('CALLING connectPipes2');
+        this.connectPipes2()
+      }.bind(this)
+
+      fromProgram.addEventListener('ready', (event) => {
+        counter++;
+        if (counter==2) resume()
+      });
+      toProgram.addEventListener('ready', (event) => {
+        counter++;
+        if (counter==2) resume()
+      });
+
+      return this;
+
+    }
+
+    connectPipes2(){
       const [fromProgram, fromPort] = this.getProgramPipe('from');
       const [toProgram, toPort] = this.getProgramPipe('to');
       const fromPortName = fromPort.getAttribute('id');
@@ -110,18 +130,7 @@ export default class Cable extends Theoretical {
       return this;
     }
 
-    getProgramPipe(attributeName){
-      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
 
-      const sceneComponent = this.getStage();
-
-      const programComponent = sceneComponent.querySelector('#'+componentId);
-      if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
-      const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
-      if(!portComponent) throw new Error(`Unable to locate portComponent ${portComponent}`)
-
-      return [programComponent, portComponent];
-    }
 
 
 
@@ -187,8 +196,62 @@ export default class Cable extends Theoretical {
 
 
 
+    getProgramPipe(attributeName){
+
+      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+      const stage = this.getStage();
+
+      const programComponent = stage.querySelector('#'+componentId);
+      if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
+      const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
+      if(!portComponent) throw new Error(`Unable to locate portComponent ${portComponent}`)
+
+      return [programComponent, portComponent];
+
+    }
+    programPipe(attributeName){
+
+      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+      const stage = this.getStage();
+
+      const programComponent = stage.querySelector('#'+componentId);
+      if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
+
+      return programComponent;
+
+    }
+    programPort(attributeName){
+
+      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+      const stage = this.getStage();
+
+      const programComponent = stage.querySelector('#'+componentId);
+      if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
+      const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
+      if(!portComponent) throw new Error(`Unable to locate portComponent ${portComponent}`)
+
+      return [programComponent, portComponent];
+
+    }
 
     monitorPosition(attributeName, fun){
+
+      let [componentId] = this.host.getAttribute(attributeName).split(':', 1);
+      const stage = this.getStage();
+      const programComponent = stage.querySelector('#'+componentId);
+      programComponent.addEventListener('ready', (event) => {
+        console.log('READY!!!!!!!');
+        // console.log(event.detail.message); // Outputs: Button was clicked!
+        this.monitorPosition2(attributeName, fun)
+      });
+      return this;
+
+    }
+
+    monitorPosition2(attributeName, fun){
+
+
+
       const [programComponent, portComponent] = this.getProgramPipe(attributeName);
       const portPad = portComponent.shadowRoot.querySelector('.valve');
 
@@ -263,67 +326,6 @@ export default class Cable extends Theoretical {
         this.subscriptions.push( {type:'ResizeObserver', id:'ancestor', subscription:()=>mutationObserver.disconnect()} );
       });
 
-      window.addEventListener('resize', calculatorFunction);
-      this.subscriptions.push( {type:'addEventListener/resize', id:'window-resize', subscription:()=>window.removeEventListener('resize', calculatorFunction)} );
-
-
-
-      // const target = this.findOut(portPad, '.perspective');
-      // const flipper = this.findOut(portPad, '.flipper');
-      //
-      // if(target){
-      //
-      //   const card1 = flipper.querySelector('.card.primary');
-      //   const card2 = flipper.querySelector('.card.secondary');
-      //     target.addEventListener('transitionend', () => {
-      //       console.log('VVV', flipper);
-      //       // flipper.style.position = 'absolute';
-      //       // flipper.style.transformStyle = 'flat';
-      //       flipper.style.opacity = '.1';
-      //       card1.style.opacity = '.1';
-      //       card2.style.opacity = '.1';
-      //       requestAnimationFrame(() => {
-      //         // flipper.style.position = 'relative';
-      //         // flipper.style.transformStyle = 'preserve-3d'; /* Forces a reflow and clears pixelation */
-      //         flipper.style.opacity = '1'; /* Forces a reflow and clears pixelation */
-      //         card1.style.opacity = '1'; /* Forces a reflow and clears pixelation */
-      //         card2.style.opacity = '1'; /* Forces a reflow and clears pixelation */
-      //       });
-      //   });
-      // }
-
-
-
-
-      // if(target){
-      //
-      //   target.addEventListener('transitionstart', () => {
-      //     if(target.classList.contains('flipped')) this.#line.setAttribute('opacity', 0);
-      //   });
-      //
-      //   target.addEventListener('transitionend', () => {
-      //
-      //     flipper.style.transformStyle = 'none';
-      //     requestAnimationFrame(() => {
-      //       // flipper.style.transformStyle = 'preserve-3d'; /* Forces a reflow and clears pixelation */
-      //     });
-      //
-      //     // if(!target.classList.contains('flipped')){
-      //       // TODO: this is a hack
-      //         // setTimeout(()=>this.#line.setAttribute('opacity', 1), 50)
-      //             // target2.style.display = 'none';
-      //             // requestAnimationFrame(() => {
-      //             //   target2.style.display = 'block'; /* Forces a reflow and clears pixelation */
-      //             // });
-      //     // }
-      //
-      //   });
-
-        // this.subscriptions.push( {type:'addEventListener/transitionstart', id:'transition', subscription:()=>target.removeEventListener('transitionstart', calculatorFunction)} );
-        // this.subscriptions.push( {type:'addEventListener/transitionend', id:'transition', subscription:()=>target.removeEventListener('transitionend', calculatorFunction)} );
-
-
-      // }
 
       window.addEventListener('resize', calculatorFunction);
       this.subscriptions.push( {type:'addEventListener/resize', id:'window-resize', subscription:()=>window.removeEventListener('resize', calculatorFunction)} );

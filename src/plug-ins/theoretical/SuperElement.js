@@ -1,6 +1,6 @@
-import Actor from './Actor.js';
+import Super from './Super.js';
 
-export default class ActorElement extends HTMLElement{
+export default class SuperElement extends HTMLElement{
   instance;
 
   static async load() {
@@ -12,7 +12,7 @@ export default class ActorElement extends HTMLElement{
 
   constructor() {
     super();
-    this.instance = new Actor(this);
+    this.instance = new Super(this);
   }
   connectedCallback() {
     this.instance.machine.transition('connected');
@@ -23,19 +23,32 @@ export default class ActorElement extends HTMLElement{
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      this.updatePosition();
+
+    if(name == 'x' || name == 'y'){
+      if (oldValue !== newValue) {
+        this.updatePosition();
+      }
     }
+
   }
 
   updatePosition() {
+
+    const style = {};
+
     const x = this.getAttribute('x') || '0';
     const y = this.getAttribute('y') || '0';
-    const movable = this.shadowRoot.querySelector('.movable');
-    if (movable) {
-      movable.style.left = `${x}px`;
-      movable.style.top = `${y}px`;
-    }
+
+
+      Object.assign(style, {left: `${x}px`, top: `${y}px`,});
+
+    this.addEventListener('ready', (event) => {
+      const movable = this.shadowRoot.querySelector('.movable');
+      if (movable) {
+        Object.assign(movable.style, style);
+      }
+    })
+
   }
 
   get pipe(){

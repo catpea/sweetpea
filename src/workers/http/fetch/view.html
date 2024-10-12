@@ -1,0 +1,59 @@
+<div class="perspective movable" use="movable">
+
+  <div class="card primary shadow">
+    <div class="card-header drag-handle">
+      JSON Fetch XXX <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+
+        <x-valve id="in" data-direction="in" data-icon="fire"></x-valve>
+        <x-valve id="out" data-direction="out" data-icon="fire"></x-valve>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="floatingInput" value="menu.json">
+          <x-bind data-name="url" data-closest="input"></x-bind>
+          <label for="floatingInput">URL</label>
+        </div>
+      </li>
+      <li class="list-group-item">...</li>
+    </ul>
+    <div class="card-footer text-wrap">
+      <small>
+        working on binding
+        <!-- Will download data from <span>???</span> upon play.
+        <x-bind data-name="url" data-closest="span"></x-bind> -->
+      </small>
+    </div>
+  </div>
+
+  <div class="card secondary shadow">
+    <div class="card-header drag-handle">
+      Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <select class="form-select form-select-sm mb-2">
+          <option selected>Worker Category</option>
+          <option value="1">HTTP</option>
+          <option value="2">JSON</option>
+          <option value="3">DATA</option>
+        </select>
+
+        <select class="form-select form-select-sm mb-2">
+          <option selected>Worker</option>
+          <option value="1">Download File</option>
+          <option value="2">Save File</option>
+          <option value="3">Append To Log</option>
+        </select>
+      </li>
+      <li class="list-group-item">...</li>
+    </ul>
+    <div class="card-footer text-wrap">
+      <small class="muted">
+      Configure your component
+      </small>
+    </div>
+  </div>
+
+</div>
