@@ -29,10 +29,13 @@ export default class Stage extends Theoretical {
       connected: {
         enter: () => this
           .log('Entering Connected state')
-          .getTemplate()
-          .readAndDestroyScript()
+
+          .getStageTemplate()
           .installTemplate()
+          .installStageView()
+
           .installStageListeners()
+
           .wrapAttributeEvents()
           .done,
          exit: () => console.log('Exiting Connected state'),
@@ -44,6 +47,147 @@ export default class Stage extends Theoretical {
     };
     this.machine = new StateMachine(states, 'idle');
   }
+
+
+
+  getStageTemplate(){
+    const html = `
+    <style>
+      :host {
+        display: block;
+        overflow: hidden;
+        position: relative;
+
+        touch-action: none;
+        user-select: none;
+      }
+      .content {
+        transform-origin: 0 0;
+      }
+
+      .vertical {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+
+      }
+    </style>
+
+
+
+    <div class="content" style="min-height: 100vh;">
+      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+      <slot></slot>
+    </div>
+
+    <div class="position-absolute btn-toolbar vertical pt-5 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; top: 0px; z-index: 10;">
+
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-success" onclick="()=>this.blank()" data-bs-toggle="popover" data-bs-title="Clear Stage" data-bs-trigger="hover focus" data-bs-content="Clear the stage of all actors and begin a new project."><i class="bi bi-eraser"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.open()"><i class="bi bi-folder2-open"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.saveAs()"><i class="bi bi-save"></i></button>
+      </div>
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.save()"><i class="bi bi-floppy2"></i></button>
+      </div>
+
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
+      </div>
+
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()"><i class="bi bi-cassette"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()"><i class="bi bi-rocket-takeoff"></i></button>
+      </div>
+
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-outline-primary" onclick="()=>this.add()"><i class="bi bi-plus-circle text-primary-emphasis"></i></button>
+      </div>
+
+
+    </div>
+
+    <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; bottom: 0px; z-index: 10;">
+
+      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-in"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-out"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-fullscreen"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-lock"></i></button>
+      </div>
+    </div>
+
+    <!-- NOTE: iframe to handle the Blob redirection -->
+    <iframe id="downloadIframe" style="display:none;"></iframe>
+    <!-- NOTE: iframe to handle file opening -->
+    <input type="file" id="fileInput" style="display: none;" />
+    `;
+    const templateContainer = document.createElement('template');
+    templateContainer.innerHTML = html;
+    this.template = templateContainer.content.cloneNode(true);
+    return this;
+  }
+
+
+
+  installStageView({attribute}={attribute:"worker"}){
+
+
+    this.View = class View {
+
+      constructor({stage, core, root, pipe, data}){
+        this.core = stage;
+        this.core = core;
+        this.root = root;
+        this.pipe = pipe;
+        this.data = data;
+
+        // this.worker = new Worker(stage);
+      }
+
+      mount(){
+        const popoverTriggerList = this.core.host.shadowRoot.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+      }
+
+
+
+      add(){
+        this.core.createSupervisor()
+      }
+
+
+      blank(){
+        this.core.blank()
+      }
+
+      open(){
+        this.core.open()
+      }
+
+      save(){
+        this.core.save()
+      }
+
+      saveAs(){
+        this.core.saveAs()
+      }
+
+      generateCode(){
+        this.core.generateCode()
+      }
+
+
+
+
+    }
+
+    return this;
+  }
+
 
   installStageListeners(){
     this.content = this.host.shadowRoot.querySelector('.content');

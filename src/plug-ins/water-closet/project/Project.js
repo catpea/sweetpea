@@ -7,6 +7,29 @@ export default Inheritance => class Project extends Inheritance {
     file: 'untitled.txt',
   }
 
+  generateCode(){
+
+  }
+
+  dehydrate(){
+    const response = [];
+    for (const child of this.getStage().children) {
+      console.log(child); // Do something with each child element
+      const obj = {};
+      obj.type = child.tagName.toLowerCase().split('-')[1];
+      const attributes = Object.fromEntries(Array.from(child.attributes).map(attr => [attr.name, attr.value]));
+      Object.assign(obj, attributes);
+      response.push(obj);
+    }
+    return response;
+
+  }
+
+  // Convert to HTML
+  rehydrate(rawData){
+    return rawData;
+  }
+
   blank(){
     this.getStage().replaceChildren();
   }
@@ -17,26 +40,33 @@ export default Inheritance => class Project extends Inheritance {
       const file = event.target.files[0];
       if (file) {
         const contents = await file.text();
-        const [rawJson, rawHtml] = contents.split(/\n---\n/, 2);
-        console.log(rawHtml);
-        this.getStage().replaceChildren();
-        this.getStage().innerHTML = rawHtml;
-        console.log(this.getStage().shadowDom);
-        const projectData = JSON.parse(`{${rawJson}}`)
-        Object.assign( this.project, projectData );
-        console.log(rawHtml);
-        console.log(projectData);
+        const {meta, data} = JSON.parse(contents)
+        // console.log({meta, data});
+        this.getStage().replaceChildren(); // Clear Stage
+
+        for (const actorObject of data) {
+          const actorElement = document.createElement(`${globalThis.sweetpea.prefix}-${actorObject.type}`);
+          delete actorObject.type;
+          for (const [attributeName, attributeValue] of Object.entries(actorObject)) {
+              actorElement.setAttribute(attributeName, attributeValue);
+          }
+          console.log(actorElement);
+          this.getStage().appendChild(actorElement);
+        }
+
+        this.project = meta;
       }
     });
   }
 
   save(){
-    const projectString = JSON.stringify(this.project, null, 2).replace(/\n\s+/g,'\n');
-    const jsonData = projectString.substr(1,projectString.length-2).trim();
-    const separator = '---'
-    const htmlData = this.formatHTML(this.getStage().innerHTML.trim());
-    const data = [jsonData, separator, htmlData].join('\n');
 
+    const data = JSON.stringify({
+      meta: this.project,
+      data: this.dehydrate(),
+    }, null, 2)
+
+    console.log(data);
     // Create a Blob object
     const blob = new Blob([data], { type: 'text/plain' });
 
@@ -64,6 +94,10 @@ export default Inheritance => class Project extends Inheritance {
 
   saveAs(){
   }
+
+
+
+
 
   formatHTML(htmlString) {
     // Use a regular expression to split at tag boundaries

@@ -10,7 +10,7 @@ export default class View {
   pipe;
 
   constructor({stage, core, root, pipe, data}){
-    this.core = stage;
+    this.stage = stage;
     this.core = core;
     this.root = root;
     this.pipe = pipe;

@@ -39,7 +39,6 @@
     import {StageElement, CableElement, ValveElement, SuperElement} from 'theoretical';
 
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
-
     await StageElement.load();
     await ValveElement.load();
     await CableElement.load();
@@ -50,6 +49,11 @@
     customElements.define(`${globalThis.sweetpea.prefix}-valve`, ValveElement);
     customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement);
     customElements.define(`${globalThis.sweetpea.prefix}-super`, SuperElement);
+
+  </script>
+
+  <script src="css/bootstrap.bundle.min.js"></script>
+  <script>
 
   </script>
 
@@ -69,126 +73,6 @@
 
   </body>
 
-  <template id="stage">
-
-    <script type="app">
-      class Main {
-
-        core;
-        root;
-        pipe;
-        data;
-
-        constructor({core, root, pipe, data}){
-          this.core = core;
-          this.root = root;
-          this.pipe = pipe;
-          this.data = data;
-        }
-
-        mount(){
-          console.log('STAGE MOUNT!!!');
-        }
-
-
-        add(){
-          this.core.createSupervisor()
-        }
-
-
-        blank(){
-          this.core.blank()
-        }
-
-        open(){
-          this.core.open()
-        }
-
-        save(){
-          this.core.save()
-        }
-
-        saveAs(){
-          this.core.saveAs()
-        }
-
-
-
-        destroy(){
-        }
-
-      }
-    </script>
-
-    <style>
-      :host {
-        display: block;
-        overflow: hidden;
-        position: relative;
-
-        touch-action: none;
-        user-select: none;
-      }
-      .content {
-        transform-origin: 0 0;
-      }
-
-      .vertical {
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-
-      }
-    </style>
-
-
-
-    <div class="content" style="min-height: 100vh;">
-      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
-      <slot></slot>
-    </div>
-
-    <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; top: 0px; z-index: 10;">
-
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.blank()"><i class="bi bi-file-earmark-plus"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.open()"><i class="bi bi-folder2-open"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.saveAs()"><i class="bi bi-save"></i></button>
-      </div>
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.save()"><i class="bi bi-floppy2"></i></button>
-      </div>
-
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
-      </div>
-
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-primary" onclick="()=>this.add()"><i class="bi bi-plus-circle text-primary-emphasis"></i></button>
-      </div>
-
-
-    </div>
-
-    <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; bottom: 0px; z-index: 10;">
-
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-in"></i></button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-out"></i></button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-fullscreen"></i></button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-lock"></i></button>
-      </div>
-    </div>
-
-    <!-- NOTE: iframe to handle the Blob redirection -->
-    <iframe id="downloadIframe" style="display:none;"></iframe>
-    <!-- NOTE: iframe to handle file opening -->
-    <input type="file" id="fileInput" style="display: none;" />
-
-  </template>
 
   <template id="valve">
     <style>
@@ -198,7 +82,7 @@
     <span use="connectable" class="valve glow-sm d-inline-block position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success"><i class="bi bi-{{icon}}"></i></span>
   </template>
 
-   
+
 
   <template id="parse">
     <script type="app">

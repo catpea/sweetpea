@@ -22,29 +22,10 @@ export default Inheritance => class ElementEvents extends Inheritance {
       pipe: this.pipe,
       data: this.host.dataset,
     };
-    //
-    // if(this.View){
-    //   // this is the embeded script's class
-    //   const strContextClass = `${this.#scripts[0]}\n return new Main(this);`;
-    //   this.viewClass = new Function(strContextClass).call(classContext); // new Main(classContext)
-    // }else{
-    //   class Main1 {
-    //     root;
-    //     constructor({root}){
-    //       this.root = root;
-    //     }
-    //     mount(){
-    //     }
-    //     destroy(){
-    //     }
-    //     say(el){
-    //       console.info('Hello from', el);
-    //     }
-    //   }
-    //   this.viewClass = new Main1(classContext); // new Main(classContext)
-    // }
+
     if(this.View){
       this.viewClass = new this.View(classContext); // new Main(classContext)
+      console.log(`XXX ${this.tagName} had a VIEW`);
     }else{
       class View {
         root;
