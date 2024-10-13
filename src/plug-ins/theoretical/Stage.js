@@ -83,28 +83,27 @@ export default class Stage extends Theoretical {
     <div class="position-absolute btn-toolbar vertical pt-5 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; top: 0px; z-index: 10;">
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-success" onclick="()=>this.blank()" data-bs-toggle="popover" data-bs-title="Clear Stage" data-bs-trigger="hover focus" data-bs-content="Clear the stage of all actors and begin a new project."><i class="bi bi-eraser"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.open()"><i class="bi bi-folder2-open"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.saveAs()"><i class="bi bi-save"></i></button>
-      </div>
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.save()"><i class="bi bi-floppy2"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.open()" data-bs-toggle="popover" data-bs-title="Open File" data-bs-trigger="hover focus" data-bs-content="Load data from your computer."><i class="bi bi-folder2-open"></i></button>
+        <!-- <button type="button" class="btn btn-outline-secondary" onclick="()=>this.saveAs()"><i class="bi bi-save"></i></button> -->
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.save()" data-bs-toggle="popover" data-bs-title="Save Stage" data-bs-trigger="hover focus" data-bs-content="Save project to your computer."><i class="bi bi-floppy2"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.blank()" data-bs-toggle="popover" data-bs-title="Clear Stage" data-bs-trigger="hover focus" data-bs-content="Clear the stage of all actors and begin a new project."><i class="bi bi-eraser"></i></button>
       </div>
 
+      <!-- debugger buttons
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
       </div>
+      -->
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()"><i class="bi bi-cassette"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()"><i class="bi bi-rocket-takeoff"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.generateCode()" data-bs-toggle="popover" data-bs-title="Code Generator" data-bs-trigger="hover focus" data-bs-content="Generate a standalone program that does not require sweetpea to run."><i class="bi bi-rocket-takeoff text-danger"></i></button>
       </div>
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-primary" onclick="()=>this.add()"><i class="bi bi-plus-circle text-primary-emphasis"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Add Supervisor" data-bs-trigger="hover focus" data-bs-content="Add a new component to your program."><i class="bi bi-plus-circle text-success"></i></button>
       </div>
 
 

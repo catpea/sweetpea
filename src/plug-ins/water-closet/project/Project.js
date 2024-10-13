@@ -8,6 +8,83 @@ export default Inheritance => class Project extends Inheritance {
   }
 
   generateCode(){
+    const lines = [];
+    lines.push(`
+      // URGENT: this should be a zip or tar file.
+      import actors from 'sweetpea-company';
+      const stage = new Stage();
+    `.split('\n').map(i=>i.trim()).join('\n'))
+    const meta = this.project;
+    const data = this.dehydrate();
+
+
+    function omit(o, ...keys){
+      return Object.fromEntries(Object.entries(o).filter(e=>!keys.includes(e[0])));
+    }
+
+    function str(input) {
+      return JSON.stringify(input)
+    }
+    function className(str) {
+        return str
+            .split(/[^a-z0-1)]/i) // Split by spaces
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter
+            .join(''); // Join without spaces
+    }
+    function toInstanceName(str) {
+      const word = className(str);
+      return word.charAt(0).toLowerCase() + word.slice(1);
+
+    }
+    function toPropertyName(str) {
+      const word = className(str);
+      return word.charAt(0).toLowerCase() + word.slice(1);
+
+    }
+
+
+    let counter = 0;
+    for (const actorObject of data) {
+
+      delete actorObject.x;
+      delete actorObject.y;
+
+      if(actorObject.type == 'super'){
+        const name = actorObject.type;
+        const type = actorObject.worker;
+        const properties = omit(actorObject, 'type', 'id', 'worker');
+        const instanceName = toInstanceName(`${name}${counter}`);
+
+        lines.push(`const ${instanceName} = new ${className(name)}(stage);`)
+        for (const property in properties) {
+          const value = properties[property]
+          lines.push(`${instanceName}.${toPropertyName(property)} = ${str(value)}`)
+        }
+        lines.push(`await ${instanceName}.worker(${str(type)});`)
+
+      }else{
+        const name = actorObject.type;
+        const type = actorObject.type;
+        const properties = omit(actorObject, 'type', 'id');
+        const instanceName = toInstanceName(`${name}${counter}`);
+        lines.push(`const ${instanceName} = new ${className(type)}(stage);`)
+        for (const property in properties) {
+          const value = properties[property]
+          lines.push(`${instanceName}.${toPropertyName(property)} = ${str(value)}`)
+        }
+      }
+
+      lines.push('')
+      counter++;
+    }
+
+    lines.push(`
+      stage.director.emit('start');
+      // TODO: nonitor CTRL-C, setup HTTP, daemonize, setup browser extenion, etc.
+    `.split('\n').map(i=>i.trim()).join('\n'))
+
+    console.log(lines.join('\n'));
+    this.downloadDialogue('code.js', lines.join('\n'));
 
   }
 
@@ -22,7 +99,6 @@ export default Inheritance => class Project extends Inheritance {
       response.push(obj);
     }
     return response;
-
   }
 
   // Convert to HTML
@@ -61,14 +137,21 @@ export default Inheritance => class Project extends Inheritance {
 
   save(){
 
-    const data = JSON.stringify({
+    const str = JSON.stringify({
       meta: this.project,
       data: this.dehydrate(),
     }, null, 2)
 
-    console.log(data);
-    // Create a Blob object
-    const blob = new Blob([data], { type: 'text/plain' });
+    this.downloadDialogue(this.project.file, str);
+
+  }
+
+  saveAs(){
+  }
+
+
+  downloadDialogue(name, str){
+    const blob = new Blob([str], { type: 'text/plain' });
 
     // Create a URL for the Blob
     const url = URL.createObjectURL(blob);
@@ -87,16 +170,10 @@ export default Inheritance => class Project extends Inheritance {
     // Trigger download by creating a temporary link (optional for browsers)
     const link = document.createElement('a');
     link.href = url;
-    link.download = this.project.file; // Specify the filename
+    link.download = name; // Specify the filename
     link.click();
-    console.log(data);
+
   }
-
-  saveAs(){
-  }
-
-
-
 
 
   formatHTML(htmlString) {

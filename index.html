@@ -63,8 +63,8 @@
     <x-stage controls minimap template="stage">
 
       <x-super id="xena" x="90" y="63" worker="http/fetch" data-url="./menu.json"> </x-super>
-      <x-super id="troi" x="510" y="161" worker="parse"> </x-super>
-      <x-super id="bork" x="935" y="87" worker="write"> </x-super>
+      <x-super id="troi" x="510" y="161" worker="object/parse"> </x-super>
+      <x-super id="bork" x="935" y="87" worker="data/write"> </x-super>
 
       <x-cable from="xena:out" to="troi:in"></x-cable>
       <x-cable from="troi:out" to="bork:in"></x-cable>
