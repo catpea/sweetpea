@@ -15,3 +15,14 @@ Example Before Refactoring: function processOrders(orders) { for (let i = 0; i <
 Example After Refactoring: function processOrders(orders) { for (let i = 0; i < orders.length; i++) { const isLargeOrder = orders[i].amount > 1000; const isCompletedOrder = orders[i].status === 'completed'; const isPremiumUser = orders[i].user.isPremium; const shouldProcessOrder = isLargeOrder && isCompletedOrder && isPremiumUser; if (shouldProcessOrder) { // Perform some operation } } }
 
 By following these structured steps and guidelines, you ensure your code is clear, modular, and maintainable, facilitating better collaboration and future-proofing the codebase.
+
+
+
+
+
+
+
+
+
+
+Could you give me a list of categories usually featured in visual flow builders like Automator, I am looking for JavaScript compatible actions that help users build workflows. The workflows usually call remote API, local AI (ollama) call local services on the network (what an age we live in), Process JSON, and map workflows (User enters Website, user Clicks Register), Include categories that cover basic UNIX worklow for Extracting and Transforming Data As Well. Give me about 25 top categories.

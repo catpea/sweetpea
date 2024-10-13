@@ -103,7 +103,7 @@ export default class Stage extends Theoretical {
       </div>
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Add Supervisor" data-bs-trigger="hover focus" data-bs-content="Add a new component to your program."><i class="bi bi-plus-circle text-success"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Browser" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-plus-circle text-success"></i></button>
       </div>
 
 
@@ -155,7 +155,15 @@ export default class Stage extends Theoretical {
 
 
       add(){
-        this.core.createSupervisor()
+        const options = {};
+        const myModalAlternative = new bootstrap.Modal('#exampleModal', options)
+        myModalAlternative.show();
+
+        //this.core.createSupervisor()
+
+
+
+
       }
 
 
