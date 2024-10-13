@@ -25,12 +25,12 @@
 
 
 /* front pane, placed above back */
-.card.primary {
+.card.front {
     z-index: 2;
     /* transform: rotateY(0deg); */
 }
 
 /* back, initially hidden pane */
-.card.secondary {
+.card.back {
     transform: rotateY(180deg);
 }

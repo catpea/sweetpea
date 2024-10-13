@@ -1,0 +1,20 @@
+{
+  "name": "string-bikini",
+  "version": "1.0.1",
+  "description": "Welcome to the String Bikini 3000! 🎉 The ONLY string processor in the universe that transforms ordinary strings into extraordinary classes, mystical instances, and prosperous properties! 🌟",
+  "main": "index.js",
+  "scripts": {
+    "save": "git add .; git commit -m 'New Release'; git push; npm version patch; npm publish; git push;"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/catpea/string-bikini.git"
+  },
+  "bugs": {
+    "url": "https://github.com/catpea/string-bikini/issues"
+  },
+  "homepage": "https://github.com/catpea/string-bikini#readme"
+}

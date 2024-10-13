@@ -2,32 +2,39 @@ import EventEmitter from 'event-emitter';
 
 export default Inheritance => class VisualProgramming extends Inheritance {
 
-  createSupervisor(){
+  createSupervisor({x,y}){
     const stage = this.getStage();
 
-    let x = 0;
-    let y = 0;
-    let {width, height} = stage.getBoundingClientRect();
-    let {x:panX,y:panY} = stage.pan;
-    let zoom = stage.zoom;
-    width = width / zoom;
-    height = height / zoom;
-    const centerW = width/2;
-    const centerH = height/2;
-    panX = panX / zoom;
-    panY = panY / zoom;
-    x = x-panX;
-    y = y-panY;
-    x = x+centerW;
-    y = y+centerH;
+    // If x or y are missing set coordinates to middle of the screen
+    if(x===undefined||y===undefined){
+      let {width, height} = stage.getBoundingClientRect();
+      let {x:panX,y:panY} = stage.pan;
+      let zoom = stage.zoom;
+      width = width / zoom;
+      height = height / zoom;
+      const centerW = width/2;
+      const centerH = height/2;
+      panX = panX / zoom;
+      panY = panY / zoom;
+      x = x-panX;
+      y = y-panY;
+      x = x+centerW;
+      y = y+centerH;
+    }
 
-
-    const supervisor = document.createElement(`${globalThis.sweetpea.prefix}-actor`);
+    const supervisor = document.createElement(`${globalThis.sweetpea.prefix}-super`);
     supervisor.setAttribute('id', this.guid());
     supervisor.setAttribute('x', x);
     supervisor.setAttribute('y', y);
-    supervisor.setAttribute('template', 'parse');
+    supervisor.setAttribute('template', 'user/note');
+
     stage.appendChild(supervisor);
+
+    // setTimeout(()=>{
+    //   supervisor.instance.machine.transition('configure-worker')
+    //
+    // },1000)
+
   }
 
 }

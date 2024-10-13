@@ -18,6 +18,11 @@ export default class Super extends Theoretical {
         exit: () => this
           .log('Exiting Idle state'),
       },
+
+      configureWorker:{
+        enter: () => this.flipTo('.card.worker-configuration'),
+        exit: () => console.log('Exiting Error state'),
+      },
       error: {
         enter: () => console.log('Entering Error state'),
          exit: () => console.log('Exiting Error state'),

@@ -6,7 +6,8 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
   async installActorTemplate({attribute}={attribute:"worker"}){
     let name = this.host.getAttribute(attribute);
-    let url = `/src/workers/http/fetch/view.html`
+    const currentUrl = new URL(window.location.href);
+    let url = `${currentUrl.pathname}src/workers/http/fetch/view.html`
     // let url = `./src/workers/${name}/view.html`
     let html;
     try {
@@ -23,7 +24,9 @@ export default Inheritance => class ActorIntegration extends Inheritance {
   }
 
   async installActorCSS({attribute}={attribute:"worker"}){
-    const list = ['/src/workers/http/fetch/style.css'];
+    const currentUrl = new URL(window.location.href);
+
+    const list = [`${currentUrl.pathname}src/workers/http/fetch/style.css`];
     for (const url of list) {
       const response = await fetch(url);
       const str = await response.text();
@@ -35,11 +38,13 @@ export default Inheritance => class ActorIntegration extends Inheritance {
   }
 
   async installActorView({attribute}={attribute:"worker"}){
+    const currentUrl = new URL(window.location.href);
+    
   const {
       default: View,
       foo,
       bar,
-    } = await import('/src/workers/http/fetch/View.js');
+    } = await import(`${currentUrl.pathname}src/workers/http/fetch/View.js`);
     this.View = View;
     return this;
   }

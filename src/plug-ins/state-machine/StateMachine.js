@@ -13,6 +13,7 @@ export default class StateMachine {
   }
 
   transition(toState) {
+    toState = toClass(toState, true);
     this.validateState(toState);
 
     const fromState = this.currentState;
@@ -34,4 +35,11 @@ export default class StateMachine {
   getStateInfo() {
     return this.states[this.currentState];
   }
+}
+
+function toClass(str, lower=true) {
+  console.log([...str.split(/[^a-z0-1)]/i).entries()]);
+  return [...str.split(/[^a-z0-1)]/i).entries()]
+  .map(([index, word]) => (index==0&&lower?word.charAt(0).toLowerCase():word.charAt(0).toUpperCase()) + word.slice(1).toLowerCase()) // Capitalize first letter
+  .join(''); // Join without spaces
 }

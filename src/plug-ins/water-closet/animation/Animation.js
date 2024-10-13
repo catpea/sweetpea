@@ -12,6 +12,17 @@ export default Inheritance => class Animation extends Inheritance {
   targetRotation = 0;
   animationFrame = null;
 
+  flipTo(selector){
+    console.log('flipTo', this);
+    const container = this.searchShadow('.perspective').pop();
+
+    let frontCard = container.querySelector('.flipped-face');
+    if(!frontCard) frontCard = container.querySelector('.front');
+    const backCard = container.querySelector(selector);
+    if(!backCard) throw new Error('Card face not found.')
+    this.flipCard(frontCard, backCard);
+  }
+
   flipCard(frontElement, backElement){
     this.frontElement = frontElement;
     this.backElement = backElement;
@@ -58,17 +69,17 @@ export default Inheritance => class Animation extends Inheritance {
     const backRotation = this.currentRotation + 180;
 
     if(frontRotation == 0 || frontRotation == 360){
-      this.frontElement.style.transform = `rotateY(${frontRotation}deg)`;
+      this.frontElement.style.transform = `rotateX(${frontRotation}deg)`;
       this.frontElement.style.transform = 'none';
     }else{
-      this.frontElement.style.transform = `rotateY(${frontRotation}deg)`;
+      this.frontElement.style.transform = `rotateX(${frontRotation}deg)`;
     }
 
     if(backRotation == 0 || backRotation == 360){
-      this.backElement.style.transform = `rotateY(${backRotation}deg)`;
+      this.backElement.style.transform = `rotateX(${backRotation}deg)`;
       this.backElement.style.transform = 'none';
     }else{
-      this.backElement.style.transform = `rotateY(${backRotation}deg)`;
+      this.backElement.style.transform = `rotateX(${backRotation}deg)`;
     }
 
     // Check if the rotation is complete
@@ -80,6 +91,12 @@ export default Inheritance => class Animation extends Inheritance {
       cancelAnimationFrame(this.animationFrame);
       this.animationFrame = null;
     }
+
+
+      this.frontElement.classList.remove('flipped-face');
+      this.backElement.classList.add('flipped-face');
+
   }
+
 
 }

@@ -1,6 +1,6 @@
 <div class="perspective movable" use="movable">
 
-  <div class="card primary shadow">
+  <div class="card front shadow">
     <div class="card-header drag-handle">
       JSON Fetch <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
     </div>
@@ -20,6 +20,7 @@
     </ul>
     <div class="card-footer text-wrap">
       <small>
+        double-click stage to add node,
         working on binding
         <!-- Will download data from <span>???</span> upon play.
         <x-bind data-name="url" data-closest="span"></x-bind> -->
@@ -27,7 +28,7 @@
     </div>
   </div>
 
-  <div class="card secondary shadow">
+  <div class="card back worker-configuration shadow">
     <div class="card-header drag-handle">
       Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
     </div>

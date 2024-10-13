@@ -207,7 +207,34 @@ export default class Stage extends Theoretical {
     this.host.addEventListener('touchmove',  this.#onTouchMove.bind(this));
     this.host.addEventListener('touchend',   this.#onTouchEnd.bind(this));
 
+    this.host.addEventListener('dblclick',   this.#dblClick.bind(this));
+
     return this;
+  }
+
+  #dblClick(e){
+    const stage = this.getStage();
+    let {x:panX,y:panY} = stage.pan;
+    let zoom = stage.zoom;
+
+    // using clicked coordinates
+    let x = e.clientX;
+    let y = e.clientY;
+
+    // transform them with zoom
+    x = x / zoom;
+    y = y / zoom;
+
+    // transform pan values with zoom
+    panX = panX / zoom;
+    panY = panY / zoom;
+
+    // and transform clicked coordinates with pan
+    x = x-panX;
+    y = y-panY;
+
+    this.createSupervisor({x,y});
+
   }
 
 

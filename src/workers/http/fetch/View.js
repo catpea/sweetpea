@@ -28,8 +28,8 @@ export default class View {
 
   flip(component){
     const container = component.searchShadow('.perspective').pop();
-    const frontCard = container.querySelector('.primary');
-    const backCard = container.querySelector('.secondary');
+    const frontCard = container.querySelector('.front');
+    const backCard = container.querySelector('.worker-configuration');
     component.flipCard(frontCard, backCard);
   }
 

@@ -176,32 +176,32 @@ export default Inheritance => class Project extends Inheritance {
   }
 
 
-  formatHTML(htmlString) {
-    // Use a regular expression to split at tag boundaries
-    const lines = htmlString.split(/(?=<)|(?<=>)/g);
-    const formattedHTML = [];
-    let indentLevel = 0;
-    const indentSize = '  ';
-
-    lines.forEach(line => {
-        line = line.trim();
-        if (line.startsWith('</')) {
-            // Closing tag; decrement indent level first
-            indentLevel--;
-        }
-
-        if (line) {
-            // Add current line with the current level of indentation
-            formattedHTML.push(`${indentSize.repeat(indentLevel)}${line}`);
-        }
-
-        if (line.startsWith('<') && !line.startsWith('</') && !line.endsWith('/>')) {
-            // Opening tag; increment indent level after use
-            indentLevel++;
-        }
-    });
-
-    return formattedHTML.join('\n');
-}
+//   formatHTML(htmlString) {
+//     // Use a regular expression to split at tag boundaries
+//     const lines = htmlString.split(/(?=<)|(?<=>)/g);
+//     const formattedHTML = [];
+//     let indentLevel = 0;
+//     const indentSize = '  ';
+//
+//     lines.forEach(line => {
+//         line = line.trim();
+//         if (line.startsWith('</')) {
+//             // Closing tag; decrement indent level first
+//             indentLevel--;
+//         }
+//
+//         if (line) {
+//             // Add current line with the current level of indentation
+//             formattedHTML.push(`${indentSize.repeat(indentLevel)}${line}`);
+//         }
+//
+//         if (line.startsWith('<') && !line.startsWith('</') && !line.endsWith('/>')) {
+//             // Opening tag; increment indent level after use
+//             indentLevel++;
+//         }
+//     });
+//
+//     return formattedHTML.join('\n');
+// }
 
 }

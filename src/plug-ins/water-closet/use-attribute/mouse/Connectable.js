@@ -162,12 +162,12 @@ export default class Connectable {
       this.#svg.removeChild(this.#line);
       console.info(`Dropped element at ${this.finalX}x${this.finalY}.`, event.target, event.currentTarget, event.composedPath());
 
-      const fromActor = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-actor`);
+      const fromActor = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-super`);
       const fromValve = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-valve`);
       const from = [fromActor.getAttribute('id'), fromValve.getAttribute('id')].join(':');
 
       const composedPath = event.composedPath().filter(el=>el instanceof HTMLElement).filter(el=>el.hasAttribute('id'))
-      const toActor = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-actor`))
+      const toActor = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-super`))
       const toValve = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-valve`))
       const to = [toActor.getAttribute('id'), toValve.getAttribute('id')].join(':');
 
@@ -176,6 +176,14 @@ export default class Connectable {
       cable.setAttribute('from', from);
       cable.setAttribute('to', to);
       this.system.getStage().appendChild(cable);
+
+      console.log({from});
+      console.log({to});
+      console.log({cable});
+
+      console.error('MANUAL READY DISPATCH, THE FLOW MUST ACCOUNT FOR CONNECTING AT LATER TIME');
+      fromActor.instance.dispatchReady();
+      toActor.instance.dispatchReady();
 
       // NOTE: can be use for some animated effect
       // const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
