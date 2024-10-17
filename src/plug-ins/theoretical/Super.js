@@ -28,8 +28,7 @@ export default class Super extends Theoretical {
          exit: () => console.log('Exiting Error state'),
       },
       connected: {
-        enter: async () => {
-          await this.macro
+        enter: async () => await this.macro
             .installActorTemplate
             .installActorCSS
             .installActorView
@@ -37,19 +36,7 @@ export default class Super extends Theoretical {
             .wrapAttributeEvents
             .useExtensions
             .dispatchReady
-          .run();
-
-          // await this.installActorTemplate()
-          // await this.installActorCSS()
-          // await this.installActorView()
-          // this
-          //   .installTemplate()
-          //   .wrapAttributeEvents()
-          //   .useExtensions()
-          //   .dispatchReady()
-
-
-        },
+            .run(),
         exit: () => console.log('Exiting Connected state'),
       },
       disconnected: {
