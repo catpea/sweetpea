@@ -1,6 +1,6 @@
 import Super from './Super.js';
 
-export default class SuperElement extends HTMLElement{
+export default class SuperElement extends HTMLElement {
   instance;
 
   static async load() {
