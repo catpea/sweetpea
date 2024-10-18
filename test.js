@@ -2,8 +2,7 @@
 
 
 const states = {
-
-  foo fire primary IDLE: {},
+  IDLE: {},
   LOADING: {
     FRONT:{},
     SETTINGS:{
@@ -15,5 +14,15 @@ const states = {
   DISCONNECTED:{},
 };
 
+const map = `
+  IDLE
+  LOADING
+    FRONT
+    SETTINGS
+      VALID
+      INVALID
+  CONNECTED
+  DISCONNECTED
+`;
 
 console.log(states);

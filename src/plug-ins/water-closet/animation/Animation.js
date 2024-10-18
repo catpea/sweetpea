@@ -14,6 +14,7 @@ export default Inheritance => class Animation extends Inheritance {
 
   flipTo(selector){
     console.log('flipTo', this);
+    console.log(this.searchShadow('.perspective'));
     const container = this.searchShadow('.perspective').pop();
 
     let frontCard = container.querySelector('.flipped-face');

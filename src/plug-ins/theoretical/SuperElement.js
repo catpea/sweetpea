@@ -15,11 +15,15 @@ export default class SuperElement extends HTMLElement {
     this.instance = new Super(this);
   }
   connectedCallback() {
-    this.instance.machine.transition('connected');
+    // this.instance.machine.transition('connected');
+    this.instance.transmission.shift('/connected/front');
+
     this.updatePosition();
   }
   disconnectedCallback() {
-    this.instance.machine.transition('disconnected');
+    // this.instance.machine.transition('disconnected');
+    this.instance.transmission.shift('/disconnected');
+
 
   }
 

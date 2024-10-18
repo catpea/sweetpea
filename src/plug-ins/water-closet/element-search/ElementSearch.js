@@ -2,6 +2,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
 
 
   searchShadow(selector='*'){
+    console.log(this.host.shadowRoot);
     return this.search(selector, {shadow:true, dom:false});
   }
 
@@ -10,7 +11,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
 
     if(shadow){
       const root = this.host.shadowRoot;
-      
+
       const elements = root.querySelectorAll(selector);
       for (const element of elements) {
         const parents = this.collectParents(element, root);
@@ -22,7 +23,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
 
     if(dom){
       const root = this.host;
-      
+
       const elements = root.querySelectorAll(selector);
       for (const element of elements) {
         const parents = this.collectParents(element, root);

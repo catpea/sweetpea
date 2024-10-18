@@ -1,0 +1,13 @@
+{
+  "name": "automatic-transmission",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Tree based state machine with automatic shifting.",
+  "main": "AutomaticTransmission.js",
+  "scripts": {
+    "test": "./test.js"
+  },
+  "keywords": ["state-machine"],
+  "author": "",
+  "license": "ISC"
+}

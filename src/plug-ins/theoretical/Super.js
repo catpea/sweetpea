@@ -1,5 +1,6 @@
 import Theoretical from './Theoretical.js';
 import StateMachine from 'state-machine';
+import AutomaticTransmission from 'automatic-transmission';
 
 export default class Super extends Theoretical {
   machine;
@@ -7,48 +8,76 @@ export default class Super extends Theoretical {
   constructor(host) {
     super(host);
 
-    const states = {
-      idle: {
-        enter: () => this
-          .log('Entering Idle state...')
-          .attachShadow()
-          .adoptCss()
-          .createElementPipe()
-          .log('Entered Idle state'),
-        exit: () => this
-          .log('Exiting Idle state'),
+    const gearbox = {
+      '/idle':{
+        enter: () => this.attachShadow().adoptCss().createElementPipe()
       },
-
-      configureWorker:{
-        enter: () => this.flipTo('.card.worker-configuration'),
-        exit: () => console.log('Exiting Error state'),
+      '/connected':{
+        enter: async () => await this.macro.installActorTemplate.installActorCSS.installActorView.installTemplate.wrapAttributeEvents.useExtensions.dispatchReady.run()
       },
-      error: {
-        enter: () => console.log('Entering Error state'),
-         exit: () => console.log('Exiting Error state'),
+      '/connected/front': {
+        enter: () => this.flipTo('.card.front')
       },
-      connected: {
-        enter: async () => await this.macro
-            .installActorTemplate
-            .installActorCSS
-            .installActorView
-            .installTemplate
-            .wrapAttributeEvents
-            .useExtensions
-            .dispatchReady
-            .run(),
-        exit: () => console.log('Exiting Connected state'),
+      '/connected/front/danger': {
+        enter: () => this.uiContext('.danger')
       },
-      disconnected: {
+      '/connected/settings': {
+        enter: () => this.flipTo('.card.settings')
+      },
+      '/connected/worker': {
+        enter: () => this.flipTo('.card.worker')
+      },
+      '/disconnected':{
         enter: () => this.collectGarbage(),
-         exit: () => console.log('Exiting disconnected'),
       },
-    };
+      '/error':{
+        enter: () => this.flipTo('.card.error')
+      },
+    }
+    this.transmission = new AutomaticTransmission(gearbox, '/idle');
 
-    this.machine = new StateMachine(states, 'idle');
+    // const states = {
+    //   idle: {
+    //     enter: () => this.attachShadow().adoptCss().createElementPipe()
+    //   },
+    //
+    //   error: {
+    //     enter: () => console.log('Entering Error state'),
+    //      exit: () => console.log('Exiting Error state'),
+    //   },
+    //
+    //   connected: {
+    //     enter: async () => await this.macro
+    //     .installActorTemplate
+    //     .installActorCSS
+    //     .installActorView
+    //     .installTemplate
+    //     .wrapAttributeEvents
+    //     .useExtensions
+    //     .dispatchReady
+    //     .initializeUI
+    //     .run()
+    //   },
+    //   disconnected: {
+    //     enter: () => this.collectGarbage(),
+    //   },
+    //
+    //   // UI States
+    //   front:{
+    //     enter: () => this.flipTo('.card.primary')
+    //   },
+    //   settings:{
+    //     enter: () => this.flipTo('.card.settings')
+    //   },
+    //   worker:{
+    //     enter: () => this.flipTo('.card.worker')
+    //   },
+    // };
+    //
+    //
+    //
+    // this.machine = new StateMachine(states, 'idle');
   }
-
-
 
   //
   #svg;
