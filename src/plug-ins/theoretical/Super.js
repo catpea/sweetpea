@@ -3,6 +3,7 @@ import StateMachine from 'state-machine';
 import AutomaticTransmission from 'automatic-transmission';
 
 export default class Super extends Theoretical {
+  initialFace = '.card.front';
   machine;
 
   constructor(host) {
@@ -16,7 +17,7 @@ export default class Super extends Theoretical {
         enter: async () => await this.macro.installActorTemplate.installActorCSS.installActorView.installTemplate.wrapAttributeEvents.useExtensions.dispatchReady.run()
       },
       '/connected/front': {
-        enter: () => this.flipTo('.card.front')
+        enter: () => this.skipTo(this.initialFace)
       },
       '/connected/front/danger': {
         enter: () => this.uiContext('.danger')

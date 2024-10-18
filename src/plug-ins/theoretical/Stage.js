@@ -214,6 +214,7 @@ export default class Stage extends Theoretical {
 
   #dblClick(e){
     const stage = this.getStage();
+
     let {x:panX,y:panY} = stage.pan;
     let zoom = stage.zoom;
 
@@ -233,7 +234,7 @@ export default class Stage extends Theoretical {
     x = x-panX;
     y = y-panY;
 
-    this.createSupervisor({x,y});
+    this.createSupervisor({x,y, initialFace:'.card.worker-configuration'});
 
   }
 

@@ -26,11 +26,8 @@ export default class View {
   destroy(){
   }
 
-  flip(component){
-    const container = component.searchShadow('.perspective').pop();
-    const frontCard = container.querySelector('.front');
-    const backCard = container.querySelector('.worker-configuration');
-    component.flipCard(frontCard, backCard);
+  flip(card){
+    this.core.flipTo(card);
   }
 
 }

@@ -14,23 +14,17 @@ export default class SuperElement extends HTMLElement {
     super();
     this.instance = new Super(this);
   }
-  connectedCallback() {
-    // this.instance.machine.transition('connected');
-    this.instance.transmission.shift('/connected/front');
 
+  connectedCallback() {
+    this.instance.transmission.shift('/connected/front');
     this.updatePosition();
   }
+
   disconnectedCallback() {
-    // this.instance.machine.transition('disconnected');
     this.instance.transmission.shift('/disconnected');
-
-
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-
-    console.log('attributeChangedCallback', name, oldValue, newValue);
-
     const attributeHandlers = {
       'x y': () => this.updatePosition(),
       // 'worker': () => this.instance.machine.transition('configure-worker'),

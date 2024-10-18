@@ -1,8 +1,8 @@
 <div class="perspective movable" use="movable">
 
-  <div class="card front shadow">
+  <div class="card front shadow active-card">
     <div class="card-header drag-handle">
-      JSON Fetch <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-gear"></i></button>
+      JSON Fetch <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
@@ -30,7 +30,7 @@
 
   <div class="card back worker-configuration shadow">
     <div class="card-header drag-handle">
-      Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip(component)"><i class="bi bi-check-circle"></i></button>
+      Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip('.front')"><i class="bi bi-check-circle"></i></button>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">

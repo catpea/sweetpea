@@ -2,100 +2,67 @@ export default Inheritance => class Animation extends Inheritance {
 
   frontElement;
   backElement;
-
   isFlipped = false;
-
-  // currentRotation = 0;
-  // flipInterval = null;
 
   currentRotation = 0;
   targetRotation = 0;
   animationFrame = null;
 
-  flipTo(selector){
-    console.log('flipTo', this);
-    console.log(this.searchShadow('.perspective'));
+  flipTo(selector, options){
+
     const container = this.searchShadow('.perspective').pop();
+    let frontElement = container.querySelector('.active-card');
+    if(!frontElement) throw new Error('.active-card not found.')
+    const backElement = container.querySelector(selector);
+    if(!backElement) throw new Error('Card face not found.')
 
-    let frontCard = container.querySelector('.flipped-face');
-    if(!frontCard) frontCard = container.querySelector('.front');
-    const backCard = container.querySelector(selector);
-    if(!backCard) throw new Error('Card face not found.')
-    this.flipCard(frontCard, backCard);
+    const defaults = {
+      increment: 10,
+      currentRotation:0,
+      targetRotation: 180,
+      frontElement,
+      backElement,
+    };
+    const setup = Object.assign(defaults, options);
+    this.animateFlip2(setup);
+
   }
 
-  flipCard(frontElement, backElement){
-    this.frontElement = frontElement;
-    this.backElement = backElement;
-    this.startFlip();
-  }
 
-  startFlip() {
-    this.targetRotation = this.isFlipped ? 0 : 180;
-    this.animateFlip();
-  }
-
-  // startFlip() {
-  //    const targetRotation = this.isFlipped ? 0 : 180;
-  //    this.flipInterval = setInterval(() => {
-  //      this.currentRotation += this.isFlipped ? -5 : 5;
-  //
-  //      // Apply rotation to both front and back faces
-  //      this.frontElement.style.transform = `rotateY(${this.currentRotation}deg)`;
-  //      this.backElement.style.transform = `rotateY(${this.currentRotation + 180}deg)`;
-  //
-  //      // Check if the flip is complete
-  //      if (this.isFlipped ? this.currentRotation <= 0 : this.currentRotation >= 180) {
-  //        clearInterval(this.flipInterval);
-  //        this.flipInterval = null;
-  //        this.isFlipped = !this.isFlipped;
-  //      }
-  //    }, 16); // 16ms interval for smoother animation (~60fps)
-  //  }
 
 
   // Animate the card flip
-  animateFlip() {
-    // Gradually increase or decrease the rotation
-    if (this.isFlipped) {
-      this.currentRotation -= 5;
-    } else {
-      this.currentRotation += 5;
-    }
+  skipTo(selector) {
+    this.flipTo(selector, {increment: 180});
+  }
 
-    // Apply the current rotation to both front and back faces
-    // this.frontElement.style.transform = `rotateY(${this.currentRotation}deg)`;
-    // this.backElement.style.transform = `rotateY(${this.currentRotation + 180}deg)`;
-    const frontRotation = this.currentRotation;
-    const backRotation = this.currentRotation + 180;
 
-    if(frontRotation == 0 || frontRotation == 360){
-      this.frontElement.style.transform = `rotateX(${frontRotation}deg)`;
-      this.frontElement.style.transform = 'none';
-    }else{
-      this.frontElement.style.transform = `rotateX(${frontRotation}deg)`;
-    }
+  animateFlip2(conf) {
+    conf.currentRotation += conf.increment;
 
-    if(backRotation == 0 || backRotation == 360){
-      this.backElement.style.transform = `rotateX(${backRotation}deg)`;
-      this.backElement.style.transform = 'none';
-    }else{
-      this.backElement.style.transform = `rotateX(${backRotation}deg)`;
-    }
+    const frontRotation = conf.currentRotation;
+    conf.frontElement.style.transform = `rotateX(${frontRotation}deg)`;
+    if(frontRotation == 0 || frontRotation == 360) conf.frontElement.style.transform = 'none'; // Optimization to remove blur
+
+    const backRotation  = 180 + conf.currentRotation;
+    conf.backElement.style.transform = `rotateX(${backRotation}deg)`;
+    if(backRotation == 0 || backRotation == 360) conf.backElement.style.transform = 'none'; // Optimization to remove blur
+
 
     // Check if the rotation is complete
-    if (this.isFlipped ? this.currentRotation > 0 : this.currentRotation < 180) {
-      this.animationFrame = requestAnimationFrame(() => this.animateFlip());
+    const isComplete = conf.currentRotation >= 180;
+    if (!isComplete) {
+      // continue animation
+      conf.animationFrame = requestAnimationFrame(() => this.animateFlip2(conf));
     } else {
       // When done, cancel the animation frame and reset the state
-      this.isFlipped = !this.isFlipped;
-      cancelAnimationFrame(this.animationFrame);
-      this.animationFrame = null;
+      conf.isFlipped = true;
+      cancelAnimationFrame(conf.animationFrame);
+      conf.animationFrame = null;
+      conf.frontElement.classList.remove('active-card');
+      conf.backElement.classList.add('active-card');
     }
 
-
-      this.frontElement.classList.remove('flipped-face');
-      this.backElement.classList.add('flipped-face');
 
   }
 
