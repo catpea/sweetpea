@@ -80,6 +80,48 @@ export default class Stage extends Theoretical {
       <slot></slot>
     </div>
 
+
+
+
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="">
+
+      <div class="toast bg-dark" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000".>
+        <div class="toast-header">
+          <i class="bi bi-bandaid me-2"></i>
+          <strong class="me-auto">TODO</strong>
+          <small>note to self</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+        data binding,
+        selection and keyboard manager,
+        stage controls (<i class="bi bi-zoom-in"></i><i class="bi bi-zoom-out"></i><i class="bi bi-fullscreen"></i><i class="bi bi-lock"></i>),
+        worker delection,
+        fix up the fetch and filter workers,
+        worker browser,
+        worker builder.
+        </div>
+      </div>
+
+      <div class="toast bg-dark" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="30000".>
+        <div class="toast-header">
+          <i class="bi bi-bandaid me-2"></i>
+          <strong class="me-auto">Program Help</strong>
+          <small>usage tips</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Double click on the stage to cerate a new component.
+          You are going to create a worker supervisor, you must then specify a worker.
+        </div>
+      </div>
+
+    </div>
+
+
+
+
     <div class="position-absolute btn-toolbar vertical pt-5 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; top: 0px; z-index: 10;">
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
@@ -100,17 +142,14 @@ export default class Stage extends Theoretical {
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.generateCode()" data-bs-toggle="popover" data-bs-title="Code Generator" data-bs-trigger="hover focus" data-bs-content="Generate a standalone program that does not require sweetpea to run."><i class="bi bi-rocket-takeoff text-danger"></i></button>
-      </div>
-
-      <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Browser" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-plus-circle text-success"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Browser" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-robot text-success"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Creator" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-puzzle text-primary"></i></button>
       </div>
 
 
     </div>
 
     <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; bottom: 0px; z-index: 10;">
-
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-in"></i></button>
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-out"></i></button>
@@ -118,6 +157,8 @@ export default class Stage extends Theoretical {
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-lock"></i></button>
       </div>
     </div>
+
+
 
     <!-- NOTE: iframe to handle the Blob redirection -->
     <iframe id="downloadIframe" style="display:none;"></iframe>
@@ -148,8 +189,26 @@ export default class Stage extends Theoretical {
       }
 
       mount(){
+
+
+
+        this.core.host.shadowRoot.querySelectorAll('.toast').forEach(toastElement=>{
+          const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastElement)
+          toastBootstrap.show();
+          toastElement.querySelector('.btn-close').addEventListener('click', () => toastBootstrap.hide())
+        })
+
+
         const popoverTriggerList = this.core.host.shadowRoot.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
+
+          new bootstrap.Popover(popoverTriggerEl)
+          popoverTriggerEl.addEventListener('hidden.bs.popover', () => {
+          this.core.host.shadowRoot.querySelectorAll('.toast').forEach(toast=>bootstrap.Toast.getOrCreateInstance(toast).hide())
+          })
+        })
+
+
       }
 
 
@@ -259,12 +318,13 @@ export default class Stage extends Theoretical {
     // Protected
     #onMouseDown(event) {
 
-        console.log(event.target);
+        console.log('event.target', event.target);
         if(event.target !== this.host) return
 
         this.#isPanning = true;
         this.#startMousePos = { x: event.clientX, y: event.clientY };
         this.#startPan = { ...this.pan };
+
         event.preventDefault();
     }
 

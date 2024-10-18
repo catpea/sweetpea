@@ -17,12 +17,14 @@ export default class Movable {
 
   connectedCallback() {
     this.element.style.position = 'absolute'; // Ensure the element is absolutely positioned
-    this.element.querySelector('.drag-handle').addEventListener('mousedown', this.mouseDownHandler);
+    // this.element.querySelector('.drag-handle').addEventListener('mousedown', this.mouseDownHandler);
+    this.element.querySelectorAll('.drag-handle').forEach(el=>el.addEventListener('mousedown', this.mouseDownHandler));
     document.addEventListener('mouseup', this.mouseUpHandler);
   }
 
   disconnectedCallback() {
-    this.element.querySelector('.drag-handle').removeEventListener('mousedown', this.mouseDownHandler);
+    // this.element.querySelector('.drag-handle').removeEventListener('mousedown', this.mouseDownHandler);
+    this.element.querySelectorAll('.drag-handle').forEach(el=>el.removeEventListener('mousedown', this.mouseDownHandler));
     document.removeEventListener('mouseup', this.mouseUpHandler);
     document.removeEventListener('mousemove', this.mouseMoveHandler);
   }
