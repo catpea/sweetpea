@@ -156,18 +156,30 @@ export default class Connectable {
   }
 
   mouseUpHandler(event) {
+    document.removeEventListener('mousemove', this.mouseMoveHandler);
 
     if (this.#dragging){
+      this.#dragging = false;
 
       this.#svg.removeChild(this.#line);
       console.info(`Dropped element at ${this.finalX}x${this.finalY}.`, event.target, event.currentTarget, event.composedPath());
 
+      //
+
+
       const fromActor = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-super`);
       const fromValve = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-valve`);
       const from = [fromActor.getAttribute('id'), fromValve.getAttribute('id')].join(':');
-
+      if (!fromActor) {
+        // did not drag to anything
+        return;
+      }
       const composedPath = event.composedPath().filter(el=>el instanceof HTMLElement).filter(el=>el.hasAttribute('id'))
       const toActor = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-super`))
+      if (!toActor) {
+        // did not drag to anything
+        return;
+      }
       const toValve = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-valve`))
       const to = [toActor.getAttribute('id'), toValve.getAttribute('id')].join(':');
 
@@ -196,8 +208,7 @@ export default class Connectable {
 
     }
 
-    this.#dragging = false;
-    document.removeEventListener('mousemove', this.mouseMoveHandler);
+
   }
 
 }

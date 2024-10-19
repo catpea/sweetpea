@@ -122,6 +122,14 @@ export default class Cable extends Theoretical {
     }
 
     connectPipes2(){
+
+      const stage = this.getStage();
+      if(!stage)  {
+        console.log('Lol, unable to locate stage!!!!!');
+        return this
+      }
+
+
       const [fromProgram, fromPort] = this.getProgramPipe('from');
       const [toProgram, toPort] = this.getProgramPipe('to');
       const fromPortName = fromPort.getAttribute('id');
@@ -200,6 +208,7 @@ export default class Cable extends Theoretical {
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
       const stage = this.getStage();
+      if(!stage) throw new Error('Lol, unable to locate stage!!!!!');
 
       const programComponent = stage.querySelector('#'+componentId);
       if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)

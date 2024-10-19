@@ -94,10 +94,9 @@ export default class Stage extends Theoretical {
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-        data binding,
-        selection and keyboard manager,
+        SUPERVISOR READY EVENT (bug in Cable, must use READY events of supervisor due to remote port loading)
         stage controls (<i class="bi bi-zoom-in"></i><i class="bi bi-zoom-out"></i><i class="bi bi-fullscreen"></i><i class="bi bi-lock"></i>),
-        worker delection,
+        worker selection,
         fix up the fetch and filter workers,
         worker browser,
         worker builder.
@@ -112,6 +111,8 @@ export default class Stage extends Theoretical {
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
+          To select/deselect a component click its caption text.
+          Use <kbd>DEL</kbd> to remove selected components.
           Double click on the stage to cerate a new component.
           You are going to create a worker supervisor, you must then specify a worker.
         </div>
@@ -179,7 +180,7 @@ export default class Stage extends Theoretical {
     this.View = class View {
 
       constructor({stage, core, root, pipe, data}){
-        this.core = stage;
+        this.stage = stage;
         this.core = core;
         this.root = root;
         this.pipe = pipe;
@@ -190,6 +191,44 @@ export default class Stage extends Theoretical {
 
       mount(){
 
+        document.addEventListener("keydown", (event) => {
+          if (event.isComposing || event.keyCode === 229) {
+            return;
+          }
+
+          const keyName = event.key;
+
+          if (keyName === "Control") {
+            // do not alert when only Control key is pressed.
+            return;
+          }
+
+          if (event.ctrlKey) {
+            // Even though event.key is not 'Control' (e.g., 'a' is pressed),
+            // event.ctrlKey may be true if Ctrl key is pressed at the same time.
+            console.log(`Combination of ctrlKey + ${keyName}`);
+          } else {
+
+            console.log(`Key pressed ${keyName}`);
+            if (keyName === "Delete") {
+              for (const supervisor of this.core.host.querySelectorAll(`${globalThis.sweetpea.prefix}-super`)) {
+                if(supervisor.getAttribute('selected') === "true"){
+
+                  // Before removing element remove the cables!
+                  for (const cable of this.core.host.querySelectorAll(`${globalThis.sweetpea.prefix}-cable`)) {
+                    if(cable.getAttribute('from').split(':')[0] === supervisor.getAttribute('id')) cable.remove();
+                    if(cable.getAttribute('to').split(':')[0] === supervisor.getAttribute('id')) cable.remove();
+                  }
+
+                  supervisor.remove();
+                }
+              }
+              return;
+            }
+
+          }
+
+        }, false);
 
 
         this.core.host.shadowRoot.querySelectorAll('.toast').forEach(toastElement=>{
@@ -198,10 +237,8 @@ export default class Stage extends Theoretical {
           toastElement.querySelector('.btn-close').addEventListener('click', () => toastBootstrap.hide())
         })
 
-
         const popoverTriggerList = this.core.host.shadowRoot.querySelectorAll('[data-bs-toggle="popover"]')
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
-
           new bootstrap.Popover(popoverTriggerEl)
           popoverTriggerEl.addEventListener('hidden.bs.popover', () => {
           this.core.host.shadowRoot.querySelectorAll('.toast').forEach(toast=>bootstrap.Toast.getOrCreateInstance(toast).hide())
