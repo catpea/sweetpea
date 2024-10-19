@@ -7,7 +7,7 @@ export default class SuperElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['x', 'y'];
+    return ['x', 'y', 'selected'];
   }
 
   constructor() {
@@ -27,6 +27,7 @@ export default class SuperElement extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     const attributeHandlers = {
       'x y': () => this.updatePosition(),
+      'selected': () => this.instance.selected(newValue),
       // 'worker': () => this.instance.machine.transition('configure-worker'),
     };
 
@@ -38,9 +39,6 @@ export default class SuperElement extends HTMLElement {
     }
 
   }
-
-
-
 
   updatePosition() {
     const style = {};

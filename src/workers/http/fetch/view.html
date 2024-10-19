@@ -1,8 +1,8 @@
-<div class="perspective movable" use="movable">
+<div class="perspective movable" use="movable selectable">
 
   <div class="card front shadow active-card">
     <div class="card-header drag-handle">
-      JSON Fetch <button type="button" class="btn btn-sm btn-outline-secondary float-end" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
+      <span class="selectable-handle">JSON Fetch</span> <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
@@ -29,7 +29,7 @@
 
   <div class="card back worker-configuration shadow">
     <div class="card-header drag-handle">
-      Configuration <button type="button" class="btn btn-sm btn-outline-success float-end" onclick="(element, component)=>this.flip('.front')"><i class="bi bi-check-circle"></i></button>
+      <span class="selectable-handle">Configuration</span> <button type="button" class="btn btn-sm btn-outline-success float-end" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;" onclick="(element, component)=>this.flip('.front')"><i class="bi bi-check-circle"></i></button>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">

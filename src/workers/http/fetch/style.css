@@ -34,3 +34,8 @@
 .card.back {
     transform: rotateY(180deg);
 }
+
+.card.selected {
+  --bs-card-border-color: var(--bs-primary);
+
+}
