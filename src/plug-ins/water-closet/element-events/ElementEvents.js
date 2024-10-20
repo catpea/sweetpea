@@ -44,7 +44,7 @@ export default Inheritance => class ElementEvents extends Inheritance {
     }
 
 
-    const supportedEvents = ['click'];
+    const supportedEvents = ['click', 'dblclick'];
     for (const name of supportedEvents) {
       const attributeQuery = `[on${name}]`
       const attributeName = `on${name}`
@@ -54,13 +54,13 @@ export default Inheritance => class ElementEvents extends Inheritance {
         const code = match.getAttribute(attributeName);
         match.removeAttribute(attributeName);
         // add a manual listener
-        match.addEventListener(name, ()=>{
+        match.addEventListener(name, event=>{
           // console.log(`TRIGGERED ${name}`, code);
           const codeFunction = new Function(`return ${code}`);
           // execute attribute code in context of class + retrieve user funcion (if any)
           const userFuncion = codeFunction.call(this.viewClass);
           // execute user funcion
-          if (userFuncion instanceof Function) userFuncion(match, this);
+          if (userFuncion instanceof Function) userFuncion(event, match, this);
         });
       });
     } // supportedEvents

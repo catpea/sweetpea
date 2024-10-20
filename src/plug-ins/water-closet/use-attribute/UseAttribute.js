@@ -1,6 +1,7 @@
 import Movable from './mouse/Movable.js';
 import Connectable from './mouse/Connectable.js';
 import Selectable from './mouse/Selectable.js';
+import Focusable from './mouse/Focusable.js';
 
 export default Inheritance => class UseAttribute extends Inheritance {
 
@@ -8,6 +9,7 @@ export default Inheritance => class UseAttribute extends Inheritance {
     movable:     Movable,
     connectable: Connectable,
     selectable:  Selectable,
+    focusable:  Focusable,
   };
 
   useExtensions(){

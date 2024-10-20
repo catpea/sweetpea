@@ -94,11 +94,14 @@ export default class Stage extends Theoretical {
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-        cable selection
-        stage controls (<i class="bi bi-zoom-in"></i><i class="bi bi-zoom-out"></i><i class="bi bi-fullscreen"></i><i class="bi bi-lock"></i>),
+
+        Mentor (a worker builder)
+
+        <!--
         fix up the fetch and filter workers,
         worker browser,
         worker builder.
+        -->
         </div>
       </div>
 
@@ -134,7 +137,7 @@ export default class Stage extends Theoretical {
       <!-- debugger buttons
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="el=>this.say(el)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="ev=>this.say(ev)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
       </div>
@@ -142,8 +145,8 @@ export default class Stage extends Theoretical {
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.generateCode()" data-bs-toggle="popover" data-bs-title="Code Generator" data-bs-trigger="hover focus" data-bs-content="Generate a standalone program that does not require sweetpea to run."><i class="bi bi-rocket-takeoff text-danger"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Browser" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-robot text-success"></i></button>
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Creator" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-puzzle text-primary"></i></button>
+        <!-- <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Browser" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-robot text-success"></i></button> -->
+        <!-- <button type="button" class="btn btn-outline-secondary" onclick="()=>this.add()" data-bs-toggle="popover" data-bs-title="Function Creator" data-bs-trigger="hover focus" data-bs-content="Add a new function to your program."><i class="bi bi-puzzle text-primary"></i></button> -->
       </div>
 
 
@@ -151,10 +154,9 @@ export default class Stage extends Theoretical {
 
     <div class="position-absolute btn-toolbar vertical pt-3 ps-2 " role="toolbar" aria-label="Toolbar with button groups" style="left: 0px; bottom: 0px; z-index: 10;">
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-in"></i></button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-zoom-out"></i></button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-fullscreen"></i></button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-lock"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" ondblclick="event=>event.stopPropagation()" onclick="this.core.zoomIn()"><i class="bi bi-zoom-in"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" ondblclick="event=>event.stopPropagation()" onclick="this.core.zoomOut()"><i class="bi bi-zoom-out"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="this.core.stageOverview()"><i class="bi bi-aspect-ratio"></i></button>
       </div>
     </div>
 
@@ -292,6 +294,34 @@ export default class Stage extends Theoretical {
     return this;
   }
 
+  stageOverview(){
+      this.zoom = 1;
+      this.pan.x = 0
+      this.pan.y = 0;
+      this.updateTransform();
+  }
+
+  zoomIn(){
+    // Simulate Wheel
+    this.#onWheel({
+      deltaY:0,
+      clientX: this.host.getBoundingClientRect().width/2,
+      clientY: this.host.getBoundingClientRect().height/2,
+      preventDefault: ()=>null
+    })
+  }
+
+  zoomOut(){
+    // Simulate Wheel
+    this.#onWheel({
+      deltaY:1,
+      clientX: this.host.getBoundingClientRect().width/2,
+      clientY: this.host.getBoundingClientRect().height/2,
+      preventDefault: ()=>null
+    })
+  }
+
+
 
   installStageListeners(){
     this.content = this.host.shadowRoot.querySelector('.content');
@@ -377,6 +407,8 @@ export default class Stage extends Theoretical {
     #onMouseUp(event) {
       this.#isPanning = false;
     }
+
+
 
     #onWheel(event) {
       const deltaScale = event.deltaY > 0 ? 0.9 : 1.1;
