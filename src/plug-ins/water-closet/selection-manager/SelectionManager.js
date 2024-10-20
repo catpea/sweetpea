@@ -1,34 +1,40 @@
+import Signal from 'signal';
+
 export default Inheritance => class SelectionManager extends Inheritance {
   //NOTE: selected can be "true" (string) or null (property removed [helps with serialization])
 
-  selected(selected){
-    const container = this.searchShadow('.perspective').pop();
+  selected = new Signal(false);
 
-    if(selected === "true"){
-      this.deselectAll();
-      for (const element of container.querySelectorAll('.card')) {
-        element.classList.add('selected');
-      }
-    }else{
-      // console.log('DE-SELECTED', this.host);
-      for (const element of container.querySelectorAll('.card')) {
-        element.classList.remove('selected');
-      }
-    }
+  constructor(...arg){
+    super(...arg)
+    const subscription = this.selected.subscribe(v=>v?this.#actorSelected():this.#actorUnselected());
+    this.subscriptions.push( {type:'svg/line', id:'cable', subscription} );
 
+    this.selected.subscribe(selected=>console.log(`${this.host.tagName}#${this.host.getAttribute('id')||'x'}`, {selected}))
 
   }
 
-  select(){
-    this.getStage()
+  #actorSelected(){
+    this.deselectOthers(this.host);
+  }
+  #actorUnselected(){
+  }
+
+
+
+  deselectOthers(chosen){
+    const others = this.getAllActorsOnStage();
+    for (const other of others) {
+      if(chosen == other) continue;
+      other.setAttribute('selected', "false");
+    }
   }
 
   deselectAll(){
-
-    for (const element of this.getStage().querySelectorAll(`${globalThis.sweetpea.prefix}-super`)) {
-      if(this.host.getAttribute('id') == element.getAttribute('id')) continue;
-      element.setAttribute('selected', "false");
+    const actors = this.getAllActorsOnStage();
+    for (const actor of actors) {
+      actor.setAttribute('selected', "false");
     }
-
   }
+
 }

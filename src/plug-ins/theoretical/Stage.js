@@ -76,7 +76,7 @@ export default class Stage extends Theoretical {
 
 
     <div class="content" style="min-height: 100vh;">
-      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+    <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
       <slot></slot>
     </div>
 
@@ -94,9 +94,8 @@ export default class Stage extends Theoretical {
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-        SUPERVISOR READY EVENT (bug in Cable, must use READY events of supervisor due to remote port loading)
+        cable selection
         stage controls (<i class="bi bi-zoom-in"></i><i class="bi bi-zoom-out"></i><i class="bi bi-fullscreen"></i><i class="bi bi-lock"></i>),
-        worker selection,
         fix up the fetch and filter workers,
         worker browser,
         worker builder.
@@ -211,18 +210,20 @@ export default class Stage extends Theoretical {
 
             // console.log(`Key pressed ${keyName}`);
             if (keyName === "Delete") {
-              for (const supervisor of this.core.host.querySelectorAll(`${globalThis.sweetpea.prefix}-super`)) {
-                if(supervisor.getAttribute('selected') === "true"){
+              for (const actor of this.core.getAllActorsOnStage()) {
+                const actorIsSelected = actor.getAttribute('selected') === "true";
+                if(!actorIsSelected) continue;
 
-                  // Before removing element remove the cables!
+                if(actor.tagName == 'SUPER'){ // Before removing a SUPPERVISOR element remove the cables!
                   for (const cable of this.core.host.querySelectorAll(`${globalThis.sweetpea.prefix}-cable`)) {
-                    if(cable.getAttribute('from').split(':')[0] === supervisor.getAttribute('id')) cable.remove();
-                    if(cable.getAttribute('to').split(':')[0] === supervisor.getAttribute('id')) cable.remove();
+                    if(cable.getAttribute('from').split(':')[0] === actor.getAttribute('id')) cable.remove();
+                    if(cable.getAttribute('to').split(':')[0] === actor.getAttribute('id')) cable.remove();
                   }
+                } // if SUPER
 
-                  supervisor.remove();
-                }
-              }
+                actor.remove();
+              } // for actors
+
               return;
             }
 

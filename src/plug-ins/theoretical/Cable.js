@@ -14,7 +14,7 @@ export default class Cable extends Theoretical {
         enter: () => this.attachShadow().adoptCss()
       },
       '/connected':{
-        enter: () => this.locateSvg().drawLine().awaitSupervisors()
+        enter: () => this.locateSvg().drawLine().makeLineSelectable().installVisualSelectionIndicator().awaitSupervisors()
       },
       '/connected/idle': {
         enter: () => this.monitorSourcePosition().monitorTargetPosition().connectPipes()
@@ -36,16 +36,7 @@ export default class Cable extends Theoretical {
 
   }
 
-  awaitSupervisorsCounter = 0;
-
   awaitSupervisors(){
-
-    // console.warn( 'awaitSupervisors' );
-
-    this.awaitSupervisorsCounter++
-
-    if(this.awaitSupervisorsCounter>1) throw new Error('awaitSupervisorsCounter can only be called once!')
-    if(this.awaitSupervisorsCounter>5) return console.log('awaitSupervisorsCounter', this.awaitSupervisorsCounter);
 
     let [fromId] = this.host.getAttribute('from').split(':', 1);
     let [toId] = this.host.getAttribute('to').split(':', 1);
@@ -57,20 +48,14 @@ export default class Cable extends Theoretical {
     const buffer = new Signal([]);
 
     const trash1 = fromSupervisor.state.subscribe(state=>{
-      // console.log('fromSupervisor state change to', state);
       buffer.alter(b=>b[0]=state);
     })
 
     const trash2 = toSupervisor.state.subscribe(state=>{
-      // console.log('toSupervisor state change to', state);
       buffer.alter(b=>b[1]=state);
     })
 
-
     const trash3 = buffer.subscribe(buffer=>{
-
-      // console.log('QQ buffer', this.host.getAttribute('id'), buffer);
-
       if (buffer.length === 0) return;
       if(buffer.every(v=>v==='idle')){
         verdict.set('idle')
@@ -87,26 +72,41 @@ export default class Cable extends Theoretical {
       busy: '/connected/busy',
     }
 
-    // verdict.subscribe(v=>console.log('QQQ VERDICCT', v, verdicts[v]));
     const trash4 = verdict.subscribe(v=> v && this.transmission.shift(verdicts[v]) );
-    // const trash4 = verdict.subscribe(v=>console.log('VERDICCT', v));
 
     [trash1,trash2,trash3,trash4].map(subscription=>this.subscriptions.push( {type:'signal', id:'signal-trash...', subscription} ))
 
     return this;
+
   }
 
 
   //
   #svg;
   #line;
+  #clickOverlayline;
 
-  #x1 = 0;
-  #y1 = 0;
-  #x2 = 0;
-  #y2 = 0;
-  #stroke = 'green';
+  #x1 = new Signal(0);
+  #y1 = new Signal(0);
+  #x2 = new Signal(0);
+  #y2 = new Signal(0);
+
+  #stroke = 'teal';
   #strokeWidth = '2';
+  #strokeWidthClickOverlay = '8';
+
+  installVisualSelectionIndicator(){
+    const subscription = this.selected.subscribe(selected=>{
+      if(selected){
+        this.#line.setAttribute('stroke', 'yellowgreen');
+      }else{
+        this.#line.setAttribute('stroke', this.#stroke);
+      }
+    });
+    this.subscriptions.push( {type:'svg/line', id:'cable', subscription} );
+    return this;
+  }
+
 
   locateSvg(){
     this.#svg = this.host.shadowRoot.host.closest('x-stage').shadowRoot.querySelector('svg');
@@ -115,17 +115,60 @@ export default class Cable extends Theoretical {
   }
 
 
+
+  makeLineSelectable(){
+    const mouseDownHandler = (event) => {
+      console.log(this.host, 'makeLineSelectable > mouseDownHandler');
+      event.composedPath()
+      if( this.host.hasAttribute('selected') ){
+        if( this.host.getAttribute('selected') === "true"){
+          this.host.removeAttribute('selected')
+        }else{
+          this.host.setAttribute('selected', "true")
+        }
+      }else{
+        this.host.setAttribute('selected', "true");
+      }
+    };
+
+    this.#clickOverlayline.addEventListener('mousedown', mouseDownHandler);
+    this.subscriptions.push( {type:'svg/line', id:'cable-click', subscription:()=>{
+      this.#clickOverlayline.removeEventListener('mousedown', mouseDownHandler);
+    }});
+    return this;
+  }
   drawLine(){
+
     this.#line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    this.#line.setAttribute('x1', this.#x1);
-    this.#line.setAttribute('y1', this.#y1);
-    this.#line.setAttribute('x2', this.#x2);
-    this.#line.setAttribute('y2', this.#y2);
+    this.#clickOverlayline = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+    this.subscriptions.push({type:'x1', id:'#line/x1', subscription: this.#x1.subscribe(v=>this.#line.setAttribute('x1', v)) });
+    this.subscriptions.push({type:'y1', id:'#line/y1', subscription: this.#y1.subscribe(v=>this.#line.setAttribute('y1', v)) });
+    this.subscriptions.push({type:'x2', id:'#line/x2', subscription: this.#x2.subscribe(v=>this.#line.setAttribute('x2', v)) });
+    this.subscriptions.push({type:'y2', id:'#line/y2', subscription: this.#y2.subscribe(v=>this.#line.setAttribute('y2', v)) });
+
     this.#line.setAttribute('stroke', this.#stroke);
     this.#line.setAttribute('stroke-width', this.#strokeWidth);
-    this.#svg.appendChild(this.#line);
 
-    this.subscriptions.push( {type:'svg/line', id:'cable', subscription:()=>this.#line.remove()} );
+    this.subscriptions.push({type:'x1', id:'#clickOverlayline/x1', subscription: this.#x1.subscribe(v=>this.#clickOverlayline.setAttribute('x1', v)) });
+    this.subscriptions.push({type:'y1', id:'#clickOverlayline/y1', subscription: this.#y1.subscribe(v=>this.#clickOverlayline.setAttribute('y1', v)) });
+    this.subscriptions.push({type:'x2', id:'#clickOverlayline/x2', subscription: this.#x2.subscribe(v=>this.#clickOverlayline.setAttribute('x2', v)) });
+    this.subscriptions.push({type:'y2', id:'#clickOverlayline/y2', subscription: this.#y2.subscribe(v=>this.#clickOverlayline.setAttribute('y2', v)) });
+
+    this.#clickOverlayline.setAttribute('stroke', this.#stroke);
+    this.#clickOverlayline.setAttribute('stroke-width', this.#strokeWidthClickOverlay);
+    this.#clickOverlayline.setAttribute('stroke-opacity', .4);
+
+    // this.#clickOverlayline
+
+    this.#svg.appendChild(this.#line);
+    this.#svg.appendChild(this.#clickOverlayline);
+
+    this.subscriptions.push( {type:'svg/line', id:'cable', subscription:()=>{
+      this.#line.remove()
+      this.#clickOverlayline.remove()
+    }} );
+
     return this;
   }
 
@@ -137,12 +180,12 @@ export default class Cable extends Theoretical {
 
 
     monitorSourcePosition(){
-      this.monitorPosition('from', (x,y)=>{ this.#line.setAttribute('x1', x); this.#line.setAttribute('y1', y); });
+      this.monitorPosition('from', (x,y)=>{ this.#x1.set(x); this.#y1.set(y); });
       return this;
     }
 
     monitorTargetPosition(){
-      this.monitorPosition('to', (x,y)=>{ this.#line.setAttribute('x2', x); this.#line.setAttribute('y2', y); });
+      this.monitorPosition('to', (x,y)=>{ this.#x2.set(x); this.#y2.set(y); });
       return this;
     }
 
@@ -319,19 +362,7 @@ export default class Cable extends Theoretical {
 
     }
 
-    // monitorPosition0(attributeName, fun){
-    //
-    //   let [componentId] = this.host.getAttribute(attributeName).split(':', 1);
-    //   const stage = this.getStage();
-    //   const programComponent = stage.querySelector('#'+componentId);
-    //   programComponent.addEventListener('ready', (event) => {
-    //     console.log('READY!!!!!!!');
-    //     // console.log(event.detail.message); // Outputs: Button was clicked!
-    //     this.monitorPosition2(attributeName, fun)
-    //   });
-    //   return this;
-    //
-    // }
+
 
     monitorPosition(attributeName, fun){
 

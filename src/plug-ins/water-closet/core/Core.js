@@ -70,7 +70,9 @@ export default Inheritance => class Core extends Inheritance {
   }
 
 
-
+  getAllActorsOnStage(){
+    return this.getStage().querySelectorAll(`${globalThis.sweetpea.prefix}-super, ${globalThis.sweetpea.prefix}-cable`);
+  }
 
 
 

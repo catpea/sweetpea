@@ -5,7 +5,7 @@ export default class Connectable {
   #dragging = false;
   #svg;
   #line;
-  #stroke = 'red';
+  #stroke = 'olive';
   #strokeWidth = 3;
   #previousX = 0;
   #previousY = 0;

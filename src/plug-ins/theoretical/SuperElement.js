@@ -28,7 +28,7 @@ export default class SuperElement extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     const attributeHandlers = {
       'x y': () => this.updatePosition(),
-      'selected': () => this.instance.selected(newValue),
+      'selected': () => this.instance.selected.set(newValue==="true"?true:false),
       // 'worker': () => this.instance.machine.transition('configure-worker'),
     };
 

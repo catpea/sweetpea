@@ -13,7 +13,7 @@ export default class Super extends Theoretical {
         enter: () => this.attachShadow().adoptCss().createElementPipe()
       },
       '/connected':{
-        enter: async () => await this.macro.installActorTemplate.installActorCSS.installActorView.installTemplate.wrapAttributeEvents.useExtensions.dispatchReady.run()
+        enter: async () => await this.macro.installActorTemplate.installActorCSS.installActorView.installTemplate.wrapAttributeEvents.useExtensions.installVisualSelectionIndicator.dispatchReady.run()
       },
       '/connected/front': {
         enter: () => this.skipTo(this.initialFace).dispatchIdle()
@@ -36,6 +36,25 @@ export default class Super extends Theoretical {
     }
     this.transmission = new AutomaticTransmission(gearbox, '/idle');
 
+  }
+
+  installVisualSelectionIndicator(){
+    const subscription = this.selected.subscribe(selected=>{
+      if(selected){
+        const container = this.searchShadow('.perspective').pop();
+        for (const element of container.querySelectorAll('.card')) {
+          element.classList.add('selected');
+        }
+      }else{
+        const container = this.searchShadow('.perspective').pop();
+        for (const element of container.querySelectorAll('.card')) {
+          element.classList.remove('selected');
+        }
+      }
+    });
+    this.subscriptions.push( {type:'svg/line', id:'cable', subscription} );
+    return this;
+    
   }
 
 }
