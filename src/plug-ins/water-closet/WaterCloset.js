@@ -12,6 +12,7 @@ import Project from './project/Project.js';
 import VisualProgramming from './visual-programming/VisualProgramming.js';
 import ActorIntegration from './actor-integration/ActorIntegration.js';
 import SelectionManager from './selection-manager/SelectionManager.js';
+import ComponentEvents from './component-events/ComponentEvents.js';
 
 export default function(){
 
@@ -30,6 +31,7 @@ export default function(){
     VisualProgramming,   // addSupervisor()
     ActorIntegration,   // installActor()
     SelectionManager,   // select() deselect()
+    ComponentEvents,   // ready) busy~idle (exit
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );

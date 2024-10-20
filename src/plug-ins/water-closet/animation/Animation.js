@@ -26,6 +26,7 @@ export default Inheritance => class Animation extends Inheritance {
     const setup = Object.assign(defaults, options);
     this.animateFlip2(setup);
 
+    return this;
   }
 
 
@@ -34,6 +35,7 @@ export default Inheritance => class Animation extends Inheritance {
   // Animate the card flip
   skipTo(selector) {
     this.flipTo(selector, {increment: 180});
+      return this;
   }
 
 

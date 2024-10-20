@@ -184,7 +184,7 @@ export default class Connectable {
       const to = [toActor.getAttribute('id'), toValve.getAttribute('id')].join(':');
 
       const cable = document.createElement(`${globalThis.sweetpea.prefix}-cable`);
-      // cable.setAttribute('id', this.system.guid());
+      cable.setAttribute('id', this.system.guid());
       cable.setAttribute('from', from);
       cable.setAttribute('to', to);
       this.system.getStage().appendChild(cable);
@@ -194,8 +194,8 @@ export default class Connectable {
       console.log({cable});
 
       console.error('MANUAL READY DISPATCH, THE FLOW MUST ACCOUNT FOR CONNECTING AT LATER TIME');
-      fromActor.instance.dispatchReady();
-      toActor.instance.dispatchReady();
+      // fromActor.instance.dispatchReady();
+      // toActor.instance.dispatchReady();
 
       // NOTE: can be use for some animated effect
       // const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');

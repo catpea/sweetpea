@@ -63,31 +63,11 @@ export default Inheritance => class Core extends Inheritance {
   }
 
 
-  dispatchReady(){
-    const event = new CustomEvent('ready', {
-        detail: { message: 'ready!' },
-        bubbles: true,
-        composed: true
-    });
-    this.host.dispatchEvent(event);
-    return this;
+  createElementPipe(){
+      this.pipe = new EventEmitter();
+      return this;
+
   }
-
-
-
-
-
-
-
-
-
-
-
-    createElementPipe(){
-        this.pipe = new EventEmitter();
-        return this;
-
-    }
 
 
 

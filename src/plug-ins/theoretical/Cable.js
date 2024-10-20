@@ -1,5 +1,7 @@
+import Signal from 'signal';
 import Theoretical from './Theoretical.js';
 import StateMachine from 'state-machine';
+import AutomaticTransmission from 'automatic-transmission';
 
 export default class Cable extends Theoretical {
   machine;
@@ -7,45 +9,92 @@ export default class Cable extends Theoretical {
   constructor(host) {
     super(host);
 
-    const states = {
-      idle: {
-        enter: () => this
-          .log('Entering Idle state...')
-          .attachShadow()
-          .adoptCss()
-          .log('Entered Idle state'),
-        exit: () => this
-          .log('Exiting Idle state'),
+    const gearbox = {
+      '/idle':{
+        enter: () => this.attachShadow().adoptCss()
       },
-      loading: {
-        enter: () => console.log('Entering Loading state'),
-         exit: () => console.log('Exiting Loading state'),
+      '/connected':{
+        enter: () => this.locateSvg().drawLine().awaitSupervisors()
       },
-      error: {
-        enter: () => console.log('Entering Error state'),
-         exit: () => console.log('Exiting Error state'),
+      '/connected/idle': {
+        enter: () => this.monitorSourcePosition().monitorTargetPosition().connectPipes()
       },
-      connected: {
-        enter: () => this
-          .log('Entering Connected state')
-          .locateSvg()
-          .drawLine()
-
-          .monitorSourcePosition()
-          .monitorTargetPosition()
-          .connectPipes()
-          .done,
-
-         exit: () => console.log('Exiting Connected state'),
-       },
-       disconnected: {
+      '/connected/busy': {
+        enter: () => ()=>this.#line.setAttribute('stroke', 'gray'),
+        exit: () => ()=>this.#line.setAttribute('stroke', this.#stroke),
+      },
+      '/disconnected':{
         enter: () => this.collectGarbage(),
-          exit: () => console.log('Exiting disconnected'),
-       },
-    };
-    this.machine = new StateMachine(states, 'idle');
+      },
+      '/error':{
+        enter: () => this.flipTo('.card.error')
+      },
+    }
+
+    this.transmission = new AutomaticTransmission(gearbox, '/idle');
+    this.subscriptions.push( {type:'queue', id:'transmission jobs...', subscription:()=>this.transmission.stop()} );
+
   }
 
+  awaitSupervisorsCounter = 0;
+
+  awaitSupervisors(){
+
+    console.warn( 'awaitSupervisors' );
+
+    this.awaitSupervisorsCounter++
+
+    if(this.awaitSupervisorsCounter>1) throw new Error('awaitSupervisorsCounter can only be called once!')
+    if(this.awaitSupervisorsCounter>5) return console.log('awaitSupervisorsCounter', this.awaitSupervisorsCounter);
+
+    let [fromId] = this.host.getAttribute('from').split(':', 1);
+    let [toId] = this.host.getAttribute('to').split(':', 1);
+
+    const fromSupervisor = this.getSupervisor(fromId);
+    const toSupervisor   = this.getSupervisor(toId);
+
+    const verdict = new Signal(null);
+    const buffer = new Signal([]);
+
+    const trash1 = fromSupervisor.state.subscribe(state=>{
+      console.log('fromSupervisor state change to', state);
+      buffer.alter(b=>b[0]=state);
+    })
+
+    const trash2 = toSupervisor.state.subscribe(state=>{
+      console.log('toSupervisor state change to', state);
+      buffer.alter(b=>b[1]=state);
+    })
+
+
+    const trash3 = buffer.subscribe(buffer=>{
+
+      console.log('QQ buffer', this.host.getAttribute('id'), buffer);
+
+      if (buffer.length === 0) return;
+      if(buffer.every(v=>v==='idle')){
+        verdict.set('idle')
+      }else if(buffer.every(v=>v==='ready')){
+        verdict.set('ready')
+      }else if(buffer.some(v=>v==='busy')){
+        verdict.set('busy')
+      }
+    });
+
+    const verdicts = {
+      ready: '/connected',
+      idle: '/connected/idle',
+      busy: '/connected/busy',
+    }
+
+    // verdict.subscribe(v=>console.log('QQQ VERDICCT', v, verdicts[v]));
+    const trash4 = verdict.subscribe(v=> v && this.transmission.shift(verdicts[v]) );
+    // const trash4 = verdict.subscribe(v=>console.log('VERDICCT', v));
+
+    [trash1,trash2,trash3,trash4].map(subscription=>this.subscriptions.push( {type:'signal', id:'signal-trash...', subscription} ))
+
+    return this;
+  }
 
 
   //
@@ -97,31 +146,31 @@ export default class Cable extends Theoretical {
       return this;
     }
 
+    // connectPipes0(){
+    //   let counter = 0;
+    //
+    //   const fromProgram = this.programPipe('from');
+    //   const toProgram = this.programPipe('to');
+    //
+    //   const resume = function(){
+    //     console.log('CALLING connectPipes2');
+    //     this.connectPipes2()
+    //   }.bind(this)
+    //
+    //   fromProgram.addEventListener('ready', (event) => {
+    //     counter++;
+    //     if (counter==2) resume()
+    //   });
+    //   toProgram.addEventListener('ready', (event) => {
+    //     counter++;
+    //     if (counter==2) resume()
+    //   });
+    //
+    //   return this;
+    //
+    // }
+
     connectPipes(){
-      let counter = 0;
-
-      const fromProgram = this.programPipe('from');
-      const toProgram = this.programPipe('to');
-
-      const resume = function(){
-        console.log('CALLING connectPipes2');
-        this.connectPipes2()
-      }.bind(this)
-
-      fromProgram.addEventListener('ready', (event) => {
-        counter++;
-        if (counter==2) resume()
-      });
-      toProgram.addEventListener('ready', (event) => {
-        counter++;
-        if (counter==2) resume()
-      });
-
-      return this;
-
-    }
-
-    connectPipes2(){
 
       const stage = this.getStage();
       if(!stage)  {
@@ -132,9 +181,12 @@ export default class Cable extends Theoretical {
 
       const [fromProgram, fromPort] = this.getProgramPipe('from');
       const [toProgram, toPort] = this.getProgramPipe('to');
+
       const fromPortName = fromPort.getAttribute('id');
       const toPortName = toPort.getAttribute('id');
+
       fromProgram.pipe.on(fromPortName, packet=>toProgram.pipe.send(toPortName, packet));
+
       return this;
     }
 
@@ -176,7 +228,6 @@ export default class Cable extends Theoretical {
           }
         }
       } // while
-      console.log('resizableAncestors', response);
       return response;
     }
 
@@ -204,6 +255,29 @@ export default class Cable extends Theoretical {
 
 
 
+    getSupervisor(id){
+
+      const stage = this.getStage();
+      if(!stage) throw new Error('Lol, unable to locate stage!!!!!');
+
+      const programComponent = stage.querySelector('#'+id);
+      if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
+
+      return programComponent;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     getProgramPipe(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
@@ -218,6 +292,8 @@ export default class Cable extends Theoretical {
       return [programComponent, portComponent];
 
     }
+
+
     programPipe(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
@@ -243,21 +319,21 @@ export default class Cable extends Theoretical {
 
     }
 
+    // monitorPosition0(attributeName, fun){
+    //
+    //   let [componentId] = this.host.getAttribute(attributeName).split(':', 1);
+    //   const stage = this.getStage();
+    //   const programComponent = stage.querySelector('#'+componentId);
+    //   programComponent.addEventListener('ready', (event) => {
+    //     console.log('READY!!!!!!!');
+    //     // console.log(event.detail.message); // Outputs: Button was clicked!
+    //     this.monitorPosition2(attributeName, fun)
+    //   });
+    //   return this;
+    //
+    // }
+
     monitorPosition(attributeName, fun){
-
-      let [componentId] = this.host.getAttribute(attributeName).split(':', 1);
-      const stage = this.getStage();
-      const programComponent = stage.querySelector('#'+componentId);
-      programComponent.addEventListener('ready', (event) => {
-        console.log('READY!!!!!!!');
-        // console.log(event.detail.message); // Outputs: Button was clicked!
-        this.monitorPosition2(attributeName, fun)
-      });
-      return this;
-
-    }
-
-    monitorPosition2(attributeName, fun){
 
 
 

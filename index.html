@@ -8,13 +8,17 @@
     <script type="importmap">
     {
       "imports": {
+
+        "isEqual": "./js/lodash-es/isEqual.js",
+        "cloneDeep": "./js/lodash-es/cloneDeep.js",
+
         "actor": "./src/plug-ins/actor/Actor.js",
 
         "automatic-transmission": "./src/plug-ins/automatic-transmission/AutomaticTransmission.js",
         "state-machine": "./src/plug-ins/state-machine/StateMachine.js",
-
         "event-emitter": "./src/plug-ins/event-emitter/EventEmitter.js",
         "string-bikini": "./src/plug-ins/string-bikini/index.js",
+        "work-queue":    "./src/plug-ins/work-queue/WorkQueue.js",
 
         "movable": "./src/plug-ins/mouse/Movable.js",
         "connectable": "./src/plug-ins/mouse/Connectable.js",
@@ -50,8 +54,8 @@
     // RISC
     customElements.define(`${globalThis.sweetpea.prefix}-stage`, StageElement);
     customElements.define(`${globalThis.sweetpea.prefix}-valve`, ValveElement);
+    customElements.define(`${globalThis.sweetpea.prefix}-super`, SuperElement); // load super before cable
     customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement);
-    customElements.define(`${globalThis.sweetpea.prefix}-super`, SuperElement);
 
   </script>
 
@@ -69,8 +73,8 @@
       <x-super id="troi" x="510" y="161" worker="object/parse"> </x-super>
       <x-super id="bork" x="935" y="87" worker="data/write"> </x-super>
 
-      <x-cable from="xena:out" to="troi:in"></x-cable>
-      <x-cable from="troi:out" to="bork:in"></x-cable>
+      <x-cable id="alfa" from="xena:out" to="troi:in"></x-cable>
+      <x-cable id="beta" from="troi:out" to="bork:in"></x-cable>
 
     </x-stage>
 

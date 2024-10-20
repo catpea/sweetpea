@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "@catpea",
   "license": "ISC",
-  
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/catpea/sweetpea.git"
@@ -17,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/catpea/sweetpea/issues"
   },
-  "homepage": "https://github.com/catpea/sweetpea#readme"
+  "homepage": "https://github.com/catpea/sweetpea#readme",
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  }
 }

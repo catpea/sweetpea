@@ -1,23 +1,48 @@
+import WorkQueue from 'work-queue';
+
 export default class AutomaticTransmission {
+
+  queue = new WorkQueue();
 
   constructor(states, initialState) {
     this.states = states;
     this.currentState = '/';
+    this.queue.start();
+
     this.shift(initialState);
+
+
+
+  }
+
+  stop(){
+      this.queue.stop();
   }
 
   validateState(state) {
+    console.info('state', this.currentState, state);
     if (!this.states[state]) {
       throw new Error(`State "${state}" is not defined.`);
     }
   }
 
-  async shift(toState) {
+  shift(toState) {
+    this.queue.addJob(()=>this.shift2(toState));
+
+
+
+  }
+
+  async shift2(toState) {
     this.validateState(toState);
     const fromState = this.currentState;
 
+    console.log('BEGIN STATE TRANSITION', fromState, toState);
+    if(fromState == toState) return
+
+
     const traverse = this.relative(fromState, toState);
-    // console.log(traverse);
+    console.log(traverse);
 
     if (traverse.exit) {
       for (const location of traverse.exit) {
@@ -32,7 +57,7 @@ export default class AutomaticTransmission {
     }
 
     this.currentState = toState;
-
+    console.log('STATE TRNSITIONED', this.currentState);
   }
 
   getCurrentState() {

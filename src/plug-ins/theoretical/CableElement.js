@@ -11,10 +11,11 @@ export default class CableElement extends HTMLElement {
     this.instance = new Cable(this);
   }
   connectedCallback() {
-    this.instance.machine.transition('connected');
+    this.instance.transmission.shift('/connected');
   }
   disconnectedCallback() {
-    this.instance.machine.transition('disconnected');
+    this.instance.transmission.shift('/disconnected');
+
   }
 
 }

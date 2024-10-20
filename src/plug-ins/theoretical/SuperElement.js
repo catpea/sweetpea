@@ -1,6 +1,7 @@
 import Super from './Super.js';
 
 export default class SuperElement extends HTMLElement {
+
   instance;
 
   static async load() {
@@ -17,7 +18,7 @@ export default class SuperElement extends HTMLElement {
 
   connectedCallback() {
     this.instance.transmission.shift('/connected/front');
-    this.updatePosition();
+    this.updatePosition(); // Init
   }
 
   disconnectedCallback() {
@@ -57,8 +58,8 @@ export default class SuperElement extends HTMLElement {
     return this.instance.pipe
   }
 
-
-
-
+  get state(){
+    return this.instance.state
+  }
 
 }
