@@ -10,7 +10,7 @@ export default Inheritance => class SelectionManager extends Inheritance {
         element.classList.add('selected');
       }
     }else{
-      console.log('DE-SELECTED', this.host);
+      // console.log('DE-SELECTED', this.host);
       for (const element of container.querySelectorAll('.card')) {
         element.classList.remove('selected');
       }
@@ -27,7 +27,6 @@ export default Inheritance => class SelectionManager extends Inheritance {
 
     for (const element of this.getStage().querySelectorAll(`${globalThis.sweetpea.prefix}-super`)) {
       if(this.host.getAttribute('id') == element.getAttribute('id')) continue;
-
       element.setAttribute('selected', "false");
     }
 

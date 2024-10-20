@@ -2,7 +2,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
 
 
   searchShadow(selector='*'){
-    console.log(this.host.shadowRoot);
+    // console.log(this.host.shadowRoot);
     return this.search(selector, {shadow:true, dom:false});
   }
 

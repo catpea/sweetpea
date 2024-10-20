@@ -206,10 +206,10 @@ export default class Stage extends Theoretical {
           if (event.ctrlKey) {
             // Even though event.key is not 'Control' (e.g., 'a' is pressed),
             // event.ctrlKey may be true if Ctrl key is pressed at the same time.
-            console.log(`Combination of ctrlKey + ${keyName}`);
+            // console.log(`Combination of ctrlKey + ${keyName}`);
           } else {
 
-            console.log(`Key pressed ${keyName}`);
+            // console.log(`Key pressed ${keyName}`);
             if (keyName === "Delete") {
               for (const supervisor of this.core.host.querySelectorAll(`${globalThis.sweetpea.prefix}-super`)) {
                 if(supervisor.getAttribute('selected') === "true"){

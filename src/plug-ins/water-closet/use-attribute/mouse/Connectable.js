@@ -74,14 +74,14 @@ export default class Connectable {
     this.#touchdownOffsetY = event.layerY;
 
     const [x1, y1] = this.getCoordinates();
-    console.log( event, `${x1}x${y1} ${event.screenX}x${event.screenY}`);
+    // console.log( event, `${x1}x${y1} ${event.screenX}x${event.screenY}`);
 
     const scale = this.element.getBoundingClientRect().width / this.element.offsetWidth;
     let { width:elementW, height:elementH} = this.element.getBoundingClientRect();
     elementW = elementW / 2 / scale;
     elementH = elementH / 2 / scale;
-    console.log('touchdownArea', elementW, elementH);
-    console.log('touchdownOffset', this.#touchdownOffsetX, this.#touchdownOffsetY);
+    // console.log('touchdownArea', elementW, elementH);
+    // console.log('touchdownOffset', this.#touchdownOffsetX, this.#touchdownOffsetY);
 
     this.#svg = this.system.getStage().shadowRoot.querySelector('svg');
     this.#line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -92,7 +92,7 @@ export default class Connectable {
     this.#line.setAttribute('stroke', this.#stroke);
     this.#line.setAttribute('stroke-width', this.#strokeWidth);
     this.#svg.appendChild(this.#line);
-    console.log('this.#line', this.#line);
+    // console.log('this.#line', this.#line);
 
     this.rawX = x1;
     this.rawY = y1;
@@ -162,7 +162,7 @@ export default class Connectable {
       this.#dragging = false;
 
       this.#svg.removeChild(this.#line);
-      console.info(`Dropped element at ${this.finalX}x${this.finalY}.`, event.target, event.currentTarget, event.composedPath());
+      // console.info(`Dropped element at ${this.finalX}x${this.finalY}.`, event.target, event.currentTarget, event.composedPath());
 
       //
 
@@ -189,11 +189,11 @@ export default class Connectable {
       cable.setAttribute('to', to);
       this.system.getStage().appendChild(cable);
 
-      console.log({from});
-      console.log({to});
-      console.log({cable});
+      // console.log({from});
+      // console.log({to});
+      // console.log({cable});
 
-      console.error('MANUAL READY DISPATCH, THE FLOW MUST ACCOUNT FOR CONNECTING AT LATER TIME');
+      // console.error('MANUAL READY DISPATCH, THE FLOW MUST ACCOUNT FOR CONNECTING AT LATER TIME');
       // fromActor.instance.dispatchReady();
       // toActor.instance.dispatchReady();
 

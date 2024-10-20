@@ -32,7 +32,7 @@ export default class Cable extends Theoretical {
     }
 
     this.transmission = new AutomaticTransmission(gearbox, '/idle');
-    this.subscriptions.push( {type:'queue', id:'transmission jobs...', subscription:()=>this.transmission.stop()} );
+    // this.subscriptions.push( {type:'queue', id:'transmission jobs...', subscription:()=>this.transmission.stop()} );
 
   }
 
@@ -40,7 +40,7 @@ export default class Cable extends Theoretical {
 
   awaitSupervisors(){
 
-    console.warn( 'awaitSupervisors' );
+    // console.warn( 'awaitSupervisors' );
 
     this.awaitSupervisorsCounter++
 
@@ -57,19 +57,19 @@ export default class Cable extends Theoretical {
     const buffer = new Signal([]);
 
     const trash1 = fromSupervisor.state.subscribe(state=>{
-      console.log('fromSupervisor state change to', state);
+      // console.log('fromSupervisor state change to', state);
       buffer.alter(b=>b[0]=state);
     })
 
     const trash2 = toSupervisor.state.subscribe(state=>{
-      console.log('toSupervisor state change to', state);
+      // console.log('toSupervisor state change to', state);
       buffer.alter(b=>b[1]=state);
     })
 
 
     const trash3 = buffer.subscribe(buffer=>{
 
-      console.log('QQ buffer', this.host.getAttribute('id'), buffer);
+      // console.log('QQ buffer', this.host.getAttribute('id'), buffer);
 
       if (buffer.length === 0) return;
       if(buffer.every(v=>v==='idle')){

@@ -29,7 +29,7 @@ export default class Valve extends Theoretical {
           .bindDoubleCurly()
           .useExtensions(),
 
-         exit: () => console.log('Exiting Connected state'),
+         // exit: () => console.log('Exiting Connected state'),
        },
        disconnected: {
         enter: () => this.collectGarbage(),

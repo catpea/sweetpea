@@ -95,7 +95,7 @@ export default Inheritance => class Core extends Inheritance {
       template = document.querySelector(selector);
     }
     this.template = template.content.cloneNode(true);
-    console.log(`${this.host.tagName} installed template:`, this.template);
+    // console.log(`${this.host.tagName} installed template:`, this.template);
     return this;
   }
 

@@ -44,7 +44,7 @@ export default class Signal {
   set(value) {
     const oldValue = this.#value;
     this.#value = value;
-    console.log('SET', isEqual(oldValue, this.#value), oldValue, this.#value);
+    // console.log('SET', isEqual(oldValue, this.#value), oldValue, this.#value);
     if(!isEqual(oldValue, this.#value)) this.notify();
   }
 

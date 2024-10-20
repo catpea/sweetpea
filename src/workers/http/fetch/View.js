@@ -20,7 +20,7 @@ export default class View {
   }
 
   mount(){
-    console.log('xxxxxxxxxxxxxx MOUNT!!!');
+    // console.log('xxxxxxxxxxxxxx MOUNT!!!');
   }
 
   destroy(){

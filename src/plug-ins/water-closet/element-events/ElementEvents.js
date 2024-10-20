@@ -25,7 +25,7 @@ export default Inheritance => class ElementEvents extends Inheritance {
 
     if(this.View){
       this.viewClass = new this.View(classContext); // new Main(classContext)
-      console.log(`XXX ${this.tagName} had a VIEW`);
+      // console.log(`XXX ${this.tagName} had a VIEW`);
     }else{
       class View {
         root;

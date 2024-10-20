@@ -13,7 +13,7 @@ export default class Super extends Theoretical {
         enter: () => this.attachShadow().adoptCss().createElementPipe()
       },
       '/connected':{
-        enter: async () => await this.macro.superStarting.installActorTemplate.installActorCSS.installActorView.installTemplate.wrapAttributeEvents.useExtensions.dispatchReady.run()
+        enter: async () => await this.macro.installActorTemplate.installActorCSS.installActorView.installTemplate.wrapAttributeEvents.useExtensions.dispatchReady.run()
       },
       '/connected/front': {
         enter: () => this.skipTo(this.initialFace).dispatchIdle()
@@ -35,11 +35,6 @@ export default class Super extends Theoretical {
       },
     }
     this.transmission = new AutomaticTransmission(gearbox, '/idle');
-
-  }
-
-  superStarting(){
-    console.log('QQQ superStarting');
 
   }
 
