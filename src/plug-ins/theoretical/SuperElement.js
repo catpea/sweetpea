@@ -8,7 +8,7 @@ export default class SuperElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['x', 'y', 'selected'];
+    return ['x', 'y', 'supervisor', 'worker', 'selected'];
   }
 
   constructor() {
@@ -33,10 +33,11 @@ export default class SuperElement extends HTMLElement {
     };
 
     if (oldValue == newValue) return;
+
     for (const [key, handler] of Object.entries(attributeHandlers)) {
       const attrs = key.split(' ');
-      const hasChanged = attrs.includes(name);
-      if(hasChanged) handler();
+      const match = attrs.includes(name);
+      if(match) handler();
     }
 
   }

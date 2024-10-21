@@ -1,28 +1,35 @@
+<template id="worker-option">
+  <li class="list-group-item">
+    <div class="form-floating">
+      <input id="floatingInput" type="text" class="form-control" data-bind="value">
+      <label for="floatingInput" data-bind="name">URL</label>
+    </div>
+  </li>
+</template>
+
 <div class="perspective movable" use="movable selectable focusable">
 
   <div class="card front shadow active-card">
     <div class="card-header drag-handle focusable-handle">
-      <span class="selectable-handle">JSON Fetch</span> <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
+      <span class="selectable-handle">Standard Supervisor</span> <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
-
+        <span class="badge rounded-pill text-bg-primary float-start">1,346,798 enqueued</span>
+        <span class="badge rounded-pill text-bg-secondary float-end">18.5k out</span>
         <x-valve id="in" data-direction="in" data-icon="fire"></x-valve>
         <x-valve id="out" data-direction="out" data-icon="fire"></x-valve>
-
-        <div class="form-floating">
-          <input type="text" class="form-control" id="floatingInput" value="menu.json">
-          <x-bind data-name="url" data-closest="input"></x-bind>
-          <label for="floatingInput">URL</label>
-        </div>
       </li>
-      <li class="list-group-item">...</li>
+    </ul>
+
+    <ul class="list-group list-group-flush">
+
+      <x-print template="worker-option" signal="options"></x-print>
+
     </ul>
     <div class="card-footer text-wrap">
       <small>
-        working on binding
-        <!-- Will download data from <span>???</span> upon play.
-        <x-bind data-name="url" data-closest="span"></x-bind> -->
+
       </small>
     </div>
   </div>
@@ -33,19 +40,26 @@
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
+
         <select class="form-select form-select-sm mb-2">
+
           <option selected>Worker Category</option>
           <option value="1">HTTP</option>
           <option value="2">JSON</option>
           <option value="3">DATA</option>
+
         </select>
 
         <select class="form-select form-select-sm mb-2">
+
           <option selected>Worker</option>
           <option value="1">Download File</option>
           <option value="2">Save File</option>
           <option value="3">Append To Log</option>
+
         </select>
+
+
       </li>
       <li class="list-group-item">...</li>
     </ul>

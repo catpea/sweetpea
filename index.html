@@ -32,7 +32,9 @@
     }
     </script>
     <style>
-    body { background-color: #123; }
+    body {
+      background-color: #212529; /* NOTE: this must be hard-coded to prevent flash of white */
+    }
     </style>
   </head>
   <script type="module">
@@ -40,22 +42,25 @@
     globalThis.sweetpea = {
       prefix: 'x',
     };
+    // import {BindElement} from './src/plugins/elements/index.js';
 
     import masticator from 'masticator';
-    // import {BindElement} from './src/plugins/elements/index.js';
-    import {StageElement, CableElement, ValveElement, SuperElement} from 'theoretical';
-
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
+
+    import {StageElement, CableElement, ValveElement, SuperElement, PrintElement} from 'theoretical';
+
+    await PrintElement.load();
     await StageElement.load();
     await ValveElement.load();
     await CableElement.load();
     await SuperElement.load();
 
     // RISC
+    customElements.define(`${globalThis.sweetpea.prefix}-print`, PrintElement);
     customElements.define(`${globalThis.sweetpea.prefix}-stage`, StageElement);
     customElements.define(`${globalThis.sweetpea.prefix}-valve`, ValveElement);
     customElements.define(`${globalThis.sweetpea.prefix}-super`, SuperElement); // load super before cable
-    customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement);
+    customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement); // load after super
 
   </script>
 
@@ -64,14 +69,14 @@
 
   </script>
 
-  <body style="">
+  <body>
 
 
     <x-stage controls minimap template="stage">
 
-      <x-super id="xena" x="90" y="63" worker="http/fetch" data-url="./menu.json"> </x-super>
-      <x-super id="troi" x="510" y="161" worker="object/parse"> </x-super>
-      <x-super id="bork" x="935" y="87" worker="data/write"> </x-super>
+      <x-super id="xena" x="90" y="63" supervisor="system/standard" worker="http/fetch" data-url="./menu.json"> </x-super>
+      <x-super id="troi" x="510" y="161" supervisor="system/standard" worker="object/parse"> </x-super>
+      <x-super id="bork" x="935" y="87" supervisor="system/standard" worker="data/write"> </x-super>
 
       <x-cable id="alfa" from="xena:out" to="troi:in"></x-cable>
       <x-cable id="beta" from="troi:out" to="bork:in"></x-cable>

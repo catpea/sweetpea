@@ -2,7 +2,7 @@ import EventEmitter from 'event-emitter';
 
 export default Inheritance => class VisualProgramming extends Inheritance {
 
-  createSupervisor({x,y,initialFace}){
+  createSupervisor({x,y,initialFace, supervisor, worker}){
     const stage = this.getStage();
 
     // If x or y are missing set coordinates to middle of the screen
@@ -22,14 +22,16 @@ export default Inheritance => class VisualProgramming extends Inheritance {
       y = y+centerH;
     }
 
-    const supervisor = document.createElement(`${globalThis.sweetpea.prefix}-super`);
-    supervisor.setAttribute('id', this.guid());
-    supervisor.setAttribute('x', x);
-    supervisor.setAttribute('y', y);
-    supervisor.setAttribute('template', 'user/note');
+    const supervisorElement = document.createElement(`${globalThis.sweetpea.prefix}-super`);
+    supervisorElement.setAttribute('id', this.guid());
+    supervisorElement.setAttribute('x', x);
+    supervisorElement.setAttribute('y', y);
 
-    stage.appendChild(supervisor);
-    if(initialFace) supervisor.instance.initialFace = initialFace;
+    supervisorElement.setAttribute('supervisor', supervisor);
+    supervisorElement.setAttribute('worker', worker);
+
+    stage.appendChild(supervisorElement);
+    if(initialFace) supervisorElement.instance.initialFace = initialFace;
 
   }
 

@@ -28,7 +28,6 @@ export default Inheritance => class Core extends Inheritance {
 
   attachShadow(){
     this.host.attachShadow({ mode: "open" });
-    //console.log('AAA', this.host);
     return this;
   }
 

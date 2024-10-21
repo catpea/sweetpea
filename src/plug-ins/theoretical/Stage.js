@@ -76,7 +76,7 @@ export default class Stage extends Theoretical {
 
 
     <div class="content" style="min-height: 100vh;">
-    <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg class="position-absolute overflow-visible w-100 h-100" xmlns="http://www.w3.org/2000/svg"></svg>
       <slot></slot>
     </div>
 
@@ -361,7 +361,8 @@ export default class Stage extends Theoretical {
     x = x-panX;
     y = y-panY;
 
-    this.createSupervisor({x,y, initialFace:'.card.worker-configuration'});
+    this.createSupervisor({x,y, supervisor:"system/standard", worker:"script/function", initialFace:'.card.worker-configuration'});
+
 
   }
 
