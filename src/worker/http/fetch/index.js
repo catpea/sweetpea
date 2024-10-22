@@ -2,32 +2,24 @@ import {Worker} from 'actor';
 
 export default class httpFetch extends Worker {
 
-  static options = [
-    {name:"retry", default:2, delay:1_000},
+  static parameters = [
+    { name:"url",   default:'./samples/json-path-example.json',    type:'String', description:'' },
+    { name:"retry", default:2,     type:'Number', description:'' },
+    { name:"delay", default:1_000, type:'Number', description:'' },
   ];
 
-  async process(job, options){
+  async work(parameters){
+    let url = parameters.url;
 
-    try {
-
-      const response = await fetch(job.url);
-      job.progress = .5;
-
-      if (!response.ok) {
-        job.progress = 0;
-        job.error = `Response status: ${response.status}`;
-        return;
-      }
-
-      const result = await response.json();
-
-      job.progress = 1;
-      job.value = result;
-
-    } catch (error) {
-      job.progress = 0;
-      job.error = error.message;
+    // if running in sub dir on github
+    if(!url.startsWith('http')){
+      const currentUrl = new URL(window.location.href);
+      url = currentUrl.pathname + parameters.url.replace(/^\.\//, '');
     }
+
+    const response = await fetch(parameters.url);
+    if (!response.ok) throw new Error(`Response status: ${response.status}`);
+    return await response.json();
 
   }
 

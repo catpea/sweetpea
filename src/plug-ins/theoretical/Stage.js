@@ -36,7 +36,8 @@ export default class Stage extends Theoretical {
 
           .installStageListeners()
 
-          .wrapAttributeEvents()
+          .instantiateView().connectEventsToView().triggerViewMount()
+
           .done,
          exit: () => console.log('Exiting Connected state'),
        },
@@ -340,6 +341,13 @@ export default class Stage extends Theoretical {
   }
 
   #dblClick(e){
+
+
+    if(e.target !== this.host) return;
+
+    const target = event.composedPath().find(o=>o.tagName==='BUTTON'||o===this.host);
+    if(target !== this.host) return;
+
     const stage = this.getStage();
 
     let {x:panX,y:panY} = stage.pan;
@@ -386,9 +394,10 @@ export default class Stage extends Theoretical {
 
     // Protected
     #onMouseDown(event) {
+      if(event.target !== this.host) return
 
-        console.log('event.target', event.target);
-        if(event.target !== this.host) return
+      const target = event.composedPath().find(o=>o.tagName==='BUTTON'||o===this.host);
+      if(target !== this.host) return;
 
         this.#isPanning = true;
         this.#startMousePos = { x: event.clientX, y: event.clientY };
@@ -398,6 +407,8 @@ export default class Stage extends Theoretical {
     }
 
     #onMouseMove(event) {
+      // if(event.target !== this.host) return;
+
       if (this.#isPanning) {
         this.pan.x = this.#startPan.x + (event.clientX - this.#startMousePos.x);
         this.pan.y = this.#startPan.y + (event.clientY - this.#startMousePos.y);
@@ -412,6 +423,7 @@ export default class Stage extends Theoretical {
 
 
     #onWheel(event) {
+
       const deltaScale = event.deltaY > 0 ? 0.9 : 1.1;
       this.zoom *= deltaScale;
 
@@ -427,6 +439,9 @@ export default class Stage extends Theoretical {
     }
 
     #onTouchStart(event) {
+      if(event.target !== this.host) return;
+
+
       if (event.touches.length === 1) {
         this.#isPanning = true;
         this.#startMousePos = { x: event.touches[0].clientX, y: event.touches[0].clientY };

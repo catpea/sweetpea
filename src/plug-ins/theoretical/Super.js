@@ -13,7 +13,7 @@ export default class Super extends Theoretical {
         enter: () => this.attachShadow().adoptCss().createElementPipe()
       },
       '/connected':{
-        enter: async () => await this.macro.installSupervisorTemplate.installSupervisorCSS.installSupervisorView.installTemplate.wrapAttributeEvents.useExtensions.installVisualSelectionIndicator.configurePrintComponent.dispatchReady.run()
+        enter: async () => await this.macro.installSupervisorTemplate.installSupervisorCSS.installSupervisorView.installTemplate.  instantiateView.connectEventsToView.triggerViewMount .useExtensions.installVisualSelectionIndicator.dispatchReady.run()
       },
       '/connected/front': {
         enter: () => this.skipTo(this.initialFace).dispatchIdle()
@@ -57,29 +57,6 @@ export default class Super extends Theoretical {
 
   }
 
-  configurePrintComponent(){
-    const matches = this.host.shadowRoot.querySelectorAll(`${globalThis.sweetpea.prefix}-print`);
-    matches.forEach(match => {
-      console.error('SEND DATA TO PRINT!!!');
-      // const trash1 = match.state.subscribe(state=>{
-      //
-      //   // if(state === 'ready'){
-      //     console.log('OOO ready');
-      //     const templateName = match.getAttribute('template');
-      //     const signalName = match.getAttribute('signal');
-      //     const template = this.host.shadowRoot.getElementById(templateName);
-      //     match.instance.externalTemplate.set( template.content.cloneNode(true) );
-      //     match.instance.externalData.set( this.viewClass[signalName] );
-      //     //
-      //     // console.log('OOO', templateName, signalName);
-      //     console.log('OOO template', match.instance.template);
-      //     console.log('OOO signal', match.instance.signal);
-      //
-      //   // }
-      //
-      // })
 
-    })
-  }
 
 }

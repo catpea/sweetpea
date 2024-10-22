@@ -1,4 +1,5 @@
-export default Inheritance => class ElementEvents extends Inheritance {
+export default Inheritance => class ElementView extends Inheritance {
+
   #scripts = [];
   viewClass;
 
@@ -14,37 +15,26 @@ export default Inheritance => class ElementEvents extends Inheritance {
     return this;
   }
 
-  wrapAttributeEvents(){
+  instantiateView(){
 
     const classContext = {
+      workerPath: this.workerPath,
       core: this,
       root: this.getStage().pipe,
       pipe: this.pipe,
       data: this.host.dataset,
     };
 
-    if(this.View){
-      this.viewClass = new this.View(classContext); // new Main(classContext)
-      // console.log(`XXX ${this.tagName} had a VIEW`);
-    }else{
-      class View {
-        root;
-        constructor({root}){
-          this.root = root;
-        }
-        mount(){
-        }
-        destroy(){
-        }
-        say(el){
-          console.info('Hello from', el);
-        }
-      }
-      this.viewClass = new View(classContext); // new Main(classContext)
-    }
+    this.viewClass = new this.View(classContext);
 
+    return this;
+
+  }
+
+  connectEventsToView(){
 
     const supportedEvents = ['click', 'dblclick'];
+
     for (const name of supportedEvents) {
       const attributeQuery = `[on${name}]`
       const attributeName = `on${name}`
@@ -53,21 +43,28 @@ export default Inheritance => class ElementEvents extends Inheritance {
         // get attribute code and remove attribute
         const code = match.getAttribute(attributeName);
         match.removeAttribute(attributeName);
-        // add a manual listener
-        match.addEventListener(name, event=>{
+
+        const payload = event => {
           // console.log(`TRIGGERED ${name}`, code);
           const codeFunction = new Function(`return ${code}`);
           // execute attribute code in context of class + retrieve user funcion (if any)
           const userFuncion = codeFunction.call(this.viewClass);
           // execute user funcion
           if (userFuncion instanceof Function) userFuncion(event, match, this);
-        });
+        }
+        // add a manual listener
+        match.addEventListener(name, payload);
+        this.subscriptions.push({type:'supportedEvents', id:'...', subscription:()=>match.removeEventListener(name, payload) });
+
       });
     } // supportedEvents
 
+    return this;
+  }
+
+  triggerViewMount(){
     if('mount' in this.viewClass) this.viewClass.mount();
     this.subscriptions.push({type:'view-class/destroy', id:'view-class', subscription:()=>this.viewClass?.destroy()});
-
     return this;
   }
 

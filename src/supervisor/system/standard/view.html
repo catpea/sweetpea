@@ -1,4 +1,4 @@
-<template id="worker-option">
+<template id="parameters">
   <li class="list-group-item">
     <div class="form-floating">
       <input id="floatingInput" type="text" class="form-control" data-bind="value">
@@ -11,7 +11,9 @@
 
   <div class="card front shadow active-card">
     <div class="card-header drag-handle focusable-handle">
-      <span class="selectable-handle">Standard Supervisor</span> <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
+      <!-- <span class="selectable-handle small">Standard Supervisor: </span> -->
+      <span class="selectable-handle small" data-render="title"></span>
+       <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
@@ -22,11 +24,9 @@
       </li>
     </ul>
 
-    <ul class="list-group list-group-flush">
-
-      <x-print template="worker-option" signal="options"></x-print>
-
+    <ul class="list-group list-group-flush" data-render="parameters">
     </ul>
+
     <div class="card-footer text-wrap">
       <small>
 
