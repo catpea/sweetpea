@@ -3,9 +3,9 @@ import {Worker} from 'actor';
 export default class httpFetch extends Worker {
 
   static parameters = [
-    { name:"url",   default:'./samples/json-path-example.json',    type:'String', description:'' },
-    { name:"retry", default:2,     type:'Number', description:'' },
-    { name:"delay", default:1_000, type:'Number', description:'' },
+    { name:"url",   default:'./samples/json-path-example.json',    type:'string', description:'' },
+    { name:"retry", default:2,     type:'number', description:'' },
+    { name:"delay", default:1_000, type:'number', description:'' },
   ];
 
   async work(parameters){

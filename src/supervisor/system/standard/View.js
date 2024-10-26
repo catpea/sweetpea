@@ -1,6 +1,8 @@
 import Signal from 'signal';
 import cloneDeep from 'cloneDeep';
 
+function interpolate(t, c){return t.replace(/\${([^}]+)}/g,(m,p)=>p.split('.').reduce((a,f)=>a?a[f]:undefined,c)??'');}
+
 export default class View {
 
   #garbage = [];
@@ -54,23 +56,44 @@ export default class View {
     element.replaceChildren();
 
     for (const parameter of this.parameters.get()) {
-      const content = template.content.cloneNode(true);
-      const bindings = content.querySelectorAll('[data-bind]');
-      for (const binding of bindings) {
-        const name = binding.dataset.bind;
-        const value = parameter[name]
 
+      const content = template.content.cloneNode(true);
+      const templateType = this.core.host.shadowRoot.getElementById(`parameters-${parameter.type}`);
+      const contentType = templateType.content.cloneNode(true);
+      content.querySelector('slot').parentNode.appendChild(contentType);
+
+      const bindings = content.querySelectorAll('[data-bind]');
+
+      for (const binding of bindings) {
+        const [name, attribute] = binding.dataset.bind.split('@');
+        const value = parameter[name]
+        console.log('OOO', name, value);
         switch (binding.tagName) {
           case 'INPUT':
             binding.value = value?.subscribe?value.get():value;
           case 'B':
             console.log('B');
           default:
-            binding.innerText = value;
+            if(attribute){
+              const template = binding.dataset.bindTemplate;
+              if(template){
+                console.warn('TODO: template literals htmlz`` ');
+                const data = {[name]:value};
+                const result = interpolate(template, data);
+                console.log('OOO', {attribute, data, result, template});
+                binding.setAttribute(attribute, result);
+
+              }else{
+                binding.setAttribute(attribute, value);
+              }
+            }else{
+              binding.innerText = value;
+            }
         } // switch
       } // for
 
       element.appendChild(content);
+
     }
   } // fun render
 

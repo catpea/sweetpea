@@ -72,12 +72,19 @@
 
     <x-stage controls minimap template="stage">
 
-      <x-super id="xena" x="90" y="63" supervisor="system/standard" worker="http/fetch" data-url="./menu.json"> </x-super>
-      <x-super id="troi" x="510" y="161" supervisor="system/standard" worker="json/path"> </x-super>
-      <x-super id="bork" x="935" y="87" supervisor="system/standard" worker="developer/console"> </x-super>
+      
 
-      <x-cable id="alfa" from="xena:out" to="troi:in"></x-cable>
-      <x-cable id="beta" from="troi:out" to="bork:in"></x-cable>
+            <x-super id="director" x="112" y="203" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
+            <x-super id="xena" x="626" y="195" supervisor="system/standard" worker="http/fetch" data-url="./menu.json" selected="false"> </x-super>
+            <x-super id="troi" x="969" y="195" supervisor="system/standard" worker="json/path" selected="false"> </x-super>
+            <x-super id="bork" x="1547" y="196" supervisor="system/standard" worker="developer/console" selected="true"> </x-super>
+
+            <x-cable id="alfa" from="xena:out" to="troi:in" selected="false"></x-cable>
+            <x-cable id="beta" from="troi:out" to="bork:in" selected="false"></x-cable>
+
+          <x-cable id="guid-f5cc83a6-aa56-461c-9782-cdebc5fbe271" from="director:out" to="xena:in" selected="false"></x-cable>
+
+
 
     </x-stage>
 

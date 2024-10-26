@@ -4,7 +4,7 @@ import * as jp from './jsonpath.min.js';
 export default class jsonPath extends Worker {
 
   static parameters = [
-    { name:"query",   default:'$.store.book[*].author',    type:'String', description:'the authors of all books in the store' },
+    { name:"query",   default:'$.store.book[*].author',    type:'string', description:'the authors of all books in the store' },
   ];
 
   async work(parameters){

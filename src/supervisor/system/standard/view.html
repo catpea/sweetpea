@@ -1,10 +1,40 @@
 <template id="parameters">
-  <li class="list-group-item">
+  <li class="list-group-item position-relative ">
+    <slot></slot>
+  </li>
+</template>
+
+<template id="parameters-string">
     <div class="form-floating">
       <input id="floatingInput" type="text" class="form-control" data-bind="value">
       <label for="floatingInput" data-bind="name">URL</label>
     </div>
-  </li>
+</template>
+
+<template id="parameters-number">
+
+  <div class="row">
+    <div class="col">
+      <label for="inputPassword6" class="col-form-label">Number</label>
+    </div>
+    <div class="col">
+      <input type="number" class="form-control" data-bind="value">
+    </div>
+  </div>
+
+</template>
+
+<template id="parameters-event">
+    <div class="row">
+      <div class="col">
+        <div class="form-text px-3">
+          <x-valve data-bind="name@id" data-bind-template="${name}-event" id="start-event" data-direction="in" data-icon="envelope"></x-valve>
+          <x-valve data-bind="name@id" data-bind-template="${name}-message" id="start-message" data-direction="out" data-icon="box-arrow-up-right"></x-valve>
+          <span data-bind="name">DATA BIND NAME</span>
+          <div data-bind="description"><small>DATA BIND NAME</small></div>
+        </div>
+      </div>
+    </div>
 </template>
 
 <div class="perspective movable" use="movable selectable focusable">
