@@ -56,7 +56,7 @@ export default class Cable extends Theoretical {
     });
     this.subscriptions.push( {type:'.actor', id:'from-pipe-to-pipe', subscription} );
 
-    console.log('ttt', `${toPortId}:control`);
+    //console.log('ttt', `${toPortId}:control`);
     const controlSubscription = toProgram.actor.on(`${toPortId}:control`, data=>fromProgram.actor.send('control', data) )
 
     this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription} );
@@ -160,7 +160,7 @@ export default class Cable extends Theoretical {
 
   makeLineSelectable(){
     const mouseDownHandler = (event) => {
-      console.log(this.host, 'makeLineSelectable > mouseDownHandler');
+      //console.log(this.host, 'makeLineSelectable > mouseDownHandler');
       event.composedPath()
       if( this.host.hasAttribute('selected') ){
         if( this.host.getAttribute('selected') === "true"){
@@ -262,7 +262,7 @@ export default class Cable extends Theoretical {
       const isDataRoot = (el) => el?.tagName?.toLowerCase() !== 'data-root';
 
       while ((el = el.parentNode||el.host) && isDataRoot(el) && el !== document) {
-        //////console.log('XXXXXX', );
+        ////////console.log('XXXXXX', );
         if(el instanceof Element){
           let style = getComputedStyle(el);
           response.push(el);
@@ -312,7 +312,7 @@ export default class Cable extends Theoretical {
     getProgramPipeAndPort(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
-      console.log({componentId, portId});
+      //console.log({componentId, portId});
       const stage = this.getStage();
       if(!stage) throw new Error('Lol, unable to locate stage!!!!!');
 
@@ -321,7 +321,7 @@ export default class Cable extends Theoretical {
 
 
       const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
-     // console.log(programComponent.shadowRoot.innerHTML);
+     // //console.log(programComponent.shadowRoot.innerHTML);
       if(!portComponent) throw new Error(`${this.host.tagName.toLowerCase()}#${this.host.getAttribute('id')} is unable to locate portComponent named "${'#'+portId}" in ${programComponent.tagName.toLowerCase()}#${componentId}`)
 
       return [programComponent, portComponent];
@@ -363,27 +363,27 @@ export default class Cable extends Theoretical {
       const targetNode = programComponent.shadowRoot.querySelector('[data-render=parameters]')
       const config = { attributes: false, childList: true, subtree: true };
 
-      console.log('RRR monitorPosition', programComponent.tagNattributeName, programComponent.getAttribute('id'), targetNode);
+      //console.log('RRR monitorPosition', programComponent.tagNattributeName, programComponent.getAttribute('id'), targetNode);
 
-      console.log('WWW',  targetNode);
+      //console.log('WWW',  targetNode);
 
       // Callback function to execute when mutations are observed
       const callback = (mutationList, observer) => {
-        console.log('EEE mutationList',  mutationList);
+        //console.log('EEE mutationList',  mutationList);
         for (const mutation of mutationList) {
           if (mutation.type === "childList") {
-            console.log("RRR A child node has been added or removed.");
-            console.log('RRR programComponent', programComponent);
+            //console.log("RRR A child node has been added or removed.");
+            //console.log('RRR programComponent', programComponent);
             const portNode = programComponent.shadowRoot.getElementById(portId);
-            console.log('RRR portNode', portNode);
+            //console.log('RRR portNode', portNode);
 
             const portExists = !!portNode;
-            console.log('RRR portExists', portExists);
+            //console.log('RRR portExists', portExists);
             if(portExists){
               this.monitorPosition2(attributeName, fun);
             }
           } else if (mutation.type === "attributes") {
-            console.log(`The ${mutation.attributeName} attribute was modified.`);
+            //console.log(`The ${mutation.attributeName} attribute was modified.`);
           }
         }
       };
@@ -402,7 +402,7 @@ export default class Cable extends Theoretical {
       const [programComponent, portComponent] = this.getProgramPipeAndPort(attributeName);
       const portPad = portComponent.shadowRoot.querySelector('.valve');
 
-      console.log('EEE located port', programComponent.getAttribute('id'), portComponent);
+      //console.log('EEE located port', programComponent.getAttribute('id'), portComponent);
 
       if(!portComponent){
         this.danger(`${this.host.tagName}, Unable to locate portComponent via selector ${componentId}:${portId}`, 'danger');

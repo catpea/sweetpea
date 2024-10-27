@@ -1,0 +1,19 @@
+{
+  "type": "module",
+  "name": "sweetpea-espree",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/esbuild index.js --bundle  --outfile=../../src/plug-ins/water-closet/curlies/espree/weetpea-espree.js --format=esm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "esbuild": "0.23.1"
+  },
+  "dependencies": {
+    "espree": "^10.1.0"
+  }
+}

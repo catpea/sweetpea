@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["index.js"],
+  "sourcesContent": ["// import * as espree from 'espree';\n\nexport default function parse(...a){\n  return console.log(...a);\n  // return espree.parse(...a);\n}\n"],
+  "mappings": "AAEe,SAARA,KAA0BC,EAAE,CACjC,OAAO,QAAQ,IAAI,GAAGA,CAAC,CAEzB",
+  "names": ["parse", "a"]
+}

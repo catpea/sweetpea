@@ -1,0 +1,19 @@
+{
+  "type": "module",
+  "name": "sweetpea-jsonpath",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/esbuild index.js --bundle  --outfile=../../src/worker/json/path/jsonpath.min.js --format=esm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "esbuild": "0.23.1"
+  },
+  "dependencies": {
+    "jsonpath": "^1.1.1"
+  }
+}

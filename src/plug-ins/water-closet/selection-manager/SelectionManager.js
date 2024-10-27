@@ -10,7 +10,7 @@ export default Inheritance => class SelectionManager extends Inheritance {
     const subscription = this.selected.subscribe(v=>v?this.#actorSelected():this.#actorUnselected());
     this.subscriptions.push( {type:'svg/line', id:'cable', subscription} );
 
-    this.selected.subscribe(selected=>console.log(`${this.host.tagName}#${this.host.getAttribute('id')||'x'}`, {selected}))
+    // this.selected.subscribe(selected=>//console.log(`${this.host.tagName}#${this.host.getAttribute('id')||'x'}`, {selected}))
 
   }
 

@@ -1,6 +1,6 @@
 import EventEmitter from 'event-emitter';
 
-export default class WorkBuffer  extends EventEmitter {
+export default class JobBuffer  extends EventEmitter {
   #buffer;
 
   constructor() {

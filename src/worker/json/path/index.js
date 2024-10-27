@@ -1,5 +1,6 @@
 import {Actor} from 'actor';
-import * as jp from './jsonpath.min.js';
+import jp from './jsonpath.min.js';
+// const jp = require('your-module-name');
 
 export default class JsonPath extends Actor {
 
@@ -8,6 +9,8 @@ export default class JsonPath extends Actor {
   ];
 
   async work(parameters){
+    console.log('jsonpath', jp);
+    console.log('JsonPath parameters', parameters);
     return jp.query(parameters.input, parameters.query);
   }
 

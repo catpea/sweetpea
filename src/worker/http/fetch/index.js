@@ -1,4 +1,5 @@
 import {Actor} from 'actor';
+import location from 'location';
 
 export default class HttpFetch extends Actor {
 
@@ -9,12 +10,12 @@ export default class HttpFetch extends Actor {
   ];
 
   async work(parameters){
+    console.warn('HttpFetch parameters', parameters);
     let url = parameters.url;
 
     // if running in sub dir on github
     if(!url.startsWith('http')){
-      const currentUrl = new URL(window.location.href);
-      url = currentUrl.pathname + parameters.url.replace(/^\.\//, '');
+      url = location(window.location.href) + '/' + parameters.url.replace(/^\.\//, '');
     }
 
     const response = await fetch(parameters.url);

@@ -1,8 +1,9 @@
 {
   "name": "sweetpea",
+  "type": "module",
   "version": "1.0.1",
   "description": "Signal and Web Component Enhanced Web Apps",
-  "main": "src/index.js",
+  "main": "index.html",
   "scripts": {
     "save": "git add .; git commit -m 'Updated Release'; git push; npm version patch; npm publish; git push;"
   },

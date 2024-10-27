@@ -1,9 +1,9 @@
-import WorkQueue from 'work-queue';
-import WorkBuffer from 'work-buffer';
+import JobQueue from 'job-queue';
+import JobBuffer from 'job-buffer';
 
 export default Inheritance => class QueueAndBuffer extends Inheritance {
 
-  queue  = new WorkQueue();
-  buffer = new WorkBuffer();
+  queue  = new JobQueue();
+  buffer = new JobBuffer();
 
 }

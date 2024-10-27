@@ -1,5 +1,6 @@
 import Signal from 'signal';
 import cloneDeep from 'cloneDeep';
+import location from 'location';
 
 
 function interpolate(t, c){return t.replace(/\${([^}]+)}/g,(m,p)=>p.split('.').reduce((a,f)=>a?a[f]:undefined,c)??'');}
@@ -26,9 +27,9 @@ export default class View {
     this.actor = core.actor;
     this.worker = core.worker; // this is a signal containing category/name of worker
 
-    const currentUrl = new URL(window.location.href);
 
-    this.worker.subscribe(async worker=>this.#WorkerClass.set((await import(`${currentUrl.pathname}src/worker/${worker}/index.js`)).default));
+
+    this.worker.subscribe(async worker=>this.#WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${worker}/index.js`)).default));
 
     this.worker.subscribe(worker=>this.core.host.shadowRoot.querySelector('[data-render=title]').innerText = worker);
 
@@ -92,12 +93,12 @@ export default class View {
       for (const binding of bindings) {
         const [name, attribute] = binding.dataset.bind.split('@');
         const value = parameter[name]
-        console.log('OOO', name, value);
+        //console.log('OOO', name, value);
         switch (binding.tagName) {
           case 'INPUT':
             binding.value = value?.subscribe?value.get():value;
           case 'B':
-            console.log('B');
+            //console.log('B');
           default:
             if(attribute){
               const template = binding.dataset.bindTemplate;
@@ -105,7 +106,7 @@ export default class View {
                 console.warn('TODO: template literals htmlz`` ');
                 const data = {[name]:value};
                 const result = interpolate(template, data);
-                console.log('OOO', {attribute, data, result, template});
+                //console.log('OOO', {attribute, data, result, template});
                 binding.setAttribute(attribute, result);
 
               }else{
