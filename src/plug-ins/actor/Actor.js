@@ -6,6 +6,8 @@ export class Actor extends EventEmitter {
 
   constructor({ stage, worker, queue, buffer }){
     super();
+    this.queue = queue;
+    this.buffer = buffer;
     const actor = this;
 
       // When message is sent to the actor
@@ -35,6 +37,7 @@ export class Actor extends EventEmitter {
       // .__. //
 
       actor.on('control', control=>{
+        console.log('actor.on(control', control);
         switch(control.event) {
           case 'request':
             actor.transmit(control.event||1);
@@ -59,11 +62,12 @@ export class Actor extends EventEmitter {
 
   // CONTROL
   transmit(max=Infinity){
+    console.log('BUFFER TRANSMIT', this.constructor.name);
     this.#pause = false;
     let sentCount = 0;
     for (const product of this.buffer) {
       if(this.#pause) break;
-      actor.send('out', { value: product });
+      this.send('out', { value: product });
       sentCount++;
       if(sentCount>max) break;
     }

@@ -1,4 +1,6 @@
 import Stage from './Stage.js';
+import EventEmitter from 'event-emitter';
+
 
 export default class StageElement extends HTMLElement {
   instance;
@@ -9,6 +11,8 @@ export default class StageElement extends HTMLElement {
   constructor() {
     super();
     this.instance = new Stage(this);
+    console.log('THIS', this);
+
   }
   connectedCallback() {
     this.instance.machine.transition('connected');
@@ -17,12 +21,9 @@ export default class StageElement extends HTMLElement {
     this.instance.machine.transition('disconnected');
   }
 
-  // get on(){
-  //   return this.instance.actor.on
-  // }
-
   get actor(){
-    return this.instance.actor
+    if(!this.instance.actor) this.instance.actor = new EventEmitter();
+    return this.instance.actor;
   }
 
   get pan() {

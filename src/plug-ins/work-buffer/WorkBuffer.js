@@ -9,6 +9,10 @@ export default class WorkBuffer  extends EventEmitter {
     this.#buffer = [];
   }
 
+  [Symbol.iterator]() {
+    return this.#buffer[Symbol.iterator]();
+  }
+
   // Method to add completed jobs to the buffer
   enbuffer(job) {
     this.#buffer.push(job); // adds one or more elements to the end of an array
@@ -18,7 +22,9 @@ export default class WorkBuffer  extends EventEmitter {
   debuffer() {
     this.#buffer.shift(job);
   }
-
+  remove(id){
+    console.warn('TODO: remove work bugger item by ID');
+  }
   // Method to retrieve all jobs from the buffer
   retrieveJobs() {
     // Create a copy of the buffer to return

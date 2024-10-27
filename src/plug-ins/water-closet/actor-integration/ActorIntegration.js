@@ -7,8 +7,10 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
   async createActor({attribute}={attribute:"worker"}){
 
+
+
     const setup = {
-      stage: this.getStage(),
+      stage: this.getStage().actor,
       worker: this.worker,
       queue: this.queue,
       buffer: this.buffer,

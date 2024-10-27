@@ -6,8 +6,13 @@ export default class JsonObject extends Actor {
     { name:"object",   default:'{"url":"example.com"}',    type:'string', description:'JSON Object' },
   ];
 
+  transmit(){
+    this.buffer.enbuffer({value:'ALL WORK ALL PLAY'});
+    super.transmit(...arguments);
+  }
+
   async work(parameters){
-    return console[parameters.type](parameters.input);
+    return {value:'WORK'}
   }
 
 }

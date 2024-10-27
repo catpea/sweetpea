@@ -8,12 +8,27 @@ export default class StageDirector extends Actor {
   ];
 
   // Special installer for director which pulls packets.
-  constructor({ stage, actor, worker, queue, cache }){
+  constructor({ stage, worker, queue, cache }){
     super(...arguments);
-    // stage.on('start', message => {
-    //   actor.send('start-object:control', { event: 'request' });
-    //   actor.send('exit-object:control', { event: 'request' });
-    // });
+    const actor = this;
+
+    stage.on('start', message => {
+      actor.send('start-message:control', { event: 'request' });
+    });
+    stage.on('exit', message => {
+      actor.send('exit-message:control', { event: 'request' });
+    });
+
+    actor.on('start-message', packet=>{
+      console.info(`StageDirector got start-message`, packet);
+      actor.send('start-event', packet);
+    });
+
+    actor.on('exit-message', packet=>{
+      console.info(`StageDirector got exit-message`, packet);
+      actor.send('exit-event', packet);
+    });
+
   }
 
   // Override in Subclass

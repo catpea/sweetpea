@@ -32,11 +32,11 @@ export default function(){
     Animation,   // flipCard()
     Project,   // open/save()
     VisualProgramming,   // addSupervisor()
+    QueueAndBuffer,   // queue-and-buffer for data passing
     ActorIntegration,   // installActor()
     SelectionManager,   // select() deselect()
     ComponentEvents,   // ready) busy~idle (exit
 
-    QueueAndBuffer,   // queue-and-buffer for data passing
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );

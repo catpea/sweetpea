@@ -49,10 +49,15 @@ export default class Cable extends Theoretical {
     const fromProgram = this.getProgramPipe('from');
     const toProgram   = this.getProgramPipe('to');
 
-    const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
+    // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
+    const subscription = fromProgram.actor.on(fromPortId, packet=>{
+      console.info(`Cable passing message between ${fromProgram.constructor.name} and ${toProgram.constructor.name}, on ports ${fromPortId} and ${toPortId} as they are connected with a cable.`);
+      toProgram.actor.send(toPortId, packet)
+    });
     this.subscriptions.push( {type:'.actor', id:'from-pipe-to-pipe', subscription} );
 
-    const controlSubscription = toProgram.actor.on(`${toPortId}::control`, data=>fromProgram.actor.send('control', data) )
+    console.log('ttt', `${toPortId}:control`);
+    const controlSubscription = toProgram.actor.on(`${toPortId}:control`, data=>fromProgram.actor.send('control', data) )
 
     this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription} );
 
@@ -387,7 +392,7 @@ export default class Cable extends Theoretical {
       const observer = new MutationObserver(callback);
       observer.observe(targetNode, config);
       this.subscriptions.push( {type:'observer.observe', id:'ports', subscription:()=>observer.disconnect()} );
- 
+
       // sometimes no changes are triggered
       callback([{type:'childList'}])
     }

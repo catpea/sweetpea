@@ -1,6 +1,6 @@
 import Theoretical from './Theoretical.js';
 import StateMachine from 'state-machine';
-import {Actor} from 'actor';
+
 
 export default class Stage extends Theoretical {
   machine;
@@ -10,7 +10,7 @@ export default class Stage extends Theoretical {
 
     const states = {
       idle: {
-        enter:   () =>   this. attachShadow().adoptCss().createActor()
+        enter:   () =>   this. attachShadow().adoptCss()
       },
       loading: {
         enter: () => console.log('Entering Loading state'),
@@ -44,16 +44,7 @@ export default class Stage extends Theoretical {
   }
 
 
-    createActor(){
-      const setup = {
-        stage: this.getStage(),
-        worker: this.worker,
-        queue: this.queue,
-        buffer: this.buffer,
-      }
-      this.actor = new Actor(setup);
-      return this;
-    }
+
 
 
   getStageTemplate(){
@@ -140,14 +131,15 @@ export default class Stage extends Theoretical {
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.blank()" data-bs-toggle="popover" data-bs-title="Clear Stage" data-bs-trigger="hover focus" data-bs-content="Clear the stage of all actors and begin a new project."><i class="bi bi-eraser"></i></button>
       </div>
 
-      <!-- debugger buttons
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.root.emit('play');"><i class="bi bi-play"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.stage.emit('start');"><i class="bi bi-play"></i></button>
+        <button type="button" class="btn btn-outline-secondary" onclick="()=>this.stage.emit('stop');"><i class="bi bi-stop"></i></button>
+        <!-- debugger buttons
         <button type="button" class="btn btn-outline-secondary" onclick="ev=>this.say(ev)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
         <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-right"></i></button>
+        -->
       </div>
-      -->
 
       <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" onclick="()=>this.generateCode()" data-bs-toggle="popover" data-bs-title="Code Generator" data-bs-trigger="hover focus" data-bs-content="Generate a standalone program that does not require sweetpea to run."><i class="bi bi-rocket-takeoff text-danger"></i></button>
@@ -186,12 +178,13 @@ export default class Stage extends Theoretical {
 
     this.View = class View {
 
-      constructor({stage, core, root, actor, data}){
-        this.stage = stage;
+      constructor({core}){
+
         this.core = core;
-        this.root = root;
-        this.actor = actor;
-        this.data = data;
+        this.stage = core.getStage().actor;
+        this.actor = core.actor;
+        this.worker = core.worker; // this is a signal containing category/name of worker
+
 
         // this.worker = new Worker(stage);
       }

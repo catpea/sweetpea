@@ -24,7 +24,7 @@ export default class EventEmitter {
 
     // Trigger an event
     emit(event, ...args) {
-      console.log('Emitting...', event, args);
+      console.log('Emitting...', event, ...args);
         if (this.events[event]) {
             this.events[event].forEach(listener => {
                 listener(...args);
