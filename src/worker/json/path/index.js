@@ -1,7 +1,7 @@
-import {Worker} from 'actor';
+import {Actor} from 'actor';
 import * as jp from './jsonpath.min.js';
 
-export default class jsonPath extends Worker {
+export default class JsonPath extends Actor {
 
   static parameters = [
     { name:"query",   default:'$.store.book[*].author',    type:'string', description:'the authors of all books in the store' },

@@ -18,7 +18,9 @@
         "state-machine": "./src/plug-ins/state-machine/StateMachine.js",
         "event-emitter": "./src/plug-ins/event-emitter/EventEmitter.js",
         "string-bikini": "./src/plug-ins/string-bikini/index.js",
+
         "work-queue":    "./src/plug-ins/work-queue/WorkQueue.js",
+        "work-buffer":    "./src/plug-ins/work-buffer/WorkBuffer.js",
 
         "movable": "./src/plug-ins/mouse/Movable.js",
         "connectable": "./src/plug-ins/mouse/Connectable.js",
@@ -72,17 +74,32 @@
 
     <x-stage controls minimap template="stage">
 
-      
 
-            <x-super id="director" x="112" y="203" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
-            <x-super id="xena" x="626" y="195" supervisor="system/standard" worker="http/fetch" data-url="./menu.json" selected="false"> </x-super>
-            <x-super id="troi" x="969" y="195" supervisor="system/standard" worker="json/path" selected="false"> </x-super>
-            <x-super id="bork" x="1547" y="196" supervisor="system/standard" worker="developer/console" selected="true"> </x-super>
 
-            <x-cable id="alfa" from="xena:out" to="troi:in" selected="false"></x-cable>
-            <x-cable id="beta" from="troi:out" to="bork:in" selected="false"></x-cable>
 
-          <x-cable id="guid-f5cc83a6-aa56-461c-9782-cdebc5fbe271" from="director:out" to="xena:in" selected="false"></x-cable>
+
+
+
+
+
+
+
+
+               <x-super id="director" x="433" y="279" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
+               <x-super id="xena" x="865" y="67" supervisor="system/standard" worker="http/fetch" data-url="./menu.json" selected="false"> </x-super>
+               <x-super id="troi" x="1184" y="63" supervisor="system/standard" worker="json/path" selected="false"> </x-super>
+               <x-super id="bork" x="1600" y="166" supervisor="system/standard" worker="developer/console" selected="true"> </x-super>
+
+               <x-super id="guid-8de165cd-af33-4f93-8cc6-f376803247bd" x="54" y="283" supervisor="system/standard" worker="json/object" selected="false"></x-super>
+               <x-super id="guid-0e3e8b3f-6072-4b6b-bad8-bdbb8d068939" x="57" y="483" supervisor="system/standard" worker="script/function" selected="false"></x-super>
+
+               <x-cable id="alfa" from="xena:out" to="troi:in" selected="false"></x-cable>
+               <x-cable id="beta" from="troi:out" to="bork:in" selected="false"></x-cable>
+
+               <x-cable id="guid-e2bd4088-294b-4048-9ea7-243de66dadb0" from="guid-8de165cd-af33-4f93-8cc6-f376803247bd:out" to="director:start-event" selected="false"></x-cable>
+               <x-cable id="guid-b237e021-7c1a-4bd0-a2a6-a7ec38b5205f" from="guid-0e3e8b3f-6072-4b6b-bad8-bdbb8d068939:out" to="director:stop-event" selected="false"></x-cable>
+               <x-cable id="guid-f45ef4c4-d60a-4ac0-b620-148eb7f9cf8e" from="director:start-message" to="xena:in" selected="false"></x-cable>
+
 
 
 

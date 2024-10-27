@@ -1,5 +1,5 @@
 <template id="parameters">
-  <li class="list-group-item position-relative ">
+  <li class="list-group-item">
     <slot></slot>
   </li>
 </template>
@@ -28,8 +28,8 @@
     <div class="row">
       <div class="col">
         <div class="form-text px-3">
-          <x-valve data-bind="name@id" data-bind-template="${name}-event" id="start-event" data-direction="in" data-icon="envelope"></x-valve>
-          <x-valve data-bind="name@id" data-bind-template="${name}-message" id="start-message" data-direction="out" data-icon="box-arrow-up-right"></x-valve>
+          <x-valve data-bind="name@id" data-bind-template="${name}-event" data-direction="in" data-icon="envelope"></x-valve>
+          <x-valve data-bind="name@id" data-bind-template="${name}-message" data-direction="out" data-icon="box-arrow-up-right"></x-valve>
           <span data-bind="name">DATA BIND NAME</span>
           <div data-bind="description"><small>DATA BIND NAME</small></div>
         </div>
@@ -55,6 +55,7 @@
     </ul>
 
     <ul class="list-group list-group-flush" data-render="parameters">
+
     </ul>
 
     <div class="card-footer text-wrap">

@@ -1,83 +1,82 @@
+import EventEmitter from 'event-emitter';
 
-class Actor {
-  // Private fields
-  #mailbox = [];
-  #currentBehavior = null;
-  #defaultBehavior = null;
+export class Actor extends EventEmitter {
 
-  constructor(initialBehavior) {
-    // Initialize instance with a default behavior
-    this.#defaultBehavior = initialBehavior || this.defaultReceive;
-    this.#currentBehavior = this.#defaultBehavior;
-    this.preStart();
+  garbage = [];
+
+  constructor({ stage, worker, queue, buffer }){
+    super();
+    const actor = this;
+
+      // When message is sent to the actor
+      actor.on('in', message => {
+        // Add the incoming message to the queue for processing
+        queue.enqueue(message);
+      });
+
+      // When a new order is added to the queue
+      queue.on('enqueue', async order => {
+        // Use the worker function to process the order and get the final product
+        const product = await worker(order);
+        // Store the finished product in the buffer
+        buffer.enbuffer(product);
+        // Remove the order from the queue, since it's been processed
+        queue.remove(order.id);
+      });
+
+      // When a product is added to the buffer
+      buffer.on('enbuffer', product => {
+        // Send the product out to another part of the system
+        actor.send('out', { value: product });
+        // Remove the product from the buffer since it's no longer needed
+        buffer.remove(product.id);
+      });
+
+      // .__. //
+
+      actor.on('control', control=>{
+        switch(control.event) {
+          case 'request':
+            actor.transmit(control.event||1);
+            break;
+          case 'quiesce':
+            actor.pause();
+            break;
+          default:
+            console.log('unknown control', control.event);
+        }
+      });
+
+      // stage.on('ping', ()=>{
+      //   stage.send('pong');
+      // });
+      //
+      // stage.on('exit', ()=>{
+      //   console.log('K, bye!');
+      // });
+
   }
 
-  // Lifecycle method called before the actor begins processing messages
-  preStart() {
-    console.log('Actor is starting.');
-  }
-
-  // Lifecycle method called after the actor stops
-  postStop() {
-    console.log('Actor has stopped.');
-  }
-
-  // Core method for receiving messages
-  receive(message) {
-    if (this.#currentBehavior) {
-      this.#currentBehavior.call(this, message);
-    } else {
-      console.log('No behavior defined to handle message:', message);
+  // CONTROL
+  transmit(max=Infinity){
+    this.#pause = false;
+    let sentCount = 0;
+    for (const product of this.buffer) {
+      if(this.#pause) break;
+      actor.send('out', { value: product });
+      sentCount++;
+      if(sentCount>max) break;
     }
   }
 
-  // Default message handler if none is provided
-  defaultReceive(message) {
-    console.log('Handling message with default behavior:', message);
+  #pause = false;
+  pause(){
+    this.#pause = true;
   }
 
-  // Method to change the actor's behavior
-  become(newBehavior) {
-    this.#currentBehavior = newBehavior;
-    console.log('Behavior changed.');
-  }
-
-  // Method to revert to default behavior
-  unbecome() {
-    this.#currentBehavior = this.#defaultBehavior;
-    console.log('Reverted to default behavior.');
-  }
-
-  // Simulated method to send messages to this actor
-  send(message) {
-    // Add incoming messages to the private mailbox
-    this.#mailbox.push(message);
-    console.log('Message sent:', message);
-  }
-
-  // Internal method to process messages in the mailbox
-  processMessages() {
-    while (this.#mailbox.length > 0) {
-      const message = this.#mailbox.shift();
-      this.receive(message);
-    }
-  }
-
-  // Stops actor, invoking cleanup
-  stop() {
-    this.postStop();
+  worker(){
+    // Override in Subclass, plz.
   }
 
 
-  // this.listenTo(stage.director, 'play', this.executeFetch);
-  listeningTo = [];
-  listenTo(actorInstance, eventName, methodHandler){
-    const unsubscribe = actorInstance.on(eventName, methodHandler);
-    listeningTo.push({unsubscribe});
-  }
-  //
 }
-
-
-export class Supervisor extends Actor {}
-export class Worker extends Actor {}

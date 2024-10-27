@@ -16,19 +16,8 @@ export default Inheritance => class ElementView extends Inheritance {
   }
 
   instantiateView(){
-
-    const classContext = {
-      workerPath: this.workerPath,
-      core: this,
-      root: this.getStage().pipe,
-      pipe: this.pipe,
-      data: this.host.dataset,
-    };
-
-    this.viewClass = new this.View(classContext);
-
+    this.viewClass = new this.View({core: this});
     return this;
-
   }
 
   connectEventsToView(){

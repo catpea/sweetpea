@@ -1,8 +1,11 @@
-export default class WorkQueue {
+import EventEmitter from 'event-emitter';
+export default class WorkQueue extends EventEmitter {
   #queue;
   #isProcessing;
 
   constructor() {
+    super()
+
     this.#queue = [];
     this.#isProcessing = false;
   }
@@ -12,6 +15,7 @@ export default class WorkQueue {
   enqueue(task) {
     this.#queue.push(task);
     if (!this.#isProcessing) this.#processQueue();
+    this.emit('enqueue', task);
   }
 
   size() {

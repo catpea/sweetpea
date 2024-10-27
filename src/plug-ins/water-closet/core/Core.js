@@ -61,14 +61,6 @@ export default Inheritance => class Core extends Inheritance {
     return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECTsssssssssssssss';
   }
 
-
-  createElementPipe(){
-      this.pipe = new EventEmitter();
-      return this;
-
-  }
-
-
   getAllActorsOnStage(){
     return this.getStage().querySelectorAll(`${globalThis.sweetpea.prefix}-super, ${globalThis.sweetpea.prefix}-cable`);
   }

@@ -1,5 +1,6 @@
 import Theoretical from './Theoretical.js';
 import StateMachine from 'state-machine';
+import {Actor} from 'actor';
 
 export default class Stage extends Theoretical {
   machine;
@@ -9,14 +10,7 @@ export default class Stage extends Theoretical {
 
     const states = {
       idle: {
-        enter: () => this
-          .log('Entering Idle state...')
-          .attachShadow()
-          .adoptCss()
-          .createElementPipe()
-          .done,
-        exit: () => this
-          .log('Exiting Idle state'),
+        enter:   () =>   this. attachShadow().adoptCss().createActor()
       },
       loading: {
         enter: () => console.log('Entering Loading state'),
@@ -49,6 +43,17 @@ export default class Stage extends Theoretical {
     this.machine = new StateMachine(states, 'idle');
   }
 
+
+    createActor(){
+      const setup = {
+        stage: this.getStage(),
+        worker: this.worker,
+        queue: this.queue,
+        buffer: this.buffer,
+      }
+      this.actor = new Actor(setup);
+      return this;
+    }
 
 
   getStageTemplate(){
@@ -181,11 +186,11 @@ export default class Stage extends Theoretical {
 
     this.View = class View {
 
-      constructor({stage, core, root, pipe, data}){
+      constructor({stage, core, root, actor, data}){
         this.stage = stage;
         this.core = core;
         this.root = root;
-        this.pipe = pipe;
+        this.actor = actor;
         this.data = data;
 
         // this.worker = new Worker(stage);
@@ -328,8 +333,8 @@ export default class Stage extends Theoretical {
     this.content = this.host.shadowRoot.querySelector('.content');
 
     this.host.addEventListener('mousedown',  this.#onMouseDown.bind(this));
-    this.host.addEventListener('mousemove',  this.#onMouseMove.bind(this));
-    this.host.addEventListener('mouseup',    this.#onMouseUp.bind(this));
+    window.addEventListener('mousemove',  this.#onMouseMove.bind(this));
+    window.addEventListener('mouseup',    this.#onMouseUp.bind(this));
     this.host.addEventListener('wheel',      this.#onWheel.bind(this), { passive: false });
     this.host.addEventListener('touchstart', this.#onTouchStart.bind(this));
     this.host.addEventListener('touchmove',  this.#onTouchMove.bind(this));

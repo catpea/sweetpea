@@ -1,9 +1,9 @@
-import {Worker} from 'actor';
+import {Actor} from 'actor';
 
-export default class developerConsole extends Worker {
+export default class DeveloperConsole extends Actor {
 
   static parameters = [
-    { name:"type",   default:'dir',    type:'String', description:'dir, log, debug, info, warn' },
+    { name:"type",   default:'dir',    type:'string', description:'dir, log, debug, info, warn' },
   ];
 
   async work(parameters){

@@ -1,8 +1,31 @@
 import masticator from 'masticator';
+import {Actor} from 'actor';
 
 export default Inheritance => class ActorIntegration extends Inheritance {
+  actor;
   View;
 
+  async createActor({attribute}={attribute:"worker"}){
+
+    const setup = {
+      stage: this.getStage(),
+      worker: this.worker,
+      queue: this.queue,
+      buffer: this.buffer,
+    }
+
+    let location = this.host.getAttribute(attribute);
+
+    if(location){
+      const currentUrl = new URL(window.location.href);
+      const {default: Actor} = await import(`${currentUrl.pathname}src/worker/${location}/index.js`);
+      this.actor = new Actor(setup);
+    }else{
+      this.actor = new Actor(setup);
+    }
+
+    return this;
+  }
 
   async installSupervisorTemplate({attribute}={attribute:"supervisor"}){
     let location = this.host.getAttribute(attribute);
@@ -38,9 +61,7 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
   async installSupervisorView({attribute}={attribute:"supervisor"}){
     let location = this.host.getAttribute(attribute);
-
     const currentUrl = new URL(window.location.href);
-
   const {
       default: View,
       foo,

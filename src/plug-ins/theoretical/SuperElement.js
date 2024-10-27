@@ -29,7 +29,7 @@ export default class SuperElement extends HTMLElement {
     const attributeHandlers = {
       'x y': () => this.updatePosition(),
       'selected': () => this.instance.selected.set(newValue==="true"?true:false),
-      'worker': () => this.instance.workerPath.set(newValue),
+      'worker': () => this.instance.worker.set(newValue),
     };
 
     if (oldValue == newValue) return;
@@ -55,12 +55,15 @@ export default class SuperElement extends HTMLElement {
     })
   }
 
-  get pipe(){
-    return this.instance.pipe
+  get actor(){
+    return this.instance.actor
   }
 
   get state(){
     return this.instance.state
   }
 
+  get MutationObserver(){
+    return MutationObserver;
+  }
 }

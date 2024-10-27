@@ -1,6 +1,6 @@
-import {Worker} from 'actor';
+import {Actor} from 'actor';
 
-export default class httpFetch extends Worker {
+export default class HttpFetch extends Actor {
 
   static parameters = [
     { name:"url",   default:'./samples/json-path-example.json',    type:'string', description:'' },

@@ -17,11 +17,11 @@ export default class Cable extends Theoretical {
         enter: () => this.locateSvg().drawLine().makeLineSelectable().installVisualSelectionIndicator().awaitSupervisors()
       },
       '/connected/idle': {
-        enter: () => this.monitorSourcePosition().monitorTargetPosition().connectPipes()
+        enter: () => this.connectPipe().monitorSourcePosition().monitorTargetPosition()
       },
       '/connected/busy': {
-        enter: () => ()=>this.#line.setAttribute('stroke', 'gray'),
-        exit: () => ()=>this.#line.setAttribute('stroke', this.#stroke),
+        enter: () => ()=>disconnectPipe(),
+        exit: () => ()=>connectPipe(),
       },
       '/disconnected':{
         enter: () => this.collectGarbage(),
@@ -35,6 +35,43 @@ export default class Cable extends Theoretical {
     // this.subscriptions.push( {type:'queue', id:'transmission jobs...', subscription:()=>this.transmission.stop()} );
 
   }
+
+
+
+
+
+  connectPipe(){
+
+    const [,fromPortId] = this.host.getAttribute('from').split(':');
+    const [,toPortId] = this.host.getAttribute('to').split(':');
+
+    // NOTE: live program is required as .actor is used
+    const fromProgram = this.getProgramPipe('from');
+    const toProgram   = this.getProgramPipe('to');
+
+    const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
+    this.subscriptions.push( {type:'.actor', id:'from-pipe-to-pipe', subscription} );
+
+    const controlSubscription = toProgram.actor.on(`${toPortId}::control`, data=>fromProgram.actor.send('control', data) )
+
+    this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription} );
+
+    return this;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   awaitSupervisors(){
 
@@ -189,49 +226,7 @@ export default class Cable extends Theoretical {
       return this;
     }
 
-    // connectPipes0(){
-    //   let counter = 0;
-    //
-    //   const fromProgram = this.programPipe('from');
-    //   const toProgram = this.programPipe('to');
-    //
-    //   const resume = function(){
-    //     console.log('CALLING connectPipes2');
-    //     this.connectPipes2()
-    //   }.bind(this)
-    //
-    //   fromProgram.addEventListener('ready', (event) => {
-    //     counter++;
-    //     if (counter==2) resume()
-    //   });
-    //   toProgram.addEventListener('ready', (event) => {
-    //     counter++;
-    //     if (counter==2) resume()
-    //   });
-    //
-    //   return this;
-    //
-    // }
 
-    connectPipes(){
-
-      const stage = this.getStage();
-      if(!stage)  {
-        console.log('Lol, unable to locate stage!!!!!');
-        return this
-      }
-
-
-      const [fromProgram, fromPort] = this.getProgramPipe('from');
-      const [toProgram, toPort] = this.getProgramPipe('to');
-
-      const fromPortName = fromPort.getAttribute('id');
-      const toPortName = toPort.getAttribute('id');
-
-      fromProgram.pipe.on(fromPortName, packet=>toProgram.pipe.send(toPortName, packet));
-
-      return this;
-    }
 
 
 
@@ -309,35 +304,26 @@ export default class Cable extends Theoretical {
       return programComponent;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    getProgramPipe(attributeName){
+    getProgramPipeAndPort(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+      console.log({componentId, portId});
       const stage = this.getStage();
       if(!stage) throw new Error('Lol, unable to locate stage!!!!!');
 
       const programComponent = stage.querySelector('#'+componentId);
       if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
+
+
       const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
-      if(!portComponent) throw new Error(`Unable to locate portComponent ${portComponent}`)
+     // console.log(programComponent.shadowRoot.innerHTML);
+      if(!portComponent) throw new Error(`${this.host.tagName.toLowerCase()}#${this.host.getAttribute('id')} is unable to locate portComponent named "${'#'+portId}" in ${programComponent.tagName.toLowerCase()}#${componentId}`)
 
       return [programComponent, portComponent];
 
     }
 
-
-    programPipe(attributeName){
+    getProgramPipe(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
       const stage = this.getStage();
@@ -348,7 +334,8 @@ export default class Cable extends Theoretical {
       return programComponent;
 
     }
-    programPort(attributeName){
+
+    getProgramPort(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
       const stage = this.getStage();
@@ -363,13 +350,54 @@ export default class Cable extends Theoretical {
     }
 
 
-
     monitorPosition(attributeName, fun){
 
+      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+      const stage = this.getStage();
+      const programComponent = stage.querySelector('#'+componentId);
+      const targetNode = programComponent.shadowRoot.querySelector('[data-render=parameters]')
+      const config = { attributes: false, childList: true, subtree: true };
+
+      console.log('RRR monitorPosition', programComponent.tagNattributeName, programComponent.getAttribute('id'), targetNode);
+
+      console.log('WWW',  targetNode);
+
+      // Callback function to execute when mutations are observed
+      const callback = (mutationList, observer) => {
+        console.log('EEE mutationList',  mutationList);
+        for (const mutation of mutationList) {
+          if (mutation.type === "childList") {
+            console.log("RRR A child node has been added or removed.");
+            console.log('RRR programComponent', programComponent);
+            const portNode = programComponent.shadowRoot.getElementById(portId);
+            console.log('RRR portNode', portNode);
+
+            const portExists = !!portNode;
+            console.log('RRR portExists', portExists);
+            if(portExists){
+              this.monitorPosition2(attributeName, fun);
+            }
+          } else if (mutation.type === "attributes") {
+            console.log(`The ${mutation.attributeName} attribute was modified.`);
+          }
+        }
+      };
 
 
-      const [programComponent, portComponent] = this.getProgramPipe(attributeName);
+      const observer = new MutationObserver(callback);
+      observer.observe(targetNode, config);
+      this.subscriptions.push( {type:'observer.observe', id:'ports', subscription:()=>observer.disconnect()} );
+ 
+      // sometimes no changes are triggered
+      callback([{type:'childList'}])
+    }
+
+    monitorPosition2(attributeName, fun){
+
+      const [programComponent, portComponent] = this.getProgramPipeAndPort(attributeName);
       const portPad = portComponent.shadowRoot.querySelector('.valve');
+
+      console.log('EEE located port', programComponent.getAttribute('id'), portComponent);
 
       if(!portComponent){
         this.danger(`${this.host.tagName}, Unable to locate portComponent via selector ${componentId}:${portId}`, 'danger');

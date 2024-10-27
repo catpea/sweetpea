@@ -14,6 +14,7 @@ import VisualProgramming from './visual-programming/VisualProgramming.js';
 import ActorIntegration from './actor-integration/ActorIntegration.js';
 import SelectionManager from './selection-manager/SelectionManager.js';
 import ComponentEvents from './component-events/ComponentEvents.js';
+import QueueAndBuffer from './queue-and-buffer/QueueAndBuffer.js';
 
 export default function(){
 
@@ -34,6 +35,8 @@ export default function(){
     ActorIntegration,   // installActor()
     SelectionManager,   // select() deselect()
     ComponentEvents,   // ready) busy~idle (exit
+
+    QueueAndBuffer,   // queue-and-buffer for data passing
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );
