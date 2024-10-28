@@ -91,20 +91,19 @@
 
 
 
-               <x-super id="director" x="433" y="279" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
-               <x-super id="xena" x="865" y="67" supervisor="system/standard" worker="http/fetch" data-url="./menu.json" selected="false"> </x-super>
-               <x-super id="troi" x="1184" y="63" supervisor="system/standard" worker="json/path" selected="false"> </x-super>
-               <x-super id="bork" x="1600" y="166" supervisor="system/standard" worker="developer/console" selected="true"> </x-super>
+               <x-super id="stage-director" x="433" y="279" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
+               <x-super id="http-fetch" x="865" y="67" supervisor="system/standard" worker="http/fetch" data-url="./samples/json-path-example.json" selected="false"> </x-super>
+               <x-super id="json-path" x="1184" y="63" supervisor="system/standard" worker="json/path" data-query="$.store.book[*].author" selected="false"> </x-super>
+               <x-super id="developer-console" x="1600" y="166" supervisor="system/standard" worker="developer/console" data-type="dir" selected="true"> </x-super>
 
-               <x-super id="guid-8de165cd-af33-4f93-8cc6-f376803247bd" x="54" y="283" supervisor="system/standard" worker="json/object" selected="false"></x-super>
-               <x-super id="guid-0e3e8b3f-6072-4b6b-bad8-bdbb8d068939" x="57" y="483" supervisor="system/standard" worker="script/function" selected="false"></x-super>
+               <x-super id="json-object" x="54" y="283" supervisor="system/standard" worker="json/object" selected="false"></x-super>
+               <x-super id="script-function" x="57" y="483" supervisor="system/standard" worker="script/function" selected="false"></x-super>
 
-               <x-cable id="alfa" from="xena:out" to="troi:in" selected="false"></x-cable>
-               <x-cable id="beta" from="troi:out" to="bork:in" selected="false"></x-cable>
-
-               <x-cable id="guid-e2bd4088-294b-4048-9ea7-243de66dadb0" from="guid-8de165cd-af33-4f93-8cc6-f376803247bd:out" to="director:start-message" selected="false"></x-cable>
-               <x-cable id="guid-b237e021-7c1a-4bd0-a2a6-a7ec38b5205f" from="guid-0e3e8b3f-6072-4b6b-bad8-bdbb8d068939:out" to="director:stop-message" selected="false"></x-cable>
-               <x-cable id="guid-f45ef4c4-d60a-4ac0-b620-148eb7f9cf8e" from="director:start-event" to="xena:in" selected="false"></x-cable>
+               <x-cable id="cable-http-fetch-to-json-path" from="http-fetch:out" to="json-path:in" selected="false"></x-cable>
+               <x-cable id="cable-json-path-to-developer-console" from="json-path:out" to="developer-console:in" selected="false"></x-cable>
+               <x-cable id="cable-json-object-to-stage-director:start" from="json-object:out" to="stage-director:start-message" selected="false"></x-cable>
+               <x-cable id="cable-script-function-to-stage-director:stop" from="script-function:out" to="stage-director:stop-message" selected="false"></x-cable>
+               <x-cable id="cable-stage-director-to-http-fetch" from="stage-director:start-event" to="http-fetch:in" selected="false"></x-cable>
 
 
 

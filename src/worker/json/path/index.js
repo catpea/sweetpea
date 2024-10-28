@@ -11,7 +11,9 @@ export default class JsonPath extends Actor {
   async work(parameters){
     console.log('jsonpath', jp);
     console.log('JsonPath parameters', parameters);
-    return jp.query(parameters.input, parameters.query);
+    console.log('JsonPath query', parameters.value, parameters.query);
+    // console.log('JsonPath zbork', this.db.url.set('zbork') );
+    return jp.query(parameters.value, parameters.query);
   }
 
 }

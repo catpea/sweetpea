@@ -46,6 +46,10 @@ export default class View {
 
   }
 
+  get db(){
+    return this.stage.instance.db( this.core.host.getAttribute('id') );
+  }
+
   renderParameters(){
     const template = this.core.host.shadowRoot.getElementById('parameters');
     const element = this.core.host.shadowRoot.querySelector('[data-render=parameters]');

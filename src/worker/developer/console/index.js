@@ -7,7 +7,10 @@ export default class DeveloperConsole extends Actor {
   ];
 
   async work(parameters){
-    return console[parameters.type](parameters.input);
+    console.warn(`DeveloperConsole ${this.id} on in: parameters`, parameters);
+    console.warn(`DeveloperConsole ${this.id} on in:  console[parameters.type]`,  console[parameters.type]);
+
+    return console[parameters.type].bind(console)(parameters.value);
   }
 
 }

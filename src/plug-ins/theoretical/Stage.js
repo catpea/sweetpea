@@ -83,7 +83,7 @@ export default class Stage extends Theoretical {
 
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="">
 
-      <div class="toast bg-dark" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000".>
+      <div class="toast text-bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000".>
         <div class="toast-header">
           <i class="bi bi-bandaid me-2"></i>
           <strong class="me-auto">TODO</strong>
@@ -92,7 +92,10 @@ export default class Stage extends Theoretical {
         </div>
         <div class="toast-body">
 
-        Mentor (a worker builder)
+        &middot; Mentor (a worker builder)
+        &middot; Apply Form Data To x-super attributes so that they flow into worker function
+        &middot; Ensure serialization captures state corectly
+        &middot; Ensure serialization captures state corectly
 
         <!--
         fix up the fetch and filter workers,
@@ -110,10 +113,11 @@ export default class Stage extends Theoretical {
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          To select/deselect a component click its caption text.
-          Use <kbd>DEL</kbd> to remove selected components.
-          Double click on the stage to cerate a new component.
-          You are going to create a worker supervisor, you must then specify a worker.
+          &raquo; sweetpea can run in nw.js
+          &raquo; To select/deselect a component click its caption text.
+          &raquo; Use <kbd>DEL</kbd> to remove selected components.
+          &raquo; Double click on the stage to cerate a new component.
+          &raquo; You are going to create a worker supervisor, you must then specify a worker.
         </div>
       </div>
 

@@ -10,8 +10,13 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
 
     const setup = {
-      options: { ...this.host.dataset },
+      id: this.host.getAttribute('id'),
+
+      options: { ...this.host.dataset }, //TODO: don't use dataset use signals...
+
       stage: this.getStage().actor,
+      db: this.getStage().instance.db,
+      
       worker: this.worker,
       queue: this.queue,
       buffer: this.buffer,

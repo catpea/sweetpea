@@ -2,14 +2,21 @@ import EventEmitter from 'event-emitter';
 
 // NOTE: Superclassed by src/worker/[category]/[name]/index.js
 export class Actor extends EventEmitter {
-
+  #db;
   garbage = [];
 
-  constructor({ options, stage, worker, queue, buffer }){
+  //NOTE: /home/meow/Universe/Development/npm/sweetpea/src/plug-ins/water-closet/actor-integration/ActorIntegration.js
+  constructor({ id, options, stage, worker, queue, buffer, db }){
 
     // NOTE: /home/meow/Universe/Development/npm/sweetpea/src/plug-ins/water-closet/queue-and-buffer/QueueAndBuffer.js
 
     super();
+
+    this.#db = db;
+    this.id = id;
+    console.log('AAA', this.#db, this.id);
+
+    this.stage = stage;
     this.queue = queue;
     this.buffer = buffer;
     const actor = this;
@@ -18,8 +25,10 @@ export class Actor extends EventEmitter {
       actor.on('in', message => {
 
         // A job is the incoming packet layed over a dataset.
-        console.warn('Actor on in', message);
+        // console.warn(`Actor ${id} on in: message`, message);
+        // console.warn(`Actor ${id} on in: options`, options);
         const job = Object.assign(options, message);
+        console.warn(`Actor ${id} on in: job`, job);
         queue.enqueue( job );
 
       });
@@ -36,9 +45,9 @@ export class Actor extends EventEmitter {
       // When a product is added to the buffer
       buffer.on('enbuffer', product => {
         // Send the product out to another part of the system
-        actor.send('out', product );
+        actor.send('out', {value:product} );
         // Remove the product from the buffer since it's no longer needed
-        buffer.remove(product.id);
+        buffer.remove(product);
       });
 
       // .__. //
@@ -66,6 +75,11 @@ export class Actor extends EventEmitter {
       // });
 
   }
+
+  get db(){
+    return this.#db( this.id );
+  }
+
 
   // CONTROL
   transmit(max=Infinity){

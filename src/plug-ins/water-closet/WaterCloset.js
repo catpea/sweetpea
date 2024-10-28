@@ -1,6 +1,7 @@
 import Garbage from './garbage/Garbage.js';
 import Macro from './macro/Macro.js';
 import Core from './core/Core.js';
+import Db from './db/Db.js';
 import DataContext from './data-context/DataContext.js';
 import ElementSearch from './element-search/ElementSearch.js';
 import Logging from './logging/Logging.js';
@@ -22,6 +23,7 @@ export default function(){
     Garbage,       // garbage collection
     Macro,       // await macro.x.x.x.x.x.run();
     Core,          // shared functions
+    Db,          // shared functions
     DataContext,   // the notion of this.context in this case based on data-* attributes
     ElementSearch, // verbose element locator that searches within the components zone of influence only
     Logging,       // .log functionality and related methods
