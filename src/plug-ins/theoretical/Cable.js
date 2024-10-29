@@ -46,8 +46,8 @@ export default class Cable extends Theoretical {
     const [,toPortId] = this.host.getAttribute('to').split(':');
 
     // NOTE: live program is required as .actor is used
-    const fromProgram = this.getProgramPipe('from');
-    const toProgram   = this.getProgramPipe('to');
+    const fromProgram = this.getProgramComponent('from');
+    const toProgram   = this.getProgramComponent('to');
 
     // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
     const subscription = fromProgram.actor.on(fromPortId, packet=>{
@@ -309,7 +309,7 @@ export default class Cable extends Theoretical {
       return programComponent;
     }
 
-    getProgramPipeAndPort(attributeName){
+    getProgramComponentAndPort(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
       //console.log({componentId, portId});
@@ -328,7 +328,7 @@ export default class Cable extends Theoretical {
 
     }
 
-    getProgramPipe(attributeName){
+    getProgramComponent(attributeName){
 
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
       const stage = this.getStage();
@@ -399,7 +399,7 @@ export default class Cable extends Theoretical {
 
     monitorPosition2(attributeName, fun){
 
-      const [programComponent, portComponent] = this.getProgramPipeAndPort(attributeName);
+      const [programComponent, portComponent] = this.getProgramComponentAndPort(attributeName);
       const portPad = portComponent.shadowRoot.querySelector('.valve');
 
       //console.log('EEE located port', programComponent.getAttribute('id'), portComponent);

@@ -1,6 +1,7 @@
 import location from 'location';
 import masticator from 'masticator';
 import {Actor} from 'actor';
+import EventEmittter from 'event-emitter';
 
 export default Inheritance => class ActorIntegration extends Inheritance {
   actor;
@@ -14,16 +15,19 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
       options: { ...this.host.dataset }, //TODO: don't use dataset use signals...
 
-      stage: this.getStage().actor,
-      db: this.getStage().instance.db,
-      
+      // stage: this.getStage().actor,
+      stage:  document.querySelector('x-stage') .actor,
+      // stage: new EventEmittter(),
+      // db: this.getStage().instance.db,
+
       worker: this.worker,
       queue: this.queue,
       buffer: this.buffer,
     }
 
     let workerPath = this.host.getAttribute(attribute);
-
+    // console.log('TIME TRAVEL ERROR, stage is a fake emitter, becasue element may not be in DOM yet, this fixes not being able to connect tnodes but destroys calling stage .start!');
+    console.log('TIME TRAVEL ERROR, stage not available element may not be in DOM yet, USING document.querySelector("x-stage") .actor');
     if(workerPath){
       const {default: Actor} = await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`);
       this.actor = new Actor(setup);

@@ -50,15 +50,19 @@ export default Inheritance => class ElementSearch extends Inheritance {
   }
 
   getStage(){
-    let response = null;
-    if(this.host.tagName.toLowerCase() == `${globalThis.sweetpea.prefix}-stage`){
-      response =  this.host;
 
+
+    let response = null;
+   if(this.host.tagName.toLowerCase() == `${globalThis.sweetpea.prefix}-stage`){
+      response =  this.host;
     }else{
       // response = upwards(this.host, `${globalThis.sweetpea.prefix}-stage`).pop();
       response = this.findOut(this.host, `${globalThis.sweetpea.prefix}-stage`);
 
     }
+    console.log('PPP',  this.host);
+    console.log('PPP',  this.host.tagName.toLowerCase(), response);
+
     return response;
   }
 
