@@ -10,10 +10,23 @@ export default class Super extends Theoretical {
 
     const gearbox = {
       '/idle':{
-        enter: () => this.attachShadow().adoptCss().createActor()
+        enter: () => this.attachShadow().adoptCss()
       },
       '/connected':{
-        enter: async () => await this.macro.installSupervisorTemplate.installSupervisorCSS.installSupervisorView.installTemplate.  instantiateView.connectEventsToView.triggerViewMount .useExtensions.installVisualSelectionIndicator.dispatchReady.run()
+        enter: async () => await this.macro
+        .createActor // NOTE: requres connection to parent
+        .installSupervisorTemplate
+        .installSupervisorCSS
+        .installSupervisorView
+        .installTemplate
+        .instantiateView
+        .connectEventsToView
+        .triggerViewMount
+        .useExtensions
+        .installVisualSelectionIndicator
+        .dispatchReady
+        .run()
+
       },
       '/connected/front': {
         enter: () => this.skipTo(this.initialFace).dispatchIdle()

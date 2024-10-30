@@ -14,7 +14,7 @@ export class Actor extends EventEmitter {
 
     this.#db = db;
     this.id = id;
-    console.log('AAA', this.#db, this.id);
+    //console.log('AAA', this.#db, this.id);
 
     this.stage = stage;
     this.queue = queue;
@@ -25,10 +25,10 @@ export class Actor extends EventEmitter {
       actor.on('in', message => {
 
         // A job is the incoming packet layed over a dataset.
-        // console.warn(`Actor ${id} on in: message`, message);
-        // console.warn(`Actor ${id} on in: options`, options);
+        // //console.warn(`Actor ${id} on in: message`, message);
+        // //console.warn(`Actor ${id} on in: options`, options);
         const job = Object.assign(options, message);
-        console.warn(`Actor ${id} on in: job`, job);
+        //console.warn(`Actor ${id} on in: job`, job);
         queue.enqueue( job );
 
       });
@@ -53,7 +53,7 @@ export class Actor extends EventEmitter {
       // .__. //
 
       actor.on('control', control=>{
-        console.log('actor.on(control', control);
+        //console.log('actor.on(control', control);
         switch(control.event) {
           case 'request':
             actor.transmit(control.event||1);
@@ -62,7 +62,7 @@ export class Actor extends EventEmitter {
             actor.pause();
             break;
           default:
-            console.log('unknown control', control.event);
+            //console.log('unknown control', control.event);
         }
       });
 
@@ -71,7 +71,7 @@ export class Actor extends EventEmitter {
       // });
       //
       // stage.on('exit', ()=>{
-      //   console.log('K, bye!');
+      //   //console.log('K, bye!');
       // });
 
   }
@@ -83,7 +83,7 @@ export class Actor extends EventEmitter {
 
   // CONTROL
   transmit(max=Infinity){
-    console.log('BUFFER TRANSMIT', this.constructor.name);
+    //console.log('BUFFER TRANSMIT', this.constructor.name);
     this.#pause = false;
     let sentCount = 0;
     for (const product of this.buffer) {

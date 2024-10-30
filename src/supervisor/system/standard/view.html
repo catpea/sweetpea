@@ -25,16 +25,10 @@
 </template>
 
 <template id="parameters-event">
-    <div class="row">
-      <div class="col">
-        <div class="form-text px-3">
-          <x-valve data-bind="name@id" data-bind-template="${name}-message" data-direction="in" data-icon="box-arrow-up-right"></x-valve>
-          <x-valve data-bind="name@id" data-bind-template="${name}-event" data-direction="out" data-icon="envelope"></x-valve>
-          <span data-bind="name">DATA BIND NAME</span>
-          <div data-bind="description"><small>DATA BIND NAME</small></div>
-        </div>
-      </div>
-    </div>
+  <x-valve data-bind="name@id" data-bind-template="${name}-message" data-direction="in" data-icon="box-arrow-up-right"></x-valve>
+  <x-valve data-bind="name@id" data-bind-template="${name}-event" data-direction="out" data-icon="envelope"></x-valve>
+  <span data-bind="name">DATA BIND NAME</span>
+  <div data-bind="description"><small>DATA BIND NAME</small></div>
 </template>
 
 <div class="perspective movable" use="movable selectable focusable">

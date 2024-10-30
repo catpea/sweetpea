@@ -82,20 +82,20 @@ export default class View {
       for (const binding of bindings) {
         const [name, attribute] = binding.dataset.bind.split('@');
         const value = parameter[name]
-        //console.log('OOO', name, value);
+        ////console.log('OOO', name, value);
         switch (binding.tagName) {
           case 'INPUT':
             binding.value = value?.subscribe?value.get():value;
           case 'B':
-            //console.log('B');
+            ////console.log('B');
           default:
             if(attribute){
               const template = binding.dataset.bindTemplate;
               if(template){
-                console.warn('TODO: template literals htmlz`` ');
+                //console.warn('TODO: template literals htmlz`` ');
                 const data = {[name]:value};
                 const result = interpolate(template, data);
-                //console.log('OOO', {attribute, data, result, template});
+                ////console.log('OOO', {attribute, data, result, template});
                 binding.setAttribute(attribute, result);
 
               }else{

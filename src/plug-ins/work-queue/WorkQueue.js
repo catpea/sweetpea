@@ -40,8 +40,9 @@ export default class WorkQueue extends EventEmitter {
       if (task) {
         try {
           await task();
+          //console.info('Task complete');
         } catch (e) {
-          console.error('Error processing task:', e);
+          //console.error('Error processing task:', e);
         }
       }
     }

@@ -20,7 +20,7 @@ export default class AutomaticTransmission {
   }
 
   shift(toState) {
-    this.queue.enqueue(()=>this.changeState(toState));
+    this.queue.enqueue(async ()=> await this.changeState(toState));
   }
 
   async changeState(toState) {

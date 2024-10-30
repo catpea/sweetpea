@@ -11,7 +11,7 @@ export default class StageElement extends HTMLElement {
   constructor() {
     super();
     this.instance = new Stage(this);
-    console.log('THIS', this);
+    //console.log('THIS', this);
 
   }
   connectedCallback() {

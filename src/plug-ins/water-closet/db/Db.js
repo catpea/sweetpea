@@ -8,10 +8,10 @@ export default Inheritance => class Db extends Inheritance {
 
   db(id){
 
-    console.log('XXX', this.constructor.name);
+    //console.log('XXX', this.constructor.name);
     const stage = this.getStage();
 
-    console.log(stage, [...stage.children].map(o=>o.getAttribute('id')), [...stage.children].find(o=>o.getAttribute('id')===id), stage.getElementById);
+    //console.log(stage, [...stage.children].map(o=>o.getAttribute('id')), [...stage.children].find(o=>o.getAttribute('id')===id), stage.getElementById);
     const element = [...stage.children].find(o=>o.getAttribute('id')===id)
 
     const ensure = (element, signalName) => {

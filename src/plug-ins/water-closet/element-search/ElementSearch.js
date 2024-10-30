@@ -2,7 +2,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
 
 
   searchShadow(selector='*'){
-    // console.log(this.host.shadowRoot);
+    // //console.log(this.host.shadowRoot);
     return this.search(selector, {shadow:true, dom:false});
   }
 
@@ -50,18 +50,16 @@ export default Inheritance => class ElementSearch extends Inheritance {
   }
 
   getStage(){
+   let response = null;
 
+   //console.log('VVV', this);
+   //console.log('VVV', this.host.tagName.toLowerCase());
 
-    let response = null;
    if(this.host.tagName.toLowerCase() == `${globalThis.sweetpea.prefix}-stage`){
       response =  this.host;
     }else{
-      // response = upwards(this.host, `${globalThis.sweetpea.prefix}-stage`).pop();
       response = this.findOut(this.host, `${globalThis.sweetpea.prefix}-stage`);
-
     }
-    console.log('PPP',  this.host);
-    console.log('PPP',  this.host.tagName.toLowerCase(), response);
 
     return response;
   }
@@ -76,7 +74,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
   //
   //   }
   //
-  //   /////////console.log(`${this.host.tagName} getApplication()`, response);
+  //   ///////////console.log(`${this.host.tagName} getApplication()`, response);
   //
   //   return response;
   // }
@@ -110,6 +108,9 @@ export default Inheritance => class ElementSearch extends Inheritance {
         parent = element.parentNode;
       }else if(element instanceof ShadowRoot){
         parent = element.host;
+      }else{
+        //console.log(`Unable to locate parent for element`, element, element.parentElement, element.parentNode, element.host )
+        throw new Error(`Unable to locate parent for element.` )
       }
       // else if(element.host){
       //   parent = element.host;

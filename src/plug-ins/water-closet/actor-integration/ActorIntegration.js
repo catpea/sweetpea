@@ -15,8 +15,8 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
       options: { ...this.host.dataset }, //TODO: don't use dataset use signals...
 
-      // stage: this.getStage().actor,
-      stage:  document.querySelector('x-stage') .actor,
+      stage: this.getStage().actor,
+      // stage:  document.querySelector('x-stage') .actor,
       // stage: new EventEmittter(),
       // db: this.getStage().instance.db,
 
@@ -26,8 +26,8 @@ export default Inheritance => class ActorIntegration extends Inheritance {
     }
 
     let workerPath = this.host.getAttribute(attribute);
-    // console.log('TIME TRAVEL ERROR, stage is a fake emitter, becasue element may not be in DOM yet, this fixes not being able to connect tnodes but destroys calling stage .start!');
-    console.log('TIME TRAVEL ERROR, stage not available element may not be in DOM yet, USING document.querySelector("x-stage") .actor');
+    // //console.log('TIME TRAVEL ERROR, stage is a fake emitter, becasue element may not be in DOM yet, this fixes not being able to connect tnodes but destroys calling stage .start!');
+    //console.log('TIME TRAVEL ERROR, stage not available element may not be in DOM yet, USING document.querySelector("x-stage") .actor');
     if(workerPath){
       const {default: Actor} = await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`);
       this.actor = new Actor(setup);
@@ -47,7 +47,7 @@ export default Inheritance => class ActorIntegration extends Inheritance {
       if (!response.ok) throw new Error('Network response was not ok: ' + response.statusText);
       html = await response.text(); // Get the response text
     } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
+      //console.error('There was a problem with the fetch operation:', error);
     }
     const templateContainer = document.createElement('template');
     templateContainer.innerHTML = html;
