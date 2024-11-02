@@ -10,7 +10,8 @@ export default class DeveloperConsole extends Actor {
     console.warn(`DeveloperConsole ${this.id} on in: parameters`, parameters);
     console.warn(`DeveloperConsole ${this.id} on in:  console[parameters.type]`,  console[parameters.type]);
 
-    return console[parameters.type].bind(console)(parameters.value);
+    console[parameters.type].bind(console)(parameters.value);
+    return parameters.value; // pass it on
   }
 
 }

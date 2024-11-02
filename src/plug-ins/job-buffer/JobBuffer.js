@@ -1,36 +1,33 @@
 import EventEmitter from 'event-emitter';
+import Signal from 'signal';
 
-export default class JobBuffer  extends EventEmitter {
-  #buffer;
-
+export default class JobQueue  extends EventEmitter {
+  count = new Signal(0);
+  total = new Signal(0);
+  #list = [];
   constructor() {
     super()
-    // Initialize an empty buffer to store completed jobs
-    this.#buffer = [];
   }
-
-  [Symbol.iterator]() {
-    return this.#buffer[Symbol.iterator]();
-  }
-
-  // Method to add completed jobs to the buffer
   enbuffer(job) {
-    this.#buffer.push(job); // adds one or more elements to the end of an array
-    this.emit('enbuffer', job);
+    if(!job) throw new Error('Job is a required prameter');
 
+    this.#list.push(job);
+    this.count.set(this.#list.length);
+    this.total.alter(v=>v+1);
+    console.log('VVV JOB', job);
+    console.log('VVV TOTAL', this.total.value);
+    this.emit('enbuffer', job);
   }
   debuffer() {
-    this.#buffer.shift(job);
+    this.#list.shift(job);
+    this.count.set(this.#list.length);
+    this.emit('debuffer', job);
   }
   remove(id){
-    console.warn('TODO: remove work bugger item by ID');
+    this.#list.splice(this.#list.findIndex(o => o.id === id), 1);
+    this.count.set(this.#list.length);
   }
-  // Method to retrieve all jobs from the buffer
-  retrieveJobs() {
-    // Create a copy of the buffer to return
-    const jobs = [...this.#buffer];
-    // Clear the buffer
-    this.#buffer.length = 0;
-    return jobs;
+  [Symbol.iterator]() {
+    return this.#list[Symbol.iterator]();
   }
 }

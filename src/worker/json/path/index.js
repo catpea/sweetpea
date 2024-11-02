@@ -13,7 +13,7 @@ export default class JsonPath extends Actor {
     console.log('JsonPath parameters', parameters);
     console.log('JsonPath query', parameters.value, parameters.query);
     // console.log('JsonPath zbork', this.db.url.set('zbork') );
-    return jp.query(parameters.value, parameters.query);
+    return jp.query(parameters.value, parameters.query).map(value=>({value}));
   }
 
 }

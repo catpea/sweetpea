@@ -1,10 +1,13 @@
 import EventEmitter from 'event-emitter';
+import Signal from 'signal';
+
 
 // NOTE: Superclassed by src/worker/[category]/[name]/index.js
 export class Actor extends EventEmitter {
   #db;
   garbage = [];
-
+  hasInput = new Signal(true);
+  hasOutput = new Signal(true);
   //NOTE: /home/meow/Universe/Development/npm/sweetpea/src/plug-ins/water-closet/actor-integration/ActorIntegration.js
   constructor({ id, options, stage, worker, queue, buffer, db }){
 
@@ -19,6 +22,7 @@ export class Actor extends EventEmitter {
     this.stage = stage;
     this.queue = queue;
     this.buffer = buffer;
+
     const actor = this;
 
       // When message is sent to the actor
@@ -35,10 +39,25 @@ export class Actor extends EventEmitter {
 
       // When a new order is added to the queue
       queue.on('enqueue', async order => {
+
+        if(order === undefined) throw new Error('Enqueue Work order must be an object');
+
         const product = await this.work(order);
+
+        if(product === undefined){
+          queue.remove(order.id);
+          return; // STOP RUN
+        }
+
         // Store the finished product in the buffer
-        buffer.enbuffer(product);
-        // Remove the order from the queue, since it's been processed
+        if(Array.isArray(product)){
+          for (const item of product) {
+            buffer.enbuffer(item);
+          }
+        }else{
+          buffer.enbuffer(product);
+        }
+
         queue.remove(order.id);
       });
 

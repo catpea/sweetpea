@@ -2,6 +2,9 @@ import location from 'location';
 import masticator from 'masticator';
 import {Actor} from 'actor';
 import EventEmittter from 'event-emitter';
+import Signal from 'signal';
+import signalMerge from 'signal-merge';
+
 
 export default Inheritance => class ActorIntegration extends Inheritance {
   actor;
@@ -78,6 +81,31 @@ export default Inheritance => class ActorIntegration extends Inheritance {
     } = await import(`${location(window.location.href)}/src/supervisor/${supervisorPath}/View.js`);
     this.View = View;
     return this;
+  }
+
+
+
+  activateInputPort(selector = `[data-feature="standard-input"]`){
+    const subscription = this.actor.hasInput.subscribe(v=>this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.style.display = v?'block':'none'))
+    this.subscriptions.push( {type:'signal-merge', id:selector, subscription} );
+    return this;
+  }
+
+  activateOutputPort(selector = `[data-feature="standard-output"]`){
+    const subscription = this.actor.hasOutput.subscribe(v=>this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.style.display = v?'block':'none'))
+    this.subscriptions.push( {type:'signal-merge', id:selector, subscription} );
+    return this;
+  }
+
+  deactivateIO(selector = `[data-feature="standard-io"]`){
+    const merged = signalMerge({ hasInput: this.actor.hasInput, hasOutput: this.actor.hasOutput }, this.subscriptions);
+    const subscription = merged.subscribe(o=>{
+      const bothInActive = o.hasInput===false&&o.hasOutput===false;
+      console.log('RRR bothInActive', bothInActive, {...o});
+      this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.style.display = bothInActive?'none':'block');
+    })
+    this.subscriptions.push( {type:'signal-merge', id:selector, subscription} );
+
   }
 
 

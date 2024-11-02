@@ -23,6 +23,13 @@ export default class Super extends Theoretical {
         .connectEventsToView
         .triggerViewMount
         .useExtensions
+
+        .activateInputPort
+        .activateOutputPort
+        .liveQueueStats
+        .liveBufferStats
+        .deactivateIO
+
         .installVisualSelectionIndicator
         .dispatchReady
         .run()

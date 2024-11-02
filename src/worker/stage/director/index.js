@@ -12,6 +12,9 @@ export default class StageDirector extends Actor {
     super(...arguments);
     const actor = this;
 
+    actor.hasInput.value = false;
+    actor.hasOutput.value = false;
+
     stage.on('start', message => {
       actor.send('start-message:control', { event: 'request' });
     });

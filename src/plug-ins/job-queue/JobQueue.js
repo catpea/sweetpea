@@ -1,36 +1,31 @@
 import EventEmitter from 'event-emitter';
+import Signal from 'signal';
 
 export default class JobQueue  extends EventEmitter {
-  #queue;
-
+  count = new Signal(0);
+  total = new Signal(0);
+  #list = [];
   constructor() {
     super()
-    // Initialize an empty queue to store completed jobs
-    this.#queue = [];
   }
-
-  [Symbol.iterator]() {
-    return this.#queue[Symbol.iterator]();
-  }
-
-  // Method to add completed jobs to the queue
   enqueue(job) {
-    this.#queue.push(job); // adds one or more elements to the end of an array
-    this.emit('enqueue', job);
+    if(!job) throw new Error('Job is a required prameter');
 
+    this.#list.push(job);
+    this.count.set(this.#list.length);
+    this.total.alter(v=>v+1);
+    this.emit('enqueue', job);
   }
   dequeue() {
-    this.#queue.shift(job);
+    this.#list.shift(job);
+    this.count.set(this.#list.length);
+    this.emit('dequeue', job);
   }
   remove(id){
-    console.warn('TODO: remove work bugger item by ID');
+    this.#list.splice(this.#list.findIndex(o => o.id === id), 1);
+    this.count.set(this.#list.length);
   }
-  // Method to retrieve all jobs from the queue
-  retrieveJobs() {
-    // Create a copy of the queue to return
-    const jobs = [...this.#queue];
-    // Clear the queue
-    this.#queue.length = 0;
-    return jobs;
+  [Symbol.iterator]() {
+    return this.#list[Symbol.iterator]();
   }
 }

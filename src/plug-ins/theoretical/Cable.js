@@ -51,8 +51,13 @@ export default class Cable extends Theoretical {
 
     // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
     const subscription = fromProgram.actor.on(fromPortId, packet=>{
-      console.info(`Cable passing message between ${fromProgram.constructor.name} and ${toProgram.constructor.name}, on ports ${fromPortId} and ${toPortId} as they are connected with a cable.`);
-      toProgram.actor.send(toPortId, packet)
+
+      console.info(`Cable passing message between ${fromProgram.id} and ${toProgram.id}, on ports ${fromPortId}->${toPortId} as they are connected with a cable.`, packet);
+
+      if(packet == undefined) throw new Error('Packet is a required parameter');
+      if(packet.value == undefined) throw new Error('Packet .value is a required parameter');
+
+        toProgram.actor.send(toPortId, packet);
     });
     this.subscriptions.push( {type:'.actor', id:'from-pipe-to-pipe', subscription} );
 
@@ -90,11 +95,11 @@ export default class Cable extends Theoretical {
     const buffer = new Signal([]);
 
     const trash1 = fromSupervisor.state.subscribe(state=>{
-      buffer.alter(b=>b[0]=state);
+      buffer.alter(b=>{b[0]=state; return b;});
     })
 
     const trash2 = toSupervisor.state.subscribe(state=>{
-      buffer.alter(b=>b[1]=state);
+      buffer.alter(b=>{b[1]=state; return b;});
     })
 
     const trash3 = buffer.subscribe(buffer=>{

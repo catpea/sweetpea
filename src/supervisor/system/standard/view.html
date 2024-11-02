@@ -35,21 +35,22 @@
 
   <div class="card front shadow active-card">
     <div class="card-header drag-handle focusable-handle">
-      <!-- <span class="selectable-handle small">Standard Supervisor: </span> -->
       <span class="selectable-handle small" data-render="title"></span>
        <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
     </div>
-    <ul class="list-group list-group-flush">
+
+    <ul class="list-group list-group-flush" data-feature="standard-io">
       <li class="list-group-item">
-        <span class="badge rounded-pill text-bg-primary float-start">1,346,798 enqueued</span>
-        <span class="badge rounded-pill text-bg-secondary float-end">18.5k out</span>
-        <x-valve id="in" data-direction="in" data-icon="fire"></x-valve>
-        <x-valve id="out" data-direction="out" data-icon="fire"></x-valve>
+        <span data-feature="standard-input" class="in-info badge rounded-pill text-bg-dark float-start" data-template="${count}/${total}"></span>
+        <span data-feature="standard-output" class="out-info badge rounded-pill text-bg-dark float-end" data-template="${count}/${total}"></span>
+        <x-valve data-feature="standard-input" id="in" data-direction="in" data-icon="fire"></x-valve>
+        <x-valve data-feature="standard-output" id="out" data-direction="out" data-icon="fire"></x-valve>
       </li>
     </ul>
 
-    <ul class="list-group list-group-flush" data-render="parameters">
 
+
+    <ul class="list-group list-group-flush" data-render="parameters">
     </ul>
 
     <div class="card-footer text-wrap">
