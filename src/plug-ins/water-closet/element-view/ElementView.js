@@ -53,11 +53,12 @@ export default Inheritance => class ElementView extends Inheritance {
 
   triggerViewMount(){
 
-
-
     if('mount' in this.viewClass) this.viewClass.mount();
+
     this.subscriptions.push({type:'view-class/destroy', id:'view-class', subscription:()=>this.viewClass?.destroy()});
+    
     return this;
+
   }
 
 

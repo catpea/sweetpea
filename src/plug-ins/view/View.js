@@ -20,35 +20,35 @@ export default class View {
   pipe;
 
   constructor({core}){
-
+    //
     this.core   = core;
     this.stage  = core.getStage();
-    this.actor  = core.actor; // This is the .work object.
-    this.worker = core.worker; // this is a signal containing category/name of worker
-
-
-
-    this.worker.subscribe(async worker=>this.#WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${worker}/index.js`)).default));
-
-    this.worker.subscribe(worker=>this.core.host.shadowRoot.querySelector('[data-render=title]').innerText = worker);
-
-    this.#WorkerClass.subscribe(WorkerClass=>this.#workerInstance.set(new WorkerClass()))
-    this.#WorkerClass.subscribe(WorkerClass=>this.parameters.set(cloneDeep(WorkerClass.parameters)))
-    this.#workerInstance.subscribe(workerInstance=>{ });
-
-    this.parameters.subscribe(parameters=>{
-      for (const parameter of parameters) {
-        parameter.value = new Signal(parameter.default);
-        const subscription = parameter.value.subscribe(v=>this.renderParameters())
-        this.#garbage.push({subscription})
-      }
-    });
+    // this.actor  = core.actor; // This is the .work object.
+    // this.worker = core.worker; // this is a signal containing category/name of worker
+    //
+    //
+    //
+    // this.worker.subscribe(async worker=>this.#WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${worker}/index.js`)).default));
+    //
+    // this.worker.subscribe(worker=>this.core.host.shadowRoot.querySelector('[data-render=title]').innerText = worker);
+    //
+    // this.#WorkerClass.subscribe(WorkerClass=>this.#workerInstance.set(new WorkerClass()))
+    // this.#WorkerClass.subscribe(WorkerClass=>this.parameters.set(cloneDeep(WorkerClass.parameters)))
+    // this.#workerInstance.subscribe(workerInstance=>{ });
+    //
+    // this.parameters.subscribe(parameters=>{
+    //   for (const parameter of parameters) {
+    //     parameter.value = new Signal(parameter.default);
+    //     const subscription = parameter.value.subscribe(v=>this.renderParameters())
+    //     this.#garbage.push({subscription})
+    //   }
+    // });
 
   }
 
-  get db(){
-    return this.stage.instance.db( this.core.host.getAttribute('id') );
-  }
+  // get db(){
+  //   return this.stage.instance.db( this.core.host.getAttribute('id') );
+  // }
 
   renderParameters(){
     const template = this.core.host.shadowRoot.getElementById('parameters');

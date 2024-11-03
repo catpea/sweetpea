@@ -45,7 +45,12 @@ export default Inheritance => class Macro extends Inheritance {
                 }
               } catch (error) {
                 // Log any errors to help with debugging
-                console.error(`Error executing command.function: ${error}`, command);
+                console.error(error);
+                console.error(`Error executing command.function named: ${command.name}`, command);
+                console.error(`program object`, program);
+                console.error(`command object`, command);
+                throw new Error(error);
+
               }
             }
           };

@@ -3,11 +3,14 @@ import {EnumParameter, StringParameter} from 'system-parameters';
 
 export default class DeveloperConsole extends SystemWorker {
 
-  consoleType   = new EnumParameter({enumeratedMembers:[{value:'dir', text:'Messge of dir type', selected:true}, {value:'log', text:'Messge of log type'}, {value:'debug', text:'Messge of debug type'}, {value:'info', text:'Messge of info type'}, {value:'warn', text:'Messge of warn type'}], description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
+  consoleType   = new EnumParameter({enumeratedMembers:[{value:'dir', name:'Messge of dir type', selected:true}, {value:'log', name:'Messge of log type'}, {value:'debug', name:'Messge of debug type'}, {value:'info', name:'Messge of info type'}, {value:'warn', name:'Messge of warn type'}], description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
   templateText  = new StringParameter({defaultValue: "Data %s", description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
 
   async connected(){
-    outputPort.alter(v=>v.showPort=false);
+    // setTimeout(()=>{
+      this.inputPort.alter(v=>v.showPort=false);
+      this.outputPort.alter(v=>v.showPort=false);
+    // },5_000)
   }
 
   async process(input){

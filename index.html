@@ -8,6 +8,10 @@
     <script type="importmap">
     {
       "imports": {
+
+        "system-parameters": "./src/plug-ins/system-parameters/SystemParameters.js",
+        "system-integration": "./src/plug-ins/system-integration/SystemIntegration.js",
+
         "view": "./src/plug-ins/view/View.js",
         "interpolate": "./src/plug-ins/interpolate/index.js",
 
@@ -16,7 +20,7 @@
         "isEqual": "./src/plug-ins/is-equal/isEqual.js",
         "cloneDeep": "./src/plug-ins/clone-deep/cloneDeep.js",
 
-        "actor": "./src/plug-ins/actor/Actor.js",
+ 
 
         "automatic-transmission": "./src/plug-ins/automatic-transmission/AutomaticTransmission.js",
         "state-machine": "./src/plug-ins/state-machine/StateMachine.js",
@@ -87,13 +91,14 @@
 
 
 
+      <x-super id="developer-console" x="1600" y="166" supervisor="system/standard" worker="developer/console" data-type="dir" selected="true"> </x-super>
 
 
 
 
 
 
-               <x-super id="stage-director" x="433" y="279" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
+               <!-- <x-super id="stage-director" x="433" y="279" supervisor="system/standard" worker="stage/director" selected="false"> </x-super>
                <x-super id="http-fetch" x="865" y="67" supervisor="system/standard" worker="http/fetch" data-url="./samples/json-path-example.json" selected="false"> </x-super>
                <x-super id="json-path" x="1184" y="63" supervisor="system/standard" worker="json/path" data-query="$.store.book[*].author" selected="false"> </x-super>
                <x-super id="developer-console" x="1600" y="166" supervisor="system/standard" worker="developer/console" data-type="dir" selected="true"> </x-super>
@@ -105,7 +110,7 @@
                <x-cable id="cable-json-path-to-developer-console" from="json-path:out" to="developer-console:in" selected="false"></x-cable>
                <x-cable id="cable-json-object-to-stage-director:start" from="json-object:out" to="stage-director:start-message" selected="false"></x-cable>
                <x-cable id="cable-script-function-to-stage-director:stop" from="script-function:out" to="stage-director:stop-message" selected="false"></x-cable>
-               <x-cable id="cable-stage-director-to-http-fetch" from="stage-director:start-event" to="http-fetch:in" selected="false"></x-cable>
+               <x-cable id="cable-stage-director-to-http-fetch" from="stage-director:start-event" to="http-fetch:in" selected="false"></x-cable> -->
 
 
 

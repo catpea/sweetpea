@@ -21,9 +21,9 @@ export default class StageElement extends HTMLElement {
     this.instance.machine.transition('disconnected');
   }
 
-  get actor(){
-    if(!this.instance.actor) this.instance.actor = new EventEmitter();
-    return this.instance.actor;
+  get emitter(){
+    if(!this.instance.emitter) this.instance.emitter = new EventEmitter();
+    return this.instance.emitter;
   }
 
   get pan() {

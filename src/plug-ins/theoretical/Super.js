@@ -14,7 +14,9 @@ export default class Super extends Theoretical {
       },
       '/connected':{
         enter: async () => await this.macro
-        .createActor // NOTE: requres connection to parent
+
+        .createWorker // NOTE: requres connection to parent
+
         .installSupervisorTemplate
         .installSupervisorCSS
         .installSupervisorView
@@ -26,9 +28,12 @@ export default class Super extends Theoretical {
 
         .activateInputPort
         .activateOutputPort
+
+        .renderViewParameters
         .liveQueueStats
         .liveBufferStats
         .deactivateIO
+
 
         .installVisualSelectionIndicator
         .dispatchReady

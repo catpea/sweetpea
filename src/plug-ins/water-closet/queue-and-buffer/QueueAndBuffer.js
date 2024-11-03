@@ -1,7 +1,6 @@
 import JobQueue from 'job-queue';
 import JobBuffer from 'job-buffer';
 import interpolate from 'interpolate';
-import Signal from 'signal';
 import signalMerge from 'signal-merge';
 
 export default Inheritance => class QueueAndBuffer extends Inheritance {
