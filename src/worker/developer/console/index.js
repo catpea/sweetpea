@@ -1,17 +1,26 @@
-import {Actor} from 'actor';
+import {SystemWorker} from 'system-integration';
+import {EnumParameter, StringParameter} from 'system-parameters';
 
-export default class DeveloperConsole extends Actor {
+export default class DeveloperConsole extends SystemWorker {
 
-  static parameters = [
-    { name:"type",   default:'dir',    type:'string', description:'dir, log, debug, info, warn' },
-  ];
+  consoleType   = new EnumParameter({enumeratedMembers:[{value:'dir', text:'Messge of dir type', selected:true}, {value:'log', text:'Messge of log type'}, {value:'debug', text:'Messge of debug type'}, {value:'info', text:'Messge of info type'}, {value:'warn', text:'Messge of warn type'}], description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
+  templateText  = new StringParameter({defaultValue: "Data %s", description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
 
-  async work(parameters){
-    console.warn(`DeveloperConsole ${this.id} on in: parameters`, parameters);
-    console.warn(`DeveloperConsole ${this.id} on in:  console[parameters.type]`,  console[parameters.type]);
+  async connected(){
+    outputPort.alter(v=>v.showPort=false);
+  }
 
-    console[parameters.type].bind(console)(parameters.value);
-    return parameters.value; // pass it on
+  async process(input){
+    result = input;
+    console[this.consoleType].bind(console)(input);
+    return result;
+  }
+
+  async diagnostic(){
+    const input = Math.random();
+    const actual = await this.process(input);
+    const expected = input;
+    console.assert(actual, expected);
   }
 
 }

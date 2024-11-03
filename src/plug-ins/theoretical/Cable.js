@@ -95,11 +95,11 @@ export default class Cable extends Theoretical {
     const buffer = new Signal([]);
 
     const trash1 = fromSupervisor.state.subscribe(state=>{
-      buffer.alter(b=>{b[0]=state; return b;});
+      buffer.alter(b=>b[0]=state);
     })
 
     const trash2 = toSupervisor.state.subscribe(state=>{
-      buffer.alter(b=>{b[1]=state; return b;});
+      buffer.alter(b=>b[1]=state);
     })
 
     const trash3 = buffer.subscribe(buffer=>{

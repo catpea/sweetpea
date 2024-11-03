@@ -13,10 +13,7 @@ export default function signalMerge(signals, subscriptions){
 
   for (const signalName in signals) {
     const subscription = signals[signalName].subscribe(v=>{
-      merged.alter(m => {
-        m[signalName] = v;
-        return m
-      });
+      merged.alter(m => m[signalName] = v );
     });
     subscriptions.push( {type:'signal-merge-internal', id:signalName, subscription} );
   }
