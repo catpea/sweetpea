@@ -21,18 +21,17 @@ export default class Stage extends Theoretical {
          exit: () => console.log('Exiting Error state'),
       },
       connected: {
-        enter: () => this
-          .log('Entering Connected state')
+          enter: async () => await this.macro
+          .loadTheme
+          .getStageTemplate
+          .installTemplate
+          .installStageView
 
-          .getStageTemplate()
-          .installTemplate()
-          .installStageView()
+          .installStageListeners
 
-          .installStageListeners()
+          .instantiateView.connectEventsToView.triggerViewMount
 
-          .instantiateView().connectEventsToView().triggerViewMount()
-
-          .done,
+          .run(),
          exit: () => console.log('Exiting Connected state'),
        },
        disconnected: {

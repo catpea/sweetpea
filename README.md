@@ -6,6 +6,7 @@ Signal and Web Component Enhanced Web Apps
 - vplSystem bindInputs duplicates functionality of bind element, i don't want to inject bind element everywhere, this should also be updated to work with all inputs.
 
 ## TODO
+- fix bug where line is dropped on face of worker and no valve is found
 - add JSON LOGIC  https://jsonlogic.com/operations.html
 - add a binding component, use form data, and data set
 

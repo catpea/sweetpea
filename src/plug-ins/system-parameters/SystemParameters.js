@@ -20,4 +20,5 @@ export class Parameter extends Signal {
 export class EnumParameter extends Parameter { }
 export class StringParameter extends Parameter {}
 export class PortParameter extends Parameter {}
-export default { Parameter, EnumParameter, StringParameter, PortParameter }
+export class EventParameter extends Parameter {}
+export default { Parameter, EnumParameter, StringParameter, PortParameter, EventParameter }

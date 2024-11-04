@@ -1,36 +1,3 @@
-<template id="parameters">
-  <li class="list-group-item">
-    <slot></slot>
-  </li>
-</template>
-
-<template id="parameters-string">
-    <div class="form-floating">
-      <input id="floatingInput" type="text" class="form-control" data-bind="value">
-      <label for="floatingInput" data-bind="name">URL</label>
-    </div>
-</template>
-
-<template id="parameters-number">
-
-  <div class="row">
-    <div class="col">
-      <label for="inputPassword6" class="col-form-label">Number</label>
-    </div>
-    <div class="col">
-      <input type="number" class="form-control" data-bind="value">
-    </div>
-  </div>
-
-</template>
-
-<template id="parameters-event">
-  <x-valve data-bind="name@id" data-bind-template="${name}-message" data-direction="in" data-icon="box-arrow-up-right"></x-valve>
-  <x-valve data-bind="name@id" data-bind-template="${name}-event" data-direction="out" data-icon="envelope"></x-valve>
-  <span data-bind="name">DATA BIND NAME</span>
-  <div data-bind="description"><small>DATA BIND NAME</small></div>
-</template>
-
 <div class="perspective movable" use="movable selectable focusable">
 
   <div class="card front shadow active-card">
@@ -41,16 +8,17 @@
 
     <ul class="list-group list-group-flush" data-feature="standard-io">
       <li class="list-group-item">
+        &nbsp;
         <span data-feature="standard-input" class="in-info badge rounded-pill text-bg-dark float-start" data-template="${count}/${total}"></span>
         <span data-feature="standard-output" class="out-info badge rounded-pill text-bg-dark float-end" data-template="${count}/${total}"></span>
-        <x-valve data-feature="standard-input" id="in" data-direction="in" data-icon="fire"></x-valve>
-        <x-valve data-feature="standard-output" id="out" data-direction="out" data-icon="fire"></x-valve>
+        <x-valve data-feature="standard-input" id="input" data-direction="in" data-icon="fire"></x-valve>
+        <x-valve data-feature="standard-output" id="output" data-direction="out" data-icon="fire"></x-valve>
       </li>
     </ul>
 
 
 
-    <ul class="list-group list-group-flush" data-render="parameters">
+    <ul class="list-group list-group-flush" data-slot="parameters">
     </ul>
 
     <div class="card-footer text-wrap">

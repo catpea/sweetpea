@@ -8,8 +8,8 @@ export default class DeveloperConsole extends SystemWorker {
 
   async connected(){
     // setTimeout(()=>{
-      this.inputPort.alter(v=>v.showPort=false);
-      this.outputPort.alter(v=>v.showPort=false);
+      // this.input.alter(v=>v.showPort=false);
+      this.output.alter(v=>v.showPort=false);
     // },5_000)
   }
 

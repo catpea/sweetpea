@@ -1,0 +1,116 @@
+<html>
+  <body>
+
+
+    <template id="supervisor-interface">
+      <div class="perspective movable" use="movable selectable focusable">
+
+        <div class="card front shadow active-card">
+          <div class="card-header drag-handle focusable-handle">
+            <span class="selectable-handle small" data-render="title"></span>
+             <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
+          </div>
+
+          <ul class="list-group list-group-flush" data-feature="standard-io">
+            <li class="list-group-item">
+              <span data-feature="standard-input" class="in-info badge rounded-pill text-bg-dark float-start" data-template="${count}/${total}"></span>
+              <span data-feature="standard-output" class="out-info badge rounded-pill text-bg-dark float-end" data-template="${count}/${total}"></span>
+              <x-valve data-feature="standard-input" id="in" data-direction="in" data-icon="fire"></x-valve>
+              <x-valve data-feature="standard-output" id="out" data-direction="out" data-icon="fire"></x-valve>
+            </li>
+          </ul>
+
+
+
+          <ul class="list-group list-group-flush" data-slot="parameters">
+          </ul>
+
+          <div class="card-footer text-wrap">
+            <small>
+
+            </small>
+          </div>
+        </div>
+
+        <div class="card back worker-configuration shadow">
+          <div class="card-header drag-handle focusable-handle">
+            <span class="selectable-handle">Configuration</span> <button type="button" class="btn btn-sm btn-outline-success float-end" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;" onclick="(element, component)=>this.flip('.front')"><i class="bi bi-check-circle"></i></button>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+
+              <select class="form-select form-select-sm mb-2">
+
+                <option selected>Worker Category</option>
+                <option value="1">HTTP</option>
+                <option value="2">JSON</option>
+                <option value="3">DATA</option>
+
+              </select>
+
+              <select class="form-select form-select-sm mb-2">
+
+                <option selected>Worker</option>
+                <option value="1">Download File</option>
+                <option value="2">Save File</option>
+                <option value="3">Append To Log</option>
+
+              </select>
+
+
+            </li>
+            <li class="list-group-item">...</li>
+          </ul>
+          <div class="card-footer text-wrap">
+            <small class="muted">
+            Configure your component
+            </small>
+          </div>
+        </div>
+
+      </div>
+    </template>
+
+
+    <template id="worker-parameters">
+      <li class="list-group-item" data-slot="type">
+      </li>
+    </template>
+
+    <template id="worker-parameters-enum">
+      <div class="form-floating">
+        <input id="floatingInput" type="text" class="form-control" data-bind="value">
+        <label for="floatingInput" data-bind="name">URL</label>
+      </div>
+    </template>
+
+    <template id="worker-parameters-string">
+      <div class="form-floating">
+        <input id="floatingInput" type="text" class="form-control" data-bind="value">
+        <label for="floatingInput" data-bind="name">URL</label>
+      </div>
+    </template>
+
+    <template id="worker-parameters-number">
+      <div class="row">
+        <div class="col">
+          <label for="inputPassword6" class="col-form-label">Number</label>
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" data-bind="value">
+        </div>
+      </div>
+    </template>
+
+    <template id="worker-parameters-event">
+      <x-valve data-bind="name@id" data-bind-template="${name}-message" data-direction="in" data-icon="box-arrow-up-right"></x-valve>
+      <x-valve data-bind="name@id" data-bind-template="${name}-event" data-direction="out" data-icon="envelope"></x-valve>
+      <span data-bind="name">DATA BIND NAME</span>
+      <div data-bind="description"><small>DATA BIND NAME</small></div>
+    </template>
+
+
+
+
+  </body>
+</html>

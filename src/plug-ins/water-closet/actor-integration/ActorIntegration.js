@@ -24,6 +24,10 @@ export default Inheritance => class ActorIntegration extends Inheritance {
     templateContainer.innerHTML = html;
     this.template = templateContainer.content.cloneNode(true);
     return this;
+    // console.log(this.getStage().instance);
+    // console.log(this.getStage().instance.theme);
+    // const template = this.getStage().instance.theme.template('supervisor-template');
+    // return this;
   }
 
   async installSupervisorCSS({attribute}={attribute:"supervisor"}){

@@ -18,8 +18,10 @@ export default class Super extends Theoretical {
         .createWorker // NOTE: requres connection to parent
 
         .installSupervisorTemplate
+
         .installSupervisorCSS
         .installSupervisorView
+
         .installTemplate
         .instantiateView
         .connectEventsToView

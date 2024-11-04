@@ -1,44 +1,49 @@
-import {Actor} from 'actor';
+import {SystemWorker} from 'system-integration';
+import {EnumParameter, StringParameter, EventParameter} from 'system-parameters';
 
-export default class StageDirector extends Actor {
+export default class DeveloperConsole extends SystemWorker {
 
-  static parameters = [
-    { name:"start",   default:"start", type:'event', description:'Sends object on start.' },
-    { name:"stop",    default:"stop", type:'event', description:'Sends object on stop.' },
-  ];
+  start = new EventParameter({});
+  stop  = new EventParameter({});
 
-  // Special installer for director which pulls packets.
-  constructor({ stage, worker, queue, cache }){
-    super(...arguments);
-    const actor = this;
+  async connect(){
+    // Stage Director has its own connect protocol, it overrides the superclass
 
-    actor.hasInput.value = false;
-    actor.hasOutput.value = false;
-
-    stage.on('start', message => {
-      actor.send('start-message:control', { event: 'request' });
+    this.stage.on('start', message => {
+      this.send('start-message:control', { event: 'request' });
     });
-    stage.on('exit', message => {
-      actor.send('exit-message:control', { event: 'request' });
+    this.stage.on('exit', message => {
+      this.send('exit-message:control', { event: 'request' });
     });
 
-    actor.on('start-message', packet=>{
+    this.on('start-message', packet=>{
       console.info(`StageDirector got start-message`, packet);
-      actor.send('start-event', packet);
+      this.send('start-event', packet);
     });
 
-    actor.on('exit-message', packet=>{
+    this.on('exit-message', packet=>{
       console.info(`StageDirector got exit-message`, packet);
-      actor.send('exit-event', packet);
+      this.send('exit-event', packet);
     });
-
   }
 
-  // Override in Subclass
-  async worker({value}){
+  async connected(){
+    this.input.alter(v=>v.showPort=false);
+    this.output.alter(v=>v.showPort=false);
+  }
+
+  async process(input, parameters){
     const date = new Date();
     const timestamp = date.toISOString()
-    return {timestamp, value};
+    result = {timestamp, input};
+    return result;
+  }
+
+  async diagnostic(){
+    const input = Math.random();
+    const actual = await this.process(input);
+    const expected = input;
+    console.assert(actual, expected);
   }
 
 }
