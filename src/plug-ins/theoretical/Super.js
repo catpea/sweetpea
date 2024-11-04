@@ -14,7 +14,7 @@ export default class Super extends Theoretical {
       },
       '/connected':{
         enter: async () => await this.macro
-
+        .awaitStageReady
         .createWorker // NOTE: requres connection to parent
 
         .installSupervisorTemplate
@@ -64,6 +64,20 @@ export default class Super extends Theoretical {
     }
     this.transmission = new AutomaticTransmission(gearbox, '/idle');
 
+  }
+
+
+  async awaitStageReady(){
+
+    const stage = this.getStage().instance;
+    const promise = new Promise(resolve => {
+      // this.gc = stage.state.subscribe(state=>console.log('WWW-state->', state))
+      this.gc = stage.state.subscribe(state=>state=='ready'?resolve():null)
+    });
+    // console.log('WWW WAITING');
+    await promise;
+    // console.log('WWW FINISHED WAITING');
+    return this;
   }
 
   installVisualSelectionIndicator(){

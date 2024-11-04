@@ -21,9 +21,11 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
   async createWorker({attribute}={attribute:"worker"}){
     this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
-    this.gc = this.workerPath.subscribe(workerPath=>console.log({workerPath}))
-    this.gc = this.WorkerClass.subscribe(WorkerClass=>console.log({WorkerClass}))
-    this.gc = this.workerInstance.subscribe(workerInstance=>console.log({workerInstance}))
+
+    // this.gc = this.workerPath.subscribe(workerPath=>console.log({workerPath}))
+    // this.gc = this.WorkerClass.subscribe(WorkerClass=>console.log({WorkerClass}))
+    // this.gc = this.workerInstance.subscribe(workerInstance=>console.log({workerInstance}))
+
     this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass(this.getStage().emitter) )
     this.gc = this.workerInstance.subscribe(async workerInstance=>{ await workerInstance.connected(); await workerInstance.connected() });
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removeal of element
@@ -74,7 +76,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
 
     for (const parameter of parameters) {
-      console.dir(parameter);
+      // console.dir(parameter);
       if (parameter.type === 'port') { // taken care of
         continue;
       }
@@ -82,7 +84,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       const contentNode = this.getStage().instance.theme.template('worker-parameters');
       const typeNode = this.getStage().instance.theme.template(`worker-parameters-${parameter.type}`);
 
-      console.log('PPP', contentNode);
+      // console.log('PPP', contentNode);
       contentNode.querySelector('[data-slot=type]').appendChild(typeNode);
 
       // WorkerSupport binding of bindings

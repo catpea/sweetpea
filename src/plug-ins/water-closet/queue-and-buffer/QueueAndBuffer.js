@@ -11,7 +11,7 @@ export default Inheritance => class QueueAndBuffer extends Inheritance {
   liveQueueStats(selector=".in-info"){
     const merged = signalMerge({ count: this.queue.count, total: this.queue.total }, this.subscriptions);
     const subscription = merged.subscribe(o=>this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.innerHTML = interpolate(el.dataset.template, o)))
-    merged.subscribe(o=> console.log('CCC merged', o ))
+    // merged.subscribe(o=> console.log('CCC merged', o ))
     this.subscriptions.push( {type:'signal-merge', id:selector, subscription} );
     return this;
   }

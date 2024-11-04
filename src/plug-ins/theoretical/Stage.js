@@ -30,7 +30,7 @@ export default class Stage extends Theoretical {
           .installStageListeners
 
           .instantiateView.connectEventsToView.triggerViewMount
-
+          .dispatchReady
           .run(),
          exit: () => console.log('Exiting Connected state'),
        },
