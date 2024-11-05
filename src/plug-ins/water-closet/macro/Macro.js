@@ -29,32 +29,15 @@ export default Inheritance => class Macro extends Inheritance {
         if (property == 'run') {
           // When 'run' is called, execute all stored functions asynchronously in order
           return async ({ verbosity } = { verbosity: 0 }) => {
-
-            // If verbosity is positive, log what commands will be executed
             if (verbosity) console.log('Cheerfully executing', program.map(o => o.name).join(' '));
-
-            // Loop through each command in the program array
             for (const command of program) {
-              try {
-                // Check if the command is asynchronous, and wait for it if so
-                if (command.asynchronous) {
-                  await command.function();
-                } else {
-                  // Just call the function directly if it's not asynchronous
-                  command.function();
-                }
-              } catch (error) {
-                // Log any errors to help with debugging
-                console.error(error);
-                console.error(`Error executing command.function named: ${command.name}`, command);
-                console.error(`program object`, program);
-                console.error(`command object`, command);
-                throw new Error(error);
-
+              if (command.asynchronous) {
+                await command.function();
+              }else{
+                command.function();
               }
             }
           };
-
         } else {
           // Check if the property is a function on the target object
           const isFunction = typeof target[property] === 'function';
@@ -68,6 +51,7 @@ export default Inheritance => class Macro extends Inheritance {
             name: property, // The name of the function or method
             asynchronous, // Whether the function is async or not
             function: target[property].bind(target) // The function itself, bound to the target
+            // function: async ()=> await target[property]()
           };
 
           // Add the command to the program array to be executed later

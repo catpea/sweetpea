@@ -47,12 +47,7 @@ export default Inheritance => class ActorIntegration extends Inheritance {
 
   async installSupervisorView({attribute}={attribute:"supervisor"}){
     let supervisorPath = this.host.getAttribute(attribute);
-
-  const {
-      default: View,
-      foo,
-      bar,
-    } = await import(`${location(window.location.href)}/src/supervisor/${supervisorPath}/View.js`);
+    const { default: View } = await import(`${location(window.location.href)}/src/supervisor/${supervisorPath}/View.js`);
     this.View = View;
     return this;
   }

@@ -8,7 +8,7 @@ export default class SuperElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['x', 'y', 'supervisor', 'worker', 'selected'];
+    return ['x', 'y', 'supervisor', 'worker', 'selected', 'debug'];
   }
 
   constructor() {
@@ -29,6 +29,7 @@ export default class SuperElement extends HTMLElement {
     const attributeHandlers = {
       'x y': () => this.updatePosition(),
       'selected': () => this.instance.selected.set(newValue==="true"?true:false),
+      'debug': () => this.instance.debug.set(newValue==="true"?true:false),
       'worker': () => this.instance.workerPath.set(newValue), //TODO: sanitize path for safe server-side work
     };
 
@@ -55,8 +56,12 @@ export default class SuperElement extends HTMLElement {
     })
   }
 
+  get id(){
+    return this.getAttribute('id');
+  }
+
   get actor(){
-    return this.instance.actor
+    return this.instance.workerInstance.value
   }
 
   get state(){

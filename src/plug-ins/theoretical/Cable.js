@@ -14,10 +14,17 @@ export default class Cable extends Theoretical {
         enter: () => this.attachShadow().adoptCss()
       },
       '/connected':{
-        enter: () => this.locateSvg().drawLine().makeLineSelectable().installVisualSelectionIndicator().awaitSupervisors()
+        enter: async () => await this.macro
+        .awaitStageReady
+        .locateSvg
+        .drawLine
+        .makeLineSelectable
+        .installVisualSelectionIndicator
+        .awaitSupervisors
+        .run()
       },
       '/connected/idle': {
-        enter: () => this.connectPipe().monitorSourcePosition().monitorTargetPosition()
+        enter: () => this.connectDataPipe().monitorSourcePosition().monitorTargetPosition()
       },
       '/connected/busy': {
         enter: () => ()=>disconnectPipe(),
@@ -32,16 +39,13 @@ export default class Cable extends Theoretical {
     }
 
     this.transmission = new AutomaticTransmission(gearbox, '/idle');
-    // this.subscriptions.push( {type:'queue', id:'transmission jobs...', subscription:()=>this.transmission.stop()} );
-
   }
 
 
 
 
 
-  connectPipe(){
-
+  connectDataPipe(){
     const [,fromPortId] = this.host.getAttribute('from').split(':');
     const [,toPortId] = this.host.getAttribute('to').split(':');
 
@@ -51,14 +55,12 @@ export default class Cable extends Theoretical {
 
     // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
     const subscription = fromProgram.actor.on(fromPortId, packet=>{
-
       console.info(`Cable passing message between ${fromProgram.id} and ${toProgram.id}, on ports ${fromPortId}->${toPortId} as they are connected with a cable.`, packet);
-
       if(packet == undefined) throw new Error('Packet is a required parameter');
       if(packet.value == undefined) throw new Error('Packet .value is a required parameter');
-
         toProgram.actor.send(toPortId, packet);
     });
+
     this.subscriptions.push( {type:'.actor', id:'from-pipe-to-pipe', subscription} );
 
     //console.log('ttt', `${toPortId}:control`);
@@ -66,22 +68,9 @@ export default class Cable extends Theoretical {
 
     this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription} );
 
+
     return this;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   awaitSupervisors(){
 
@@ -94,15 +83,15 @@ export default class Cable extends Theoretical {
     const verdict = new Signal(null);
     const buffer = new Signal([]);
 
-    const trash1 = fromSupervisor.state.subscribe(state=>{
+    this.gc = fromSupervisor.state.subscribe(state=>{
       buffer.alter(b=>b[0]=state);
     })
 
-    const trash2 = toSupervisor.state.subscribe(state=>{
+    this.gc = toSupervisor.state.subscribe(state=>{
       buffer.alter(b=>b[1]=state);
     })
 
-    const trash3 = buffer.subscribe(buffer=>{
+    this.gc = buffer.subscribe(buffer=>{
       if (buffer.length === 0) return;
       if(buffer.every(v=>v==='idle')){
         verdict.set('idle')
@@ -119,9 +108,9 @@ export default class Cable extends Theoretical {
       busy: '/connected/busy',
     }
 
-    const trash4 = verdict.subscribe(v=> v && this.transmission.shift(verdicts[v]) );
+    this.gc = verdict.subscribe(v=> v && this.transmission.shift(verdicts[v]) );
+    // this.gc = verdict.subscribe(v=>  console.log('VERDICT', v) );
 
-    [trash1,trash2,trash3,trash4].map(subscription=>this.subscriptions.push( {type:'signal', id:'signal-trash...', subscription} ))
 
     return this;
 
@@ -235,6 +224,64 @@ export default class Cable extends Theoretical {
       this.monitorPosition('to', (x,y)=>{ this.#x2.set(x); this.#y2.set(y); });
       return this;
     }
+
+
+    monitorPosition(attributeName, fun){
+      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
+      const stage = this.getStage();
+      const programComponent = stage.querySelector('#'+componentId);
+      const targetNode = programComponent.shadowRoot.querySelector('[data-slot=parameters]')
+
+
+      // console.log(`monitorPosition: componentId=${componentId} portId=${portId}`);
+
+      const config = { attributes: false, childList: true, subtree: true };
+
+      // Callback function to execute when mutations are observed
+      const callback = (mutationList, observer) => {
+        //console.log('EEE mutationList',  mutationList);
+        for (const mutation of mutationList) {
+          if (mutation.type === "childList") {
+            const portNode = programComponent.shadowRoot.getElementById(portId);
+            if(!portNode) throw new Error(`Unable to locate port #${portId} in #${componentId}`)
+            const portExists = !!portNode;
+            if(portExists){
+              this.monitorPosition2(attributeName, fun);
+            }
+          } else if (mutation.type === "attributes") {
+            //console.log(`The ${mutation.attributeName} attribute was modified.`);
+          }
+        }
+      };
+
+      const observer = new MutationObserver(callback);
+      observer.observe(targetNode, config);
+
+      this.subscriptions.push( {type:'observer.observe', id:'ports', subscription:()=>observer.disconnect()} );
+
+      // sometimes no changes are triggered
+      callback([{type:'childList'}])
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -359,48 +406,6 @@ export default class Cable extends Theoretical {
 
     }
 
-
-    monitorPosition(attributeName, fun){
-
-      let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
-      const stage = this.getStage();
-      const programComponent = stage.querySelector('#'+componentId);
-      const targetNode = programComponent.shadowRoot.querySelector('[data-render=parameters]')
-      const config = { attributes: false, childList: true, subtree: true };
-
-      //console.log('RRR monitorPosition', programComponent.tagNattributeName, programComponent.getAttribute('id'), targetNode);
-
-      //console.log('WWW',  targetNode);
-
-      // Callback function to execute when mutations are observed
-      const callback = (mutationList, observer) => {
-        //console.log('EEE mutationList',  mutationList);
-        for (const mutation of mutationList) {
-          if (mutation.type === "childList") {
-            //console.log("RRR A child node has been added or removed.");
-            //console.log('RRR programComponent', programComponent);
-            const portNode = programComponent.shadowRoot.getElementById(portId);
-            //console.log('RRR portNode', portNode);
-
-            const portExists = !!portNode;
-            //console.log('RRR portExists', portExists);
-            if(portExists){
-              this.monitorPosition2(attributeName, fun);
-            }
-          } else if (mutation.type === "attributes") {
-            //console.log(`The ${mutation.attributeName} attribute was modified.`);
-          }
-        }
-      };
-
-
-      const observer = new MutationObserver(callback);
-      observer.observe(targetNode, config);
-      this.subscriptions.push( {type:'observer.observe', id:'ports', subscription:()=>observer.disconnect()} );
-
-      // sometimes no changes are triggered
-      callback([{type:'childList'}])
-    }
 
     monitorPosition2(attributeName, fun){
 

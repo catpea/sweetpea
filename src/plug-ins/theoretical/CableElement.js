@@ -7,7 +7,7 @@ export default class CableElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['selected'];
+    return ['selected', 'debug'];
   }
 
   constructor() {
@@ -26,6 +26,7 @@ export default class CableElement extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     const attributeHandlers = {
       'selected': () => this.instance.selected.set(newValue==="true"?true:false),
+      'debug': () => this.instance.debug.set(newValue==="true"?true:false),
     };
 
     if (oldValue == newValue) return;
@@ -35,6 +36,10 @@ export default class CableElement extends HTMLElement {
       if(hasChanged) handler();
     }
 
+  }
+
+  get id(){
+    return this.getAttribute('id');
   }
 
 }

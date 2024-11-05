@@ -38,12 +38,7 @@ export default class WorkQueue extends EventEmitter {
     while (this.#queue.length > 0) {
       const task = this.#dequeue();
       if (task) {
-        try {
-          await task();
-          //console.info('Task complete');
-        } catch (e) {
-          //console.error('Error processing task:', e);
-        }
+        await task();
       }
     }
     this.#isProcessing = false;

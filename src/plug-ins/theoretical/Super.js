@@ -18,7 +18,6 @@ export default class Super extends Theoretical {
         .createWorker // NOTE: requres connection to parent
 
         .installSupervisorTemplate
-
         .installSupervisorCSS
         .installSupervisorView
 
@@ -67,18 +66,7 @@ export default class Super extends Theoretical {
   }
 
 
-  async awaitStageReady(){
 
-    const stage = this.getStage().instance;
-    const promise = new Promise(resolve => {
-      // this.gc = stage.state.subscribe(state=>console.log('WWW-state->', state))
-      this.gc = stage.state.subscribe(state=>state=='ready'?resolve():null)
-    });
-    // console.log('WWW WAITING');
-    await promise;
-    // console.log('WWW FINISHED WAITING');
-    return this;
-  }
 
   installVisualSelectionIndicator(){
     const subscription = this.selected.subscribe(selected=>{
