@@ -1,15 +1,19 @@
 import {SystemWorker} from 'system-integration';
 import {EnumParameter, StringParameter, EventParameter} from 'system-parameters';
 
-export default class DeveloperConsole extends SystemWorker {
+export default class StageDirector extends SystemWorker {
 
   start = new EventParameter({});
   stop  = new EventParameter({});
 
   async connect(){
-    // Stage Director has its own connect protocol, it overrides the superclass
+    await super.connect();
+
+    // Stage Director has its own connect protocol.
+    console.info('Stage Director has its own connect protocol as well, installing...');
 
     this.stage.on('start', message => {
+      console.log('sending start-message:control');
       this.send('start-message:control', { event: 'request' });
     });
     this.stage.on('exit', message => {

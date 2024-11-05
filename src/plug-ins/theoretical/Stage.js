@@ -25,6 +25,8 @@ export default class Stage extends Theoretical {
           .loadTheme
           .getStageTemplate
           .installTemplate
+
+
           .installStageView
 
           .installStageListeners
@@ -184,7 +186,7 @@ export default class Stage extends Theoretical {
       constructor({core}){
 
         this.core = core;
-        this.stage = core.getStage().actor;
+        this.stage = core.getStage().emitter;
         this.actor = core.actor;
         this.worker = core.worker; // this is a signal containing category/name of worker
 

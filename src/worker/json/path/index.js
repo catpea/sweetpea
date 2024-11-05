@@ -1,22 +1,49 @@
-import {Actor} from 'actor';
+import {SystemWorker} from 'system-integration';
+import {EnumParameter, StringParameter} from 'system-parameters';
+
 import jp from './jsonpath.min.js';
-// const jp = require('your-module-name');
 
-export default class JsonPath extends Actor {
+export default class JsonPath extends SystemWorker {
 
-  static parameters = [
-    { name:"query",   default:'$.store.book[*].author',    type:'string', description:'the authors of all books in the store' },
-  ];
+  queryString  = new StringParameter({defaultValue: "$.store.book[*].author", description: "JSON Path Expression" });
 
-  async work(parameters){
-    console.log('jsonpath', jp);
-    console.log('JsonPath parameters', parameters);
-    console.log('JsonPath query', parameters.value, parameters.query);
-    // console.log('JsonPath zbork', this.db.url.set('zbork') );
-    return jp.query(parameters.value, parameters.query).map(value=>({value}));
+  async connected(){
+    // this.output.alter(v=>v.showPort=false);
+  }
+
+  async process(input){
+    console.warn('USING defaultValue FOR TESTING');
+    return jp.query(input, this.queryString.value.defaultValue).map(value=>({value}));;
+  }
+
+  async diagnostic(){
+    const input = Math.random();
+    const actual = await this.process(input);
+    const expected = input;
+    console.assert(actual, expected);
   }
 
 }
+
+
+// import {Actor} from 'actor';
+// // const jp = require('your-module-name');
+//
+// export default class JsonPath extends Actor {
+//
+//   static parameters = [
+//     { name:"query",   default:'$.store.book[*].author',    type:'string', description:'the authors of all books in the store' },
+//   ];
+//
+//   async work(parameters){
+//     console.log('jsonpath', jp);
+//     console.log('JsonPath parameters', parameters);
+//     console.log('JsonPath query', parameters.value, parameters.query);
+//     // console.log('JsonPath zbork', this.db.url.set('zbork') );
+//     return jp.query(parameters.value, parameters.query).map(value=>({value}));
+//   }
+//
+// }
 
 /*
   EXAMPLES

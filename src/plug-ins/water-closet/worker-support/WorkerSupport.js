@@ -26,8 +26,8 @@ export default Inheritance => class WorkerSupport extends Inheritance {
     // this.gc = this.WorkerClass.subscribe(WorkerClass=>console.log({WorkerClass}))
     // this.gc = this.workerInstance.subscribe(workerInstance=>console.log({workerInstance}))
 
-    this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass(this.getStage().emitter) )
-    this.gc = this.workerInstance.subscribe(async workerInstance=>{ await workerInstance.connected(); await workerInstance.connected() });
+    this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass({queue:this.queue, buffer:this.buffer, stage:this.getStage().emitter}) )
+    this.gc = this.workerInstance.subscribe(async workerInstance=>{ await workerInstance.connect(); await workerInstance.connected() });
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removeal of element
     return this;
   }

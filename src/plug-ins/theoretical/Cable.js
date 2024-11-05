@@ -55,9 +55,9 @@ export default class Cable extends Theoretical {
 
     // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
     const subscription = fromProgram.actor.on(fromPortId, packet=>{
-      console.info(`Cable passing message between ${fromProgram.id} and ${toProgram.id}, on ports ${fromPortId}->${toPortId} as they are connected with a cable.`, packet);
+      // console.info(`Cable passing message between ${fromProgram.id} and ${toProgram.id}, on ports ${fromPortId}->${toPortId} as they are connected with a cable.`, packet);
       if(packet == undefined) throw new Error('Packet is a required parameter');
-      if(packet.value == undefined) throw new Error('Packet .value is a required parameter');
+      // if(packet.value == undefined) throw new Error('Packet .value is a required parameter');
         toProgram.actor.send(toPortId, packet);
     });
 
