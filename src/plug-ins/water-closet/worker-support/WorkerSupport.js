@@ -21,15 +21,14 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
   async createWorker({attribute}={attribute:"worker"}){
     this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
-
-    // this.gc = this.workerPath.subscribe(workerPath=>console.log({workerPath}))
-    // this.gc = this.WorkerClass.subscribe(WorkerClass=>console.log({WorkerClass}))
-    // this.gc = this.workerInstance.subscribe(workerInstance=>console.log({workerInstance}))
-
     this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass({queue:this.queue, buffer:this.buffer, stage:this.getStage().emitter}) )
     this.gc = this.workerInstance.subscribe(async workerInstance=>{ await workerInstance.connect(); await workerInstance.connected() });
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removeal of element
+
+
+    await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
     return this;
+
   }
 
   activateInputPort(selector = `[data-feature="standard-input"]`){
