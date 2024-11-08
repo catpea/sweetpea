@@ -1,14 +1,6 @@
-import Signal from 'signal';
-import location from 'location';
-
-// import location from 'location';
-// import masticator from 'masticator';
-// import EventEmittter from 'event-emitter';
-// import Signal from 'signal';
-// import Signal from 'signal';
-// import cloneDeep from 'cloneDeep';
-// import location from 'location';
 import interpolate from 'interpolate';
+import location from 'location';
+import Signal from 'signal';
 
 
 import signalMerge from 'signal-merge';
@@ -19,13 +11,11 @@ export default Inheritance => class WorkerSupport extends Inheritance {
   WorkerClass = new Signal();
   workerInstance = new Signal();
 
-  async createWorker({attribute}={attribute:"worker"}){
+  async createWorker(){
     this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
     this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass({queue:this.queue, buffer:this.buffer, stage:this.getStage().emitter}) )
     this.gc = this.workerInstance.subscribe(async workerInstance=>{ await workerInstance.connect(); await workerInstance.connected() });
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removeal of element
-
-
     await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
     return this;
 
@@ -83,15 +73,16 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       const contentNode = this.getStage().instance.theme.template('worker-parameters');
       const typeNode = this.getStage().instance.theme.template(`worker-parameters-${parameter.type}`);
 
-      // console.log('PPP', contentNode);
       contentNode.querySelector('[data-slot=type]').appendChild(typeNode);
 
       // WorkerSupport binding of bindings
       const bindings = contentNode.querySelectorAll('[data-bind]');
       for (const binding of bindings) {
+
+        //NOTE: split
         const [name, attribute] = binding.dataset.bind.split('@');
         const value = parameter[name]
-        ////console.log('OOO', name, value);
+
         switch (binding.tagName) {
           case 'INPUT':
             binding.value = value?.subscribe?value.get():value;

@@ -58,6 +58,16 @@ export default class Signal {
     }
   }
 
+  update(f) { // operates on instances
+    const oldValue = cloneDeep(this.#value);
+    const newValue = f(this.#value);
+
+    if(!isEqual(oldValue, newValue)){
+      this.#value = newValue;
+      this.notify();
+    }
+  }
+
   prop(key, value) { // operates on instances
     const oldValue = this.#value[key];
     const newValue = value;

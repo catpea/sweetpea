@@ -73,7 +73,7 @@ export class SystemWorker extends EventEmittter {
 
     // Control protocol aka DATA PULL
     actor.on('control', control=>{
-      console.log(`${this.constructor.name} got control packet!`, control);
+      // console.log(`${this.constructor.name} got control packet!`, control);
       switch(control.event) {
         case 'request':
           actor.transmit(control.event||1);

@@ -13,7 +13,7 @@ export default class JobQueue  extends EventEmitter {
 
     this.#list.push(job);
     this.count.set(this.#list.length);
-    this.total.alter(v=>v+1);
+    this.total.update((v) => (v++,v));
     this.emit('enqueue', job);
   }
   dequeue() {

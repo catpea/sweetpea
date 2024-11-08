@@ -10,25 +10,7 @@ export default Inheritance => class ActorIntegration extends Inheritance {
   View;
 
   async installSupervisorTemplate({attribute}={attribute:"supervisor"}){
-    // let supervisorPath = this.host.getAttribute(attribute);
-    //     let url = `${location(window.location.href)}/src/supervisor/${supervisorPath}/view.html`;
-    // let html;
-    // try {
-    //   const response = await fetch(url);
-    //   if (!response.ok) throw new Error('Network response was not ok: ' + response.statusText);
-    //   html = await response.text(); // Get the response text
-    // } catch (error) {
-    //   //console.error('There was a problem with the fetch operation:', error);
-    // }
-    // const templateContainer = document.createElement('template');
-    // templateContainer.innerHTML = html;
-    // this.template = templateContainer.content.cloneNode(true);
-    // return this;
-
-    // console.log(this.getStage().instance);
-    // console.log(this.getStage().instance.theme);
     this.template = this.getStage().instance.theme.template('supervisor-interface');
-
     return this;
   }
 

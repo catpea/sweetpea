@@ -23,6 +23,8 @@ export default class Super extends Theoretical {
 
         .installTemplate
         .instantiateView
+        .renderViewSlots
+
         .connectEventsToView
         .triggerViewMount
         .useExtensions
@@ -31,6 +33,7 @@ export default class Super extends Theoretical {
         .activateOutputPort
 
         .renderViewParameters
+
         .liveQueueStats
         .liveBufferStats
         .deactivateIO

@@ -7,14 +7,14 @@
 
         <div class="card front shadow active-card">
           <div class="card-header drag-handle focusable-handle">
-            <span class="selectable-handle small" data-render="title"></span>
+            <span class="selectable-handle small" data-slot="worker-path">ddd</span>
              <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
           </div>
 
           <ul class="list-group list-group-flush" data-feature="standard-io">
             <li class="list-group-item">
-              <span data-feature="standard-input" class="in-info badge rounded-pill text-bg-dark float-start" data-template="${count}/${total}"></span>
-              <span data-feature="standard-output" class="out-info badge rounded-pill text-bg-dark float-end" data-template="${count}/${total}"></span>
+              <span data-feature="standard-input" class="badge rounded-pill text-bg-dark float-start" data-slot="queue-count" data-template="${count}/${total}"></span>
+              <span data-feature="standard-output" class="badge rounded-pill text-bg-dark float-end" data-slot="buffer-count" data-template="${count}/${total}"></span>
 
               <x-valve data-feature="standard-input" id="input" data-direction="in" data-icon="fire"></x-valve>
               <x-valve data-feature="standard-output" id="output" data-direction="out" data-icon="fire"></x-valve>

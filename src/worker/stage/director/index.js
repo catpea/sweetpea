@@ -10,7 +10,6 @@ export default class StageDirector extends SystemWorker {
     await super.connect();
 
     // Stage Director has its own connect protocol.
-    console.info('Stage Director has its own connect protocol as well, installing...');
 
     this.stage.on('start', message => {
       console.log('sending start-message:control');
