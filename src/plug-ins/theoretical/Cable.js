@@ -66,7 +66,7 @@ export default class Cable extends Theoretical {
     //console.log('ttt', `${toPortId}:control`);
     const controlSubscription = toProgram.actor.on(`${toPortId}:control`, data=>fromProgram.actor.send('control', data) )
 
-    this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription} );
+    this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription:controlSubscription} );
 
 
     return this;

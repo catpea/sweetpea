@@ -1,0 +1,462 @@
+{
+  "categories": [
+    {
+      "name": "API Calls",
+      "description": "Actions for making HTTP requests to external APIs, including support for GET and POST methods, as well as handling authentication mechanisms like OAuth and API keys.",
+      "blocks": [
+        {
+          "name": "HTTP GET",
+          "description": "Fetches data from a specified URL using the GET method."
+        },
+        {
+          "name": "HTTP POST",
+          "description": "Sends data to a specified URL using the POST method."
+        },
+        {
+          "name": "OAuth Authentication",
+          "description": "Handles authentication for API requests using OAuth tokens."
+        }
+      ]
+    },
+    {
+      "name": "Data Processing",
+      "description": "Tools for parsing, transforming, and manipulating data, particularly JSON, including operations such as mapping, filtering, and aggregation.",
+      "blocks": [
+        {
+          "name": "JSON Parse",
+          "description": "Converts a JSON string into a JavaScript object for easier manipulation."
+        },
+        {
+          "name": "Data Mapping",
+          "description": "Transforms data by applying a specified function to each item in a dataset."
+        },
+        {
+          "name": "Data Filtering",
+          "description": "Filters a dataset based on specified criteria, returning only the matching items."
+        }
+      ]
+    },
+    {
+      "name": "User Interaction",
+      "description": "Elements that handle user input and interactions, including form submissions, button clicks, and event listeners to trigger workflow actions.",
+      "blocks": [
+        {
+          "name": "Form Submission",
+          "description": "Captures and processes data entered into a user form when submitted."
+        },
+        {
+          "name": "Button Click",
+          "description": "Triggers actions in the workflow when a specified button is clicked."
+        },
+        {
+          "name": "Event Listener",
+          "description": "Listens for specific events (e.g., mouse movement, key presses) and triggers actions accordingly."
+        }
+      ]
+    },
+    {
+      "name": "Local AI Integration",
+      "description": "Actions for invoking local AI models, such as Ollama, allowing users to prepare and send data to AI systems and handle responses effectively.",
+      "blocks": [
+        {
+          "name": "Invoke AI Model",
+          "description": "Calls a specified AI model with input data and retrieves the output."
+        },
+        {
+          "name": "Prepare AI Input",
+          "description": "Formats data for compatibility with AI model requirements."
+        },
+        {
+          "name": "Handle AI Response",
+          "description": "Processes and utilizes the output from an AI model for further actions."
+        }
+      ]
+    },
+    {
+      "name": "Network Services",
+      "description": "Capabilities to make calls to local network services, including RESTful APIs and WebSocket connections for real-time data exchange.",
+      "blocks": [
+        {
+          "name": "REST API Call",
+          "description": "Sends requests to local RESTful APIs to retrieve or manipulate data."
+        },
+        {
+          "name": "WebSocket Connection",
+          "description": "Establishes a persistent connection to a WebSocket server for real-time data communication."
+        },
+        {
+          "name": "Data Fetch from Local Service",
+          "description": "Retrieves data from a specified local service over the network."
+        }
+      ]
+    },
+    {
+      "name": "File Handling",
+      "description": "Functions for reading and writing files, including local storage operations, file uploads, and downloads, enabling data persistence.",
+      "blocks": [
+        {
+          "name": "Read File",
+          "description": "Reads the contents of a specified file from local storage."
+        },
+        {
+          "name": "Write File",
+          "description": "Writes data to a specified file in local storage."
+        },
+        {
+          "name": "Upload File",
+          "description": "Facilitates the upload of files from the user’s device to a specified location."
+        }
+      ]
+    },
+    {
+      "name": "Error Handling",
+      "description": "Mechanisms for managing errors in workflows, including try/catch blocks and logging to alert users about issues that arise during execution.",
+      "blocks": [
+        {
+          "name": "Try/Catch Block",
+          "description": "Executes code in a try block and catches errors in a catch block for handling."
+        },
+        {
+          "name": "Log Error",
+          "description": "Records error details for troubleshooting and monitoring purposes."
+        },
+        {
+          "name": "Alert User",
+          "description": "Notifies users of errors or issues that occur during workflow execution."
+        }
+      ]
+    },
+    {
+      "name": "Scheduling",
+      "description": "Tools for scheduling tasks, including timers for delays and recurring actions similar to cron jobs for automated workflow management.",
+      "blocks": [
+        {
+          "name": "Set Timer",
+          "description": "Creates a delay for a specified period before executing the next action."
+        },
+        {
+          "name": "Recurring Task",
+          "description": "Schedules a task to run at specified intervals (e.g., daily, weekly)."
+        },
+        {
+          "name": "Schedule Event",
+          "description": "Creates a timed event to trigger an action at a future date and time."
+        }
+      ]
+    },
+    {
+      "name": "Conditionals and Logic",
+      "description": "Logical structures to implement decision-making in workflows, utilizing if/else statements and switch cases to control flow based on conditions.",
+      "blocks": [
+        {
+          "name": "If Statement",
+          "description": "Evaluates a condition and executes actions based on whether the condition is true or false."
+        },
+        {
+          "name": "Else Statement",
+          "description": "Specifies actions to be taken if the associated if statement evaluates to false."
+        },
+        {
+          "name": "Switch Case",
+          "description": "Evaluates an expression and executes the corresponding case block based on its value."
+        }
+      ]
+    },
+    {
+      "name": "Data Extraction",
+      "description": "Actions for extracting data from various sources, including web scraping and processing API responses to retrieve relevant information.",
+      "blocks": [
+        {
+          "name": "Web Scraper",
+          "description": "Extracts data from specified web pages based on given selectors."
+        },
+        {
+          "name": "Parse API Response",
+          "description": "Extracts relevant information from the data returned by an API."
+        },
+        {
+          "name": "Extract Fields",
+          "description": "Retrieves specific fields from a dataset for further processing."
+        }
+      ]
+    },
+    {
+      "name": "Text Manipulation",
+      "description": "Functions for manipulating strings, including concatenation, splitting, replacing, and using regular expressions for pattern matching.",
+      "blocks": [
+        {
+          "name": "String Concatenation",
+          "description": "Combines multiple strings into a single string."
+        },
+        {
+          "name": "String Split",
+          "description": "Divides a string into an array of substrings based on a specified delimiter."
+        },
+        {
+          "name": "Regex Match",
+          "description": "Uses regular expressions to find patterns within strings."
+        }
+      ]
+    },
+    {
+      "name": "Database Interactions",
+      "description": "Actions for performing CRUD operations on local databases, such as SQLite, including building and executing queries for data management.",
+      "blocks": [
+        {
+          "name": "Create Record",
+          "description": "Inserts a new record into a specified database table."
+        },
+        {
+          "name": "Read Record",
+          "description": "Retrieves data from a specified database table based on criteria."
+        },
+        {
+          "name": "Update Record",
+          "description": "Modifies an existing record in a specified database table."
+        },
+        {
+          "name": "Delete Record",
+          "description": "Removes a specified record from a database table."
+        }
+      ]
+    },
+    {
+      "name": "Email Handling",
+      "description": "Capabilities for sending and receiving emails, including SMTP interactions and parsing email data for integration into workflows.",
+      "blocks": [
+        {
+          "name": "Send Email",
+          "description": "Sends an email using specified recipients, subject, and body content."
+        },
+        {
+          "name": "Receive Email",
+          "description": "Retrieves and processes incoming emails from a specified account."
+        },
+        {
+          "name": "Parse Email",
+          "description": "Extracts relevant information from an email message for further processing."
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "description": "Tools for sending alerts and notifications to users, supporting various channels such as desktop notifications, emails, or SMS.",
+      "blocks": [
+        {
+          "name": "Desktop Notification",
+          "description": "Displays a notification on the user's desktop or mobile device."
+        },
+        {
+          "name": "SMS Notification",
+          "description": "Sends a text message notification to a specified phone number."
+        },
+        {
+          "name": "Email Notification",
+          "description": "Sends a notification email to a specified recipient."
+        }
+      ]
+    },
+    {
+      "name": "Data Visualization",
+      "description": "Functions for creating visual representations of data, such as charts and graphs, as well as generating reports to summarize information.",
+      "blocks": [
+        {
+          "name": "Create Chart",
+          "description": "Generates a visual chart (e.g., bar, line, pie) based on provided data."
+        },
+        {
+          "name": "Generate Report",
+          "description": "Compiles data and formats it into a readable report."
+        },
+        {
+          "name": "Export Visualization",
+          "description": "Saves generated visualizations as images or PDFs."
+        }
+      ]
+    },
+    {
+      "name": "File Formats",
+      "description": "Tools for handling different file formats, including parsing and generating CSV and XML files for data interchange.",
+      "blocks": [
+        {
+          "name": "Parse CSV",
+          "description": "Reads and converts CSV file content into a structured format for processing."
+        },
+        {
+          "name": "Generate CSV",
+          "description": "Creates a CSV file from a structured dataset."
+        },
+        {
+          "name": "Parse XML",
+          "description": "Reads and converts XML file content into a structured format for processing."
+        }
+      ]
+    },
+    {
+      "name": "UI Manipulation",
+      "description": "Actions that enable dynamic manipulation of the user interface, including adding or removing DOM elements and applying styling changes.",
+      "blocks": [
+        {
+          "name": "Add Element",
+          "description": "Dynamically adds a new element to the DOM."
+        },
+        {
+          "name": "Remove Element",
+          "description": "Removes a specified element from the DOM."
+        },
+        {
+          "name": "Change Style",
+          "description": "Applies or modifies CSS styles on specified elements in the UI."
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "description": "Mechanisms for setting up incoming webhooks to receive real-time data and sending outgoing webhooks to trigger actions in other services.",
+      "blocks": [
+        {
+          "name": "Setup Incoming Webhook",
+          "description": "Configures an endpoint to receive data from external services via webhooks."
+        },
+        {
+          "name": "Send Outgoing Webhook",
+          "description": "Sends data to a specified URL using a webhook format."
+        },
+        {
+          "name": "Handle Webhook Data",
+          "description": "Processes and utilizes the data received from an incoming webhook."
+        }
+      ]
+    },
+    {
+      "name": "Authentication and Security",
+      "description": "Tools for managing user authentication, including token management and data encryption/decryption for secure data handling.",
+      "blocks": [
+        {
+          "name": "Generate Token",
+          "description": "Creates a secure token for user authentication or data access."
+        },
+        {
+          "name": "Verify Token",
+          "description": "Validates a provided token to ensure it is authentic and not expired."
+        },
+        {
+          "name": "Encrypt Data",
+          "description": "Secures sensitive data by encrypting it for safe storage or transmission."
+        }
+      ]
+    },
+    {
+      "name": "Logging and Monitoring",
+      "description": "Functions for logging activities and monitoring performance within workflows, providing insights into operation success and failures.",
+      "blocks": [
+        {
+          "name": "Log Activity",
+          "description": "Records specified activities or events for auditing and tracking purposes."
+        },
+        {
+          "name": "Monitor Performance",
+          "description": "Tracks the performance of various actions within the workflow to identify bottlenecks."
+        },
+        {
+          "name": "Generate Logs",
+          "description": "Creates structured log files for review and analysis."
+        }
+      ]
+    },
+    {
+      "name": "Session Management",
+      "description": "Tools for handling user sessions, including session state management and cookie handling for tracking user interactions.",
+      "blocks": [
+        {
+          "name": "Create Session",
+          "description": "Initiates a new session for a user and stores relevant state information."
+        },
+        {
+          "name": "End Session",
+          "description": "Terminates a user session and clears any stored state."
+        },
+        {
+          "name": "Manage Cookies",
+          "description": "Sets, retrieves, and deletes cookies used for session tracking."
+        }
+      ]
+    },
+    {
+      "name": "External Integrations",
+      "description": "Actions for connecting to third-party services and APIs, enabling workflows to interact with tools like Slack, Trello, and others.",
+      "blocks": [
+        {
+          "name": "Connect to Slack",
+          "description": "Establishes a connection to Slack for sending messages or retrieving channel data."
+        },
+        {
+          "name": "Integrate with Trello",
+          "description": "Interacts with Trello boards and cards to automate project management tasks."
+        },
+        {
+          "name": "API Integration",
+          "description": "Facilitates communication with any external API for data retrieval or manipulation."
+        }
+      ]
+    },
+    {
+      "name": "UNIX Commands",
+      "description": "Capabilities to execute shell commands for file manipulation and system operations, integrating UNIX-like command-line tools into workflows.",
+      "blocks": [
+        {
+          "name": "Execute Shell Command",
+          "description": "Runs a specified shell command and captures the output."
+        },
+        {
+          "name": "File Manipulation Command",
+          "description": "Uses commands like cp, mv, rm to manipulate files in the file system."
+        },
+        {
+          "name": "System Info Command",
+          "description": "Executes commands to retrieve system information, such as disk usage and memory stats."
+        }
+      ]
+    },
+    {
+      "name": "Version Control",
+      "description": "Functions for managing source code versions, including Git operations such as committing, pushing, pulling, and branch management.",
+      "blocks": [
+        {
+          "name": "Git Commit",
+          "description": "Records changes to the repository with a specified message."
+        },
+        {
+          "name": "Git Push",
+          "description": "Uploads local repository changes to a remote repository."
+        },
+        {
+          "name": "Git Pull",
+          "description": "Retrieves the latest changes from a remote repository and merges them into the local branch."
+        },
+        {
+          "name": "Create Branch",
+          "description": "Creates a new branch in the repository for feature development or experimentation."
+        }
+      ]
+    },
+    {
+      "name": "Backup and Recovery",
+      "description": "Actions for creating backups of data and procedures for restoring information, ensuring data integrity and availability in workflows.",
+      "blocks": [
+        {
+          "name": "Create Backup",
+          "description": "Generates a backup of specified data or configuration for safekeeping."
+        },
+        {
+          "name": "Restore Backup",
+          "description": "Recovers data from a previously created backup."
+        },
+        {
+          "name": "Schedule Backup",
+          "description": "Sets up automated backups to occur at specified intervals."
+        }
+      ]
+    }
+  ]
+}

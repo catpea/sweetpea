@@ -9,7 +9,11 @@ export default class JobBuffer extends EventEmitter {
     super();
   }
   enbuffer(job) {
-    if (!job) throw new Error("Job is a required prameter");
+    if (!job){
+      console.log(job);
+      throw new Error("Job is a required prameter");
+    }
+
     this.#list.push(job);
     this.count.set(this.#list.length);
     this.total.update((v) => (v++,v));

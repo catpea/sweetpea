@@ -22,14 +22,12 @@ export default class Valve extends Theoretical {
          exit: () => console.log('Exiting Error state'),
       },
       connected: {
-        enter: () => this
-          .log('Entering Connected state')
-          .getTemplate({selector: '#'+this.constructor.name.toLowerCase()})
-          .installTemplate()
-          .bindDoubleCurly()
-          .useExtensions(),
-
-         // exit: () => console.log('Exiting Connected state'),
+        enter: async () => await this.macro
+          .getValveTemplate
+          .installTemplate
+          .bindDoubleCurly
+          .useExtensions
+          .run()
        },
        disconnected: {
         enter: () => this.collectGarbage(),
@@ -39,6 +37,9 @@ export default class Valve extends Theoretical {
     this.machine = new StateMachine(states, 'idle');
   }
 
+  async getValveTemplate() {
+    this.template = this.getStage().instance.theme.template('cable-valve');
 
+  }
 
 }

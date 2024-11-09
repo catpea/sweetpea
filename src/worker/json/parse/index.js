@@ -1,7 +1,7 @@
 import {SystemWorker} from 'system-integration';
 import {EnumParameter, StringParameter} from 'system-parameters';
 
-export default class JsonObject extends SystemWorker {
+export default class JsonParse extends SystemWorker {
 
   json = new StringParameter({defaultValue: `{"url":"example.com"}`, description: "JSON Object" });
 
@@ -12,12 +12,6 @@ export default class JsonObject extends SystemWorker {
   async process(input, {json}){
     const result = JSON.parse(json);
     return result;
-  }
-
-  async transmit(number, {json}){
-    console.warn('JsonObject .transmit anomaly - this should transfer job');
-    this.buffer.enbuffer(JSON.parse(json));
-    super.transmit(...arguments);
   }
 
   async diagnostic(){

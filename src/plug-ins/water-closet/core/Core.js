@@ -1,5 +1,6 @@
 import EventEmitter from 'event-emitter';
 import Signal from 'signal';
+import location from 'location';
 
 export default Inheritance => class Core extends Inheritance {
 
@@ -13,6 +14,20 @@ export default Inheritance => class Core extends Inheritance {
     super()
     this.host = host;
   }
+
+
+
+
+
+  async fetchJSON(json){
+    let url = `${location(window.location.href)}/${json}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Network response was not ok: ' + response.statusText);
+    return await response.json(); // Get the response text
+  }
+
+
+
 
   isDOM(){
     let current = this.host;
@@ -79,7 +94,6 @@ export default Inheritance => class Core extends Inheritance {
 
 
 // TEMPLATE
-  fetchTemplate(){}
 
   getTemplate({attribute,selector}={attribute:'template', selector:""}){
 

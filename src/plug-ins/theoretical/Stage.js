@@ -94,9 +94,6 @@ export default class Stage extends Theoretical {
         <div class="toast-body">
 
         &middot; Mentor (a worker builder)
-        &middot; Apply Form Data To x-super attributes so that they flow into worker function
-        &middot; Ensure serialization captures state corectly
-        &middot; Ensure serialization captures state corectly
 
         <!--
         fix up the fetch and filter workers,
@@ -117,7 +114,7 @@ export default class Stage extends Theoretical {
           &raquo; sweetpea can run in nw.js
           &raquo; To select/deselect a component click its caption text.
           &raquo; Use <kbd>DEL</kbd> to remove selected components.
-          &raquo; Double click on the stage to cerate a new component.
+          &raquo; Double click on the stage (knock) to cerate a new component.
           &raquo; You are going to create a worker supervisor, you must then specify a worker.
         </div>
       </div>

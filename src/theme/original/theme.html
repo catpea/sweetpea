@@ -40,27 +40,15 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
 
-              <select class="form-select form-select-sm mb-2">
-
-                <option selected>Worker Category</option>
-                <option value="1">HTTP</option>
-                <option value="2">JSON</option>
-                <option value="3">DATA</option>
-
+              <select class="form-select form-select-sm mb-2" data-slot="category-list">
               </select>
 
-              <select class="form-select form-select-sm mb-2">
-
-                <option selected>Worker</option>
-                <option value="1">Download File</option>
-                <option value="2">Save File</option>
-                <option value="3">Append To Log</option>
-
+              <select class="form-select form-select-sm mb-2" data-slot="worker-list">
               </select>
 
 
             </li>
-            <li class="list-group-item">...</li>
+            <li class="list-group-item" data-slot="description"></li>
           </ul>
           <div class="card-footer text-wrap">
             <small class="muted">
@@ -110,7 +98,13 @@
       <div data-bind="description"><small>DATA BIND NAME</small></div>
     </template>
 
-
+    <template id="cable-valve">
+      <style>
+        .valve {
+        }
+      </style>
+      <span use="connectable" class="valve glow-sm d-inline-block position-absolute p-1 top-50 {{direction=='out'?'start-100':'start-0'}} translate-middle badge rounded-pill bg-success"><i class="bi bi-{{icon}}"></i></span>
+    </template>
 
 
   </body>

@@ -38,6 +38,9 @@ export default class Super extends Theoretical {
         .liveBufferStats
         .deactivateIO
 
+        .installWorkerIndex
+        .listWorkerCategories
+        .listCategoryWorkers
 
         .installVisualSelectionIndicator
         .dispatchReady

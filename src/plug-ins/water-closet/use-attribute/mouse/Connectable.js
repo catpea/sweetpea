@@ -181,6 +181,10 @@ export default class Connectable {
         return;
       }
       const toValve = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-valve`))
+      if (!toValve) {
+        // did not detect a vale in the composed path.
+        return;
+      }
       const to = [toActor.getAttribute('id'), toValve.getAttribute('id')].join(':');
 
       const cable = document.createElement(`${globalThis.sweetpea.prefix}-cable`);

@@ -47,7 +47,7 @@ export class SystemWorker extends EventEmittter {
       // console.log(`${this.constructor.name} PRODUCT`, product);
 
       // EARLY EXIT
-      if(product === undefined){
+      if(product === undefined || product === null){
         queue.remove(order.id);
         return; // STOP RUN, nothing to pass along, not return value
       }
@@ -116,7 +116,13 @@ export class SystemWorker extends EventEmittter {
     // subscribe
   }
 
+  async disconnect(){ // disconnect from stage
+    // unsubscribe
+  }
   async disconnected(){ // disconnect from stage
+    // unsubscribe
+  }
+  async stop(){ // disconnect from stage
     // unsubscribe
   }
 
