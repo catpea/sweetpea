@@ -3,14 +3,14 @@ import {EnumParameter, StringParameter} from 'system-parameters';
 
 export default class JsonObject extends SystemWorker {
 
-  jsonObject = new StringParameter({defaultValue: `{"url":"example.com"}`, description: "JSON Object" });
+  json = new StringParameter({defaultValue: `{"url":"example.com"}`, description: "JSON Object" });
 
   async connected(){
     // this.output.alter(v=>v.showPort=false);
   }
 
-  async process(input){
-    const result = JSON.parse(this.jsonObject.value);
+  async process(input, {json}){
+    const result = JSON.parse(json);
     return result;
   }
 

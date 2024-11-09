@@ -3,15 +3,14 @@ import {EnumParameter, StringParameter} from 'system-parameters';
 
 export default class ScriptFunction extends SystemWorker {
 
-  jsFunction   = new EnumParameter({enumeratedMembers:[{value:'dir', name:'Messge of dir type', selected:true}, {value:'log', name:'Messge of log type'}, {value:'debug', name:'Messge of debug type'}, {value:'info', name:'Messge of info type'}, {value:'warn', name:'Messge of warn type'}], description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
-  // templateText  = new StringParameter({defaultValue: "Data %s", description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
+  script   = new EnumParameter({enumeratedMembers:[{value:'dir', name:'Messge of dir type', selected:true}, {value:'log', name:'Messge of log type'}, {value:'debug', name:'Messge of debug type'}, {value:'info', name:'Messge of info type'}, {value:'warn', name:'Messge of warn type'}], description: "Console type options: dir, log, debug, info, warn. Determines the type of console message. Default is 'dir'." });
 
   async connected(){
     // this.output.alter(v=>v.showPort=false);
   }
 
-  async process(input){
-    result = this.jsFunction.value;
+  async process(input, {script}){
+    const result = Function(`return ${script}`)();
     return result;
   }
 

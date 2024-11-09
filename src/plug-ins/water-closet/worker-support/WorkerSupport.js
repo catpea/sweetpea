@@ -13,7 +13,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
   async createWorker(){
     this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
-    this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass({queue:this.queue, buffer:this.buffer, stage:this.getStage().emitter}) )
+    this.gc = this.WorkerClass.subscribe(WorkerClass=>this.workerInstance.value = new WorkerClass({queue:this.queue, buffer:this.buffer, stage:this.getStage().emitter, data:this.data}) )
     this.gc = this.workerInstance.subscribe(async workerInstance=>{ await workerInstance.connect(); await workerInstance.connected() });
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removeal of element
     await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
@@ -76,33 +76,42 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       contentNode.querySelector('[data-slot=type]').appendChild(typeNode);
 
       // WorkerSupport binding of bindings
-      const bindings = contentNode.querySelectorAll('[data-bind]');
-      for (const binding of bindings) {
+      const boundElements = contentNode.querySelectorAll('[data-bind]');
+      for (const boundElement of boundElements) {
 
         //NOTE: split
-        const [name, attribute] = binding.dataset.bind.split('@');
+        const [name, attribute] = boundElement.dataset.bind.split('@');
         const value = parameter[name]
 
-        switch (binding.tagName) {
+        switch (boundElement.tagName) {
           case 'INPUT':
-            binding.value = value?.subscribe?value.get():value;
+          if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize signal value (upsert)
+            // boundElement.value = this.data[name].value; // Initialize valeu of input element
+
+            // listen to input element
+            const updateValue = () => this.data[parameter.name].value = boundElement.value;
+            // const updateValue = () => { console.log(`Update ${name} value "${this.data[name].value}" with bound element value "${boundElement.value}"`) }
+            boundElement.addEventListener('input', updateValue);
+            this.gc = () => boundElement.removeEventListener('input', updateValue);
+            this.gc = this.data[parameter.name].subscribe(v => boundElement.value = v);
+
           case 'B':
             ////console.log('B');
           default:
             if(attribute){
-              const template = binding.dataset.bindTemplate;
+              const template = boundElement.dataset.bindTemplate;
               if(template){
                 //console.warn('TODO: template literals htmlz`` ');
                 const data = {[name]:value};
                 const result = interpolate(template, data);
                 ////console.log('OOO', {attribute, data, result, template});
-                binding.setAttribute(attribute, result);
+                boundElement.setAttribute(attribute, result);
 
               }else{
-                binding.setAttribute(attribute, value);
+                boundElement.setAttribute(attribute, value);
               }
             }else{
-              binding.innerText = value;
+              boundElement.innerText = value;
             }
         } // switch
       } // for

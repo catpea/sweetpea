@@ -5,16 +5,14 @@ import {EnumParameter, StringParameter} from 'system-parameters';
 
 export default class HttpFetch extends SystemWorker {
 
-  urlAddress  = new StringParameter({defaultValue: "./samples/json-path-example.json", description: "Url of file to fetch." });
+  url  = new StringParameter({defaultValue: "./samples/json-path-example.json", description: "Url of file to fetch." });
 
   async connected(){
     // this.output.alter(v=>v.showPort=false);
   }
 
-  async process(input){
-    console.warn('USING defaultValue FOR TESTING');
-
-    return await this.fetchJSON(this.urlAddress.value.defaultValue);
+  async process(input, {url}){
+    return await this.fetchJSON(url);
   }
 
   normalizeURL(url){

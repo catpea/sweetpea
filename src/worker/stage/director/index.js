@@ -15,8 +15,9 @@ export default class StageDirector extends SystemWorker {
       console.log('sending start-message:control');
       this.send('start-message:control', { event: 'request' });
     });
-    this.stage.on('exit', message => {
-      this.send('exit-message:control', { event: 'request' });
+    this.stage.on('stop', message => {
+      console.log('sending stop-message:control');
+      this.send('stop-message:control', { event: 'request' });
     });
 
     this.on('start-message', packet=>{
@@ -24,9 +25,9 @@ export default class StageDirector extends SystemWorker {
       this.send('start-event', packet);
     });
 
-    this.on('exit-message', packet=>{
-      console.info(`StageDirector got exit-message`, packet);
-      this.send('exit-event', packet);
+    this.on('stop-message', packet=>{
+      console.info(`StageDirector got stop-message`, packet);
+      this.send('stop-event', packet);
     });
   }
 

@@ -11,6 +11,9 @@ Signal and Web Component Enhanced Web Apps
 - add JSON LOGIC  https://jsonlogic.com/operations.html
 - add a binding component, use form data, and data set
 
+## News
+- less reliance on view JS, mechanism has been put into standard flow
+
 
 ## Search for a neat name
 

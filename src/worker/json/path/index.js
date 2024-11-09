@@ -5,15 +5,14 @@ import jp from './jsonpath.min.js';
 
 export default class JsonPath extends SystemWorker {
 
-  queryString  = new StringParameter({defaultValue: "$.store.book[*].author", description: "JSON Path Expression" });
+  query  = new StringParameter({defaultValue: "$.store.book[*].author", description: "JSON Path Expression" });
 
   async connected(){
     // this.output.alter(v=>v.showPort=false);
   }
 
-  async process(input){
-    console.warn('USING defaultValue FOR TESTING');
-    return jp.query(input, this.queryString.value.defaultValue).map(value=>({value}));;
+  async process(input, {query}){
+    return jp.query(input, query).map(value=>({value}));;
   }
 
   async diagnostic(){

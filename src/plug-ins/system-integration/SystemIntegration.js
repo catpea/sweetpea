@@ -2,7 +2,7 @@ import EventEmittter from 'event-emitter';
 import {PortParameter, Parameter} from 'system-parameters';
 
 export class SystemWorker extends EventEmittter {
-
+  data; // function
   stage;
   queue;
   buffer;
@@ -10,12 +10,15 @@ export class SystemWorker extends EventEmittter {
   input = new PortParameter({description: "Input port for the node, located on the left side." });
   output = new PortParameter({portDirection: "right", description: "Output port for the node, located on the right side." });
 
-  constructor({queue, buffer, stage}){
+  constructor({queue, buffer, stage, data}){
     super();
     this.stage = stage; //NOTE: this is the emitter
     this.queue = queue;
     this.buffer = buffer;
+    this.data = data;
   }
+
+
 
   async connect(){
 
@@ -40,7 +43,7 @@ export class SystemWorker extends EventEmittter {
       // console.log(`${this.constructor.name} queue order!`, order);
 
       if(order === undefined) throw new Error('Enqueue Work order must be an object');
-      const product = await this.process(order);
+      const product = await this.process(order, this.data.parameters);
       // console.log(`${this.constructor.name} PRODUCT`, product);
 
       // EARLY EXIT
