@@ -12,7 +12,7 @@ export default class JsonPath extends SystemWorker {
   }
 
   async process(input, {query}){
-    return jp.query(input, query).map(value=>({value}));;
+    return jp.query(input, query).map(value=>(value));;
   }
 
   async diagnostic(){

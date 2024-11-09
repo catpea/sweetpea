@@ -10,6 +10,6 @@ export default Inheritance => class Data extends Inheritance {
     this.data = datasetStore(this.host);
     this.gc =()=> this.data.disconnect();
 
-    console.log('data initialized');
+    // console.log('data initialized');
   }
 }

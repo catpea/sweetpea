@@ -14,9 +14,9 @@ export default class JsonObject extends SystemWorker {
     return result;
   }
 
-  transmit(){
-    console.log('JsonObject .transmit anomaly');
-    this.buffer.enbuffer({value:'ALL WORK ALL PLAY'});
+  async transmit(number, {json}){
+    console.warn('JsonObject .transmit anomaly - this should transfer job');
+    this.buffer.enbuffer(JSON.parse(json));
     super.transmit(...arguments);
   }
 

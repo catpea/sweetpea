@@ -90,11 +90,11 @@
 
       <x-super id="stage-director" x="433" y="279" supervisor="system/standard" worker="stage/director" selected="false"></x-super>
 
-      <x-super id="http-fetch" x="865" y="67" supervisor="system/standard" worker="http/fetch" data-url="./samples/json-path-example.json" selected="false"> </x-super>
+      <x-super id="http-fetch" x="865" y="67" supervisor="system/standard" worker="http/fetch" data-url="./default.json" selected="false"> </x-super>
       <x-super id="json-path" x="1184" y="63" supervisor="system/standard" worker="json/path" data-query="$.store.book[*].author" selected="false"> </x-super>
       <x-super id="developer-console" x="1600" y="166" supervisor="system/standard" worker="developer/console" data-context="dir" selected="true"> </x-super>
 
-      <x-super id="json-object" x="54" y="283" supervisor="system/standard" worker="json/object" selected="false" data-json=""></x-super>
+      <x-super id="json-object" x="54" y="283" supervisor="system/standard" worker="json/object" selected="false" data-json='{"url":"./samples/json-path-example.json"}'></x-super>
       <x-super id="script-function" x="57" y="483" supervisor="system/standard" worker="script/function" data-script="console.log('Hello!')" selected="false"></x-super>
 
       <x-cable id="cable-http-fetch-to-json-path" from="http-fetch:output" to="json-path:input" selected="false"></x-cable>

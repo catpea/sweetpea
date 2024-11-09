@@ -11,7 +11,9 @@ export default class HttpFetch extends SystemWorker {
     // this.output.alter(v=>v.showPort=false);
   }
 
-  async process(input, {url}){
+  async process(input, parameters){
+    const { url } = Object.assign({}, parameters, input);
+    console.log('fetch resolved input', url)
     return await this.fetchJSON(url);
   }
 

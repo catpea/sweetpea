@@ -30,13 +30,13 @@ class DataStore {
 
       for (const mutation of mutationList) {
         if (mutation.type === "attributes") {
-          console.log(`mutation.attributeName: ${mutation.attributeName}`)
+          // console.log(`mutation.attributeName: ${mutation.attributeName}`)
           if (mutation.attributeName.startsWith('data-')) {
             const [,key] = mutation.attributeName.split('-');
             const incomingValue = mutation.target.getAttribute(mutation.attributeName);
             const signalObject = Object.entries(this.signals).find(([k, v]) => key == k.toLowerCase())[1];
             const signalValue = signalObject.value;
-            console.log(`The ${mutation.attributeName} attribute was modified`);
+            // console.log(`The ${mutation.attributeName} attribute was modified`);
             if (incomingValue !== signalValue){
               console.info('External attribute modification', {incomingValue, signalValue})
               signalObject.value = incomingValue;
