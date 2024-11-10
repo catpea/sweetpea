@@ -1,7 +1,7 @@
 # :melon: sweetpea
 A Simple and Portable JavaScript-based Visual Programming Language (VPL) Solution
 
-!(screenshot.png)[screenshot.png]
+![screenshot.png](screenshot.png)
 
 ## Overview
 
