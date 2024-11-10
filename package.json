@@ -7,7 +7,7 @@
   "scripts": {
     "save": "git add .; git commit -m 'Updated Release'; git push; npm version patch; npm publish; git push;"
   },
-  "keywords": [],
+  "keywords": ["visual-programming-language", "graph-editor", "flow-based-programming", "dataflow-programming", "visual-programming", "low-code", "vpl" ],
   "author": "@catpea",
   "license": "ISC",
   "repository": {
