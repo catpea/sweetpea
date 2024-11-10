@@ -41,7 +41,7 @@ export default class EventEmitter {
 
   // Remove a specific listener
   removeListener(event, handlerToRemove) {
-    console.log(`removeListener`, event)
+    // console.log(`removeListener`, event)
     if (this.events[event]) {
       this.events[event] = this.events[event].filter(
         (handler) => handler !== handlerToRemove,
@@ -53,12 +53,12 @@ export default class EventEmitter {
   removeAllListeners(event = null) {
     if (event) {
       if (this.events[event]) {
-        console.log(`removeAllListener`, event)
+        // console.log(`removeAllListener`, event)
         delete this.events[event];
       }
     } else {
       // Remove all listeners for all events
-      Object.keys(this.events).map(o=>console.log(`removeAllListener`, o))
+      // Object.keys(this.events).map(o=>console.log(`removeAllListener`, o))
       this.events = {};
     }
   }

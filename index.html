@@ -94,16 +94,31 @@
 
 
 
-            <x-super id="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672" x="427" y="32" supervisor="system/standard" worker="stage/director" data-text="" selected="false"></x-super>
-            <x-super id="guid-92e560db-8df1-49e9-a33e-dc1e84745721" x="80" y="187" supervisor="system/standard" worker="stage/parameter" data-text="" data-json="{&quot;url&quot;:&quot;example.com&quot;}" selected="false"></x-super>
-            <x-super id="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3" x="790" y="195" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="" data-context="info" selected="false"></x-super>
 
-            <x-cable id="guid-938cee5a-4329-4a2c-a5f8-2f787bc90097" from="guid-92e560db-8df1-49e9-a33e-dc1e84745721:output" to="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-message" selected="false"></x-cable>
-            <x-cable id="guid-b5b52451-178f-4579-b1bd-18bda31a3028" from="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-event" to="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3:input" selected="false"></x-cable>
 
-        <x-super id="guid-c8b532ee-65ff-43d8-af43-4d2497081566" x="173" y="422" supervisor="system/standard" worker="stage/listener" data-text="" data-event="start" selected="false"></x-super>
-        <x-super id="guid-deaabf37-4aad-4e85-930f-e89c24b9f280" x="585" y="423" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="" data-context="warn" selected="true"></x-super>
-        <x-cable id="guid-9b2eeaf4-68de-4c80-ad6f-30bd8ba3ff38" from="guid-c8b532ee-65ff-43d8-af43-4d2497081566:output" to="guid-deaabf37-4aad-4e85-930f-e89c24b9f280:input" selected="false"></x-cable>
+
+
+
+
+
+
+
+                        <x-super id="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672" x="427" y="32" supervisor="system/standard" worker="stage/director" data-text="" selected="false"></x-super>
+                        <x-super id="guid-92e560db-8df1-49e9-a33e-dc1e84745721" x="24" y="71" supervisor="system/standard" worker="stage/parameter" data-text="" data-json="{&quot;url&quot;:&quot;./samples/json-path-example.json&quot;}" selected="false"></x-super>
+                        <x-super id="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3" x="762" y="151" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Stage Director Output:" data-context="log" selected="false"></x-super>
+
+                        <x-cable id="guid-938cee5a-4329-4a2c-a5f8-2f787bc90097" from="guid-92e560db-8df1-49e9-a33e-dc1e84745721:output" to="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-message" selected="false"></x-cable>
+                        <x-cable id="guid-b5b52451-178f-4579-b1bd-18bda31a3028" from="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-event" to="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3:input" selected="false"></x-cable>
+
+                    <x-super id="guid-c8b532ee-65ff-43d8-af43-4d2497081566" x="93" y="438" supervisor="system/standard" worker="stage/listener" data-text="" data-event="bork" selected="false"></x-super>
+                    <x-super id="guid-deaabf37-4aad-4e85-930f-e89c24b9f280" x="567" y="427" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Bork Event Data:" data-context="warn" selected="false"></x-super>
+                    <x-cable id="guid-9b2eeaf4-68de-4c80-ad6f-30bd8ba3ff38" from="guid-c8b532ee-65ff-43d8-af43-4d2497081566:output" to="guid-deaabf37-4aad-4e85-930f-e89c24b9f280:input" selected="false"></x-cable>
+              <x-super id="guid-ddb000eb-7209-42a1-b034-9000895b7331" x="1079" y="33" supervisor="system/standard" worker="network-services/js-fetch" data-text="" data-url="uses packet" selected="false"></x-super><x-cable id="guid-fd1c0724-0a74-4ece-bfed-5c157a0caeb0" from="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-event" to="guid-ddb000eb-7209-42a1-b034-9000895b7331:input" selected="false"></x-cable><x-super id="guid-747dbcb6-868b-4469-9184-2b457e065630" x="1707" y="14" supervisor="system/standard" worker="data-extraction/json-path" data-text="" data-query="$.store.book[*].author" selected="false"></x-super><x-cable id="guid-22c86eec-fcc9-4a25-a39a-62a9cc97d451" from="guid-ddb000eb-7209-42a1-b034-9000895b7331:output" to="guid-747dbcb6-868b-4469-9184-2b457e065630:input" selected="false"></x-cable><x-super id="guid-e73f709d-ab69-4617-8f0f-ac5031b0d7b8" x="1398" y="119" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Data Fetch Output:" data-context="log" selected="false"></x-super><x-cable id="guid-c716d8ca-cefc-4c88-8255-099df8643f7a" from="guid-ddb000eb-7209-42a1-b034-9000895b7331:output" to="guid-e73f709d-ab69-4617-8f0f-ac5031b0d7b8:input" selected="false"></x-cable><x-super id="guid-2f6edcf8-74a8-44c2-8bea-f136c2d89f79" x="2116" y="-154" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="JSON Path extraction result:" data-context="log" selected="true"></x-super><x-cable id="guid-9a1067df-c48d-43ad-b372-817a7559063b" from="guid-747dbcb6-868b-4469-9184-2b457e065630:output" to="guid-2f6edcf8-74a8-44c2-8bea-f136c2d89f79:input" selected="false"></x-cable><x-super id="guid-e05b51b7-2b4b-41f9-882a-5aa64c84508b" x="2096" y="85" supervisor="system/standard" worker="stage/emitter" data-text="" data-event="bork" selected="false"></x-super><x-cable id="guid-d1d51886-5fcf-44fa-8e0f-ad7e966b1da7" from="guid-747dbcb6-868b-4469-9184-2b457e065630:output" to="guid-e05b51b7-2b4b-41f9-882a-5aa64c84508b:input" selected="false"></x-cable>
+
+
+
+
+
   </x-stage>
 
 

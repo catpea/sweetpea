@@ -8,12 +8,11 @@ export default class HttpFetch extends SystemWorker {
   url  = new StringParameter({defaultValue: "./samples/json-path-example.json", description: "Url of file to fetch." });
 
   async connected(){
-    // this.output.alter(v=>v.showPort=false);
   }
 
   async process(input, parameters){
     const { url } = Object.assign({}, parameters, input);
-    console.log('fetch resolved input', url)
+    // console.log('fetch resolved input', url)
     return await this.fetchJSON(url);
   }
 

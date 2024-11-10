@@ -18,6 +18,11 @@
           "description": "Listen to configurable stage event."
         },
         {
+          "id":"emitter",
+          "name": "Stage Emitter",
+          "description": "Emit a custom stage event."
+        },
+        {
           "id":"parameter",
           "name": "Stage Parameter",
           "description": "JSON Object that can be sent by the stage director."
