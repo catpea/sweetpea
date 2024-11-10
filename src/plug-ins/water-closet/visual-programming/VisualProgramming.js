@@ -22,7 +22,7 @@ export default Inheritance => class VisualProgramming extends Inheritance {
       y = y+centerH;
     }
 
-    const supervisorElement = document.createElement(`${globalThis.sweetpea.prefix}-super`);
+    const supervisorElement = document.createElement(`${VPL_ELEMENT_PREFIX}-super`);
     supervisorElement.setAttribute('id', this.guid());
     supervisorElement.setAttribute('x', x);
     supervisorElement.setAttribute('y', y);

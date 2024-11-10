@@ -18,7 +18,14 @@ export class SystemWorker extends EventEmittter {
     this.data = data;
   }
 
+  subscriptions = []; // {type:'list/item/value', id:'', run}
+  collectGarbage(){
+    this.subscriptions.forEach(s=>s.subscription())
+  }
 
+  set gc(subscription){ // shorthand for component level garbage collection
+    this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription} );
+  }
 
   async connect(){
 
@@ -31,14 +38,14 @@ export class SystemWorker extends EventEmittter {
     const buffer = this.buffer;
 
     // When message is sent to this actor
-    actor.on('input', input => {
+    this.gc = actor.on('input', input => {
       // console.log(`${this.constructor.name} got input packet!`, input);
 
       queue.enqueue( input );
     });
 
     // When a new order is added to the queue
-    queue.on('enqueue', async order => {
+    this.gc = queue.on('enqueue', async order => {
 
       // console.log(`${this.constructor.name} queue order!`, order);
 
@@ -66,7 +73,7 @@ export class SystemWorker extends EventEmittter {
     });
 
     // When a product is added to the buffer
-    buffer.on('enbuffer', product => {
+    this.gc = buffer.on('enbuffer', product => {
       // Send the product out to another part of the system
       actor.send('output', product );
 
@@ -75,7 +82,7 @@ export class SystemWorker extends EventEmittter {
     });
 
     // Control protocol aka DATA PULL
-    actor.on('control', async control=>{
+    this.gc = actor.on('control', async control=>{
       // console.log(`${this.constructor.name} got control packet!`, control);
       switch(control.event) {
         case 'request':
@@ -122,7 +129,12 @@ export class SystemWorker extends EventEmittter {
   async disconnected(){ // disconnect from stage
     // unsubscribe
   }
-
+  async destroy(){ // disconnect from stage
+    console.log('Destroy!', this.stage.stats());
+    this.removeAllListeners();
+    this.collectGarbage()
+    console.log('Destroyed!', this.stage.stats());
+  }
 
   async diagnostic(){
   }

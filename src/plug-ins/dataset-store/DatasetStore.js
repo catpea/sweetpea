@@ -6,6 +6,7 @@ export default function main (el){
 
   return new Proxy(dataStore, {
     get(dataStore, key) {
+      if (key === 'destroy') return ()=>dataStore.destroy();
       if (key === 'parameters') return dataStore.parameters();
       return dataStore.getSignal(key);
     },
@@ -55,11 +56,11 @@ class DataStore {
     this.subscriptions.map(s=>s.subscription())
   }
 
-  set gc(v){ // shorthand for component level garbage collection
-    this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription: ()=>v} );
+  set gc(subscription){ // shorthand for component level garbage collection
+    this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription} );
   }
 
-  stop() {
+  destroy() {
     this.#observer.disconnect();
     this.collectGarbage();
   }

@@ -11,13 +11,12 @@ export default class StageDirector extends SystemWorker {
 
     // Stage Director has its own connect protocol.
 
-    this.stage.on('start', message => {
-
-      console.log('sending start-message:control');
+    this.gc = this.stage.on('start', message => {
+      console.log('Stage Director: sending start-message:control');
       this.send('start-message:control', { event: 'request' });
 
     });
-    this.stage.on('stop', message => {
+    this.gc = this.stage.on('stop', message => {
       console.log('sending stop-message:control');
       this.send('stop-message:control', { event: 'request' });
     });

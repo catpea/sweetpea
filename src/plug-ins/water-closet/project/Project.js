@@ -121,7 +121,7 @@ export default Inheritance => class Project extends Inheritance {
         this.getStage().replaceChildren(); // Clear Stage
 
         for (const actorObject of data) {
-          const actorElement = document.createElement(`${globalThis.sweetpea.prefix}-${actorObject.type}`);
+          const actorElement = document.createElement(`${VPL_ELEMENT_PREFIX}-${actorObject.type}`);
           delete actorObject.type;
           for (const [attributeName, attributeValue] of Object.entries(actorObject)) {
               actorElement.setAttribute(attributeName, attributeValue);

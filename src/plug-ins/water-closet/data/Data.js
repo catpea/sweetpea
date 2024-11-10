@@ -8,7 +8,7 @@ export default Inheritance => class Data extends Inheritance {
     super(...a);
 
     this.data = datasetStore(this.host);
-    this.gc =()=> this.data.disconnect();
+    this.gc =()=> this.data.destroy();
 
     // console.log('data initialized');
   }

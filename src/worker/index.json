@@ -6,20 +6,26 @@
       "name": "Stage",
       "description": "Actions for initializing events and programs",
       "blocks": [
-        {
-          "id":"comment",
-          "name": "Stage Comment",
-          "description": "Comment area of stage."
-        },
+
         {
           "id":"director",
           "name": "Stage Director",
           "description": "Listens to stage start and stop events, emitting an object when either event occurs."
         },
         {
+          "id":"listener",
+          "name": "Stage Listener",
+          "description": "Listen to configurable stage event."
+        },
+        {
           "id":"parameter",
           "name": "Stage Parameter",
           "description": "JSON Object that can be sent by the stage director."
+        },
+        {
+          "id":"comment",
+          "name": "Stage Comment",
+          "description": "Comment area of stage."
         }
       ]
     },

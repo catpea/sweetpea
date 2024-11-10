@@ -54,7 +54,7 @@ export default class Connectable {
     let centeredX = elementX+centerW;
     let centeredY = elementY+centerH;
 
-    const panZoom = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-stage`);
+    const panZoom = this.system.findOut(this.element, `${VPL_ELEMENT_PREFIX}-stage`);
     let {x:panX,y:panY} = panZoom.pan;
     panX = panX / scale;
     panY = panY / scale;
@@ -167,27 +167,27 @@ export default class Connectable {
       //
 
 
-      const fromActor = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-super`);
-      const fromValve = this.system.findOut(this.element, `${globalThis.sweetpea.prefix}-valve`);
+      const fromActor = this.system.findOut(this.element, `${VPL_ELEMENT_PREFIX}-super`);
+      const fromValve = this.system.findOut(this.element, `${VPL_ELEMENT_PREFIX}-valve`);
       const from = [fromActor.getAttribute('id'), fromValve.getAttribute('id')].join(':');
       if (!fromActor) {
         // did not drag to anything
         return;
       }
       const composedPath = event.composedPath().filter(el=>el instanceof HTMLElement).filter(el=>el.hasAttribute('id'))
-      const toActor = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-super`))
+      const toActor = composedPath.find(el=>el.matches(`${VPL_ELEMENT_PREFIX}-super`))
       if (!toActor) {
         // did not drag to anything
         return;
       }
-      const toValve = composedPath.find(el=>el.matches(`${globalThis.sweetpea.prefix}-valve`))
+      const toValve = composedPath.find(el=>el.matches(`${VPL_ELEMENT_PREFIX}-valve`))
       if (!toValve) {
         // did not detect a vale in the composed path.
         return;
       }
       const to = [toActor.getAttribute('id'), toValve.getAttribute('id')].join(':');
 
-      const cable = document.createElement(`${globalThis.sweetpea.prefix}-cable`);
+      const cable = document.createElement(`${VPL_ELEMENT_PREFIX}-cable`);
       cable.setAttribute('id', this.system.guid());
       cable.setAttribute('from', from);
       cable.setAttribute('to', to);

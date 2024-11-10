@@ -55,10 +55,14 @@
   </head>
   <script type="module">
 
-    globalThis.sweetpea = {
-      prefix: 'x',
-    };
-    // import {BindElement} from './src/plugins/elements/index.js';
+  Object.defineProperty(globalThis, 'VPL_ELEMENT_PREFIX', {
+    value: 'x',          // Value of the constant
+    writable: false,    // Prevent modification of the constant
+    enumerable: false,   // Make it enumerable (optional, for iteration)
+    configurable: false // Prevent deletion or reconfiguration of the constant
+  });
+
+
 
     import masticator from 'masticator';
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
@@ -71,10 +75,10 @@
     await SuperElement.load();
 
     // RISC
-    customElements.define(`${globalThis.sweetpea.prefix}-stage`, StageElement);
-    customElements.define(`${globalThis.sweetpea.prefix}-valve`, ValveElement);
-    customElements.define(`${globalThis.sweetpea.prefix}-super`, SuperElement); // load super before cable
-    customElements.define(`${globalThis.sweetpea.prefix}-cable`, CableElement); // load after super
+    customElements.define(`${VPL_ELEMENT_PREFIX}-stage`, StageElement);
+    customElements.define(`${VPL_ELEMENT_PREFIX}-valve`, ValveElement);
+    customElements.define(`${VPL_ELEMENT_PREFIX}-super`, SuperElement); // load super before cable
+    customElements.define(`${VPL_ELEMENT_PREFIX}-cable`, CableElement); // load after super
 
   </script>
 
@@ -87,7 +91,24 @@
 
 
   <x-stage controls minimap template="stage" theme="original">
+
+
+
+            <x-super id="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672" x="427" y="32" supervisor="system/standard" worker="stage/director" data-text="" selected="false"></x-super>
+            <x-super id="guid-92e560db-8df1-49e9-a33e-dc1e84745721" x="80" y="187" supervisor="system/standard" worker="stage/parameter" data-text="" data-json="{&quot;url&quot;:&quot;example.com&quot;}" selected="false"></x-super>
+            <x-super id="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3" x="790" y="195" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="" data-context="info" selected="false"></x-super>
+
+            <x-cable id="guid-938cee5a-4329-4a2c-a5f8-2f787bc90097" from="guid-92e560db-8df1-49e9-a33e-dc1e84745721:output" to="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-message" selected="false"></x-cable>
+            <x-cable id="guid-b5b52451-178f-4579-b1bd-18bda31a3028" from="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-event" to="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3:input" selected="false"></x-cable>
+
+        <x-super id="guid-c8b532ee-65ff-43d8-af43-4d2497081566" x="173" y="422" supervisor="system/standard" worker="stage/listener" data-text="" data-event="start" selected="false"></x-super>
+        <x-super id="guid-deaabf37-4aad-4e85-930f-e89c24b9f280" x="585" y="423" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="" data-context="warn" selected="true"></x-super>
+        <x-cable id="guid-9b2eeaf4-68de-4c80-ad6f-30bd8ba3ff38" from="guid-c8b532ee-65ff-43d8-af43-4d2497081566:output" to="guid-deaabf37-4aad-4e85-930f-e89c24b9f280:input" selected="false"></x-cable>
   </x-stage>
+
+
+
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">

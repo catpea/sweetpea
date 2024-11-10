@@ -42,6 +42,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       if (this.workerInstance.value) {
         await this.workerInstance.value.disconnect();
         await this.workerInstance.value.disconnected();
+        await this.workerInstance.value.destroy();
         console.log( this.workerInstance.value );
       }
       this.workerInstance.value = new WorkerClass({ queue: this.queue, buffer: this.buffer, stage: this.getStage().emitter, data: this.data })
@@ -54,6 +55,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
     this.gc = ()=>this.workerInstance.value.disconnect(); // .gc will clean up on removal of element
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removal of element
+    this.gc = ()=>this.workerInstance.value.destroy(); // .gc will clean up on removal of element
 
     await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
     return this;
@@ -214,9 +216,16 @@ export default Inheritance => class WorkerSupport extends Inheritance {
             containerNode.appendChild(optionNode);
           }
 
-          // Select
-          const selection = parameter.enumeratedMembers.find(o => o.selected);
-          if(selection) this.data[parameter.name].value = selection.value;
+          // If the datastore has no value, find the default.
+          const unknownValue = !this.data[parameter.name].value;
+          if (unknownValue) {
+            const selection = parameter.enumeratedMembers.find(o => o.selected);
+            if(selection) this.data[parameter.name].value = selection.value;
+          }
+
+          // When datastore changes, use the value from the data store
+          this.gc = this.data[parameter.name].subscribe(v=>containerNode.value=v)
+
 
         });
       }

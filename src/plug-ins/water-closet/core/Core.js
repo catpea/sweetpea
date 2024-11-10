@@ -80,7 +80,7 @@ export default Inheritance => class Core extends Inheritance {
   }
 
   getAllActorsOnStage(){
-    return this.getStage().querySelectorAll(`${globalThis.sweetpea.prefix}-super, ${globalThis.sweetpea.prefix}-cable`);
+    return this.getStage().querySelectorAll(`${VPL_ELEMENT_PREFIX}-super, ${VPL_ELEMENT_PREFIX}-cable`);
   }
 
 

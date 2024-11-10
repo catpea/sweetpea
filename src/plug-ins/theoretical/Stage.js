@@ -220,7 +220,7 @@ export default class Stage extends Theoretical {
                 if(!actorIsSelected) continue;
 
                 if(actor.tagName == 'SUPER'){ // Before removing a SUPPERVISOR element remove the cables!
-                  for (const cable of this.core.host.querySelectorAll(`${globalThis.sweetpea.prefix}-cable`)) {
+                  for (const cable of this.core.host.querySelectorAll(`${VPL_ELEMENT_PREFIX}-cable`)) {
                     if(cable.getAttribute('from').split(':')[0] === actor.getAttribute('id')) cable.remove();
                     if(cable.getAttribute('to').split(':')[0] === actor.getAttribute('id')) cable.remove();
                   }

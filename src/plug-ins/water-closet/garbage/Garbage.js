@@ -7,7 +7,7 @@ export default Inheritance => class Garbage extends Inheritance {
     this.subscriptions.map(s=>s.subscription())
   }
 
-  set gc(v){ // shorthand for component level garbage collection
-    this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription: ()=>v} );
+  set gc(subscription){ // shorthand for component level garbage collection
+    this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription} );
   }
 }

@@ -55,10 +55,10 @@ export default Inheritance => class ElementSearch extends Inheritance {
    //console.log('VVV', this);
    //console.log('VVV', this.host.tagName.toLowerCase());
 
-   if(this.host.tagName.toLowerCase() == `${globalThis.sweetpea.prefix}-stage`){
+   if(this.host.tagName.toLowerCase() == `${VPL_ELEMENT_PREFIX}-stage`){
       response =  this.host;
     }else{
-      response = this.findOut(this.host, `${globalThis.sweetpea.prefix}-stage`);
+      response = this.findOut(this.host, `${VPL_ELEMENT_PREFIX}-stage`);
     }
 
     return response;
@@ -97,7 +97,7 @@ export default Inheritance => class ElementSearch extends Inheritance {
 
     isOutermostElement(parents) {
 
-        const hasInnerDataTag = !!parents.map(p => p.tagName).find(tag => tag.startsWith(globalThis.sweetpea.prefix + '-'));
+        const hasInnerDataTag = !!parents.map(p => p.tagName).find(tag => tag.startsWith(VPL_ELEMENT_PREFIX + '-'));
         return !hasInnerDataTag;
     }
 
