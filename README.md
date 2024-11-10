@@ -1,47 +1,45 @@
 # :melon: sweetpea
-Signal and Web Component Enhanced Web Apps
+A Simple and Portable JavaScript-based Visual Programming Language (VPL) Solution
 
-## NOTES
+!(screenshot.png)[screenshot.png]
 
-- vplSystem bindInputs duplicates functionality of bind element, i don't want to inject bind element everywhere, this should also be updated to work with all inputs.
+## Overview
 
-## TODO
-- add JSON LOGIC?  https://jsonlogic.com/operations.html
+This Visual Programming Language (VPL) provides an intuitive, user-friendly environment for building,
+manipulating, and visualizing code without the need for extensive programming knowledge.
 
-## News
-- less reliance on view JS, mechanism has been put into standard flow
+Designed with accessibility in mind, the system enables users to create complex workflows,
+data interactions, and web applications through a graphical interface.
 
+## Key Features
 
-## Search for a neat name
+- **User-Friendly Interface**: The platform is designed for non-programmers and developers alike, enabling users to design applications visually using drag-and-drop components.
+- **Built-in Components**: Easily integrate common web development tools, such as HTTP/fetch for network requests and JSONPath for working with JSON data, without writing complex code.
+- **Graphical Workflow Builder**: Create sophisticated workflows by connecting visual blocks, representing different actions and processes, in an intuitive canvas-based environment.
+- **Portable and Flexible**: As a JavaScript-based language, the system can be used across platforms and is easily embeddable in web applications.
+- **Seamless Testing and Deployment**: The system supports testing and deploying web-based applications directly from the platform, simplifying the development lifecycle.
 
-- Dispatcher: *Implies a role in managing the execution of tasks and sending them to the appropriate resources.*
-- Adjudicator: *Suggests a role that decides how tasks are processed or prioritized.*
-- Facilitator: *Implies that the class helps make tasks easier to execute or manage.*
+## Benefits
 
-- Agent: *This term conveys the idea of an entity that performs tasks on behalf of another, often used in multi-agent systems.*
-- Operator: *Indicates that the class performs operations or tasks, often with a technical connotation.*
-- Processor: *Indicates that the class is focused on executing tasks or processing data.*
-- Handler: *Suggests that the class is responsible for processing or managing specific tasks or requests.*
-- Assistant: *A friendly term that suggests help or support in completing jobs.*
-- Executor: *This implies a class that executes jobs, often associated with task management.*
-- Laborer: *A more informal term that might fit well if your application has a casual tone.*
-- Servant: *Conveys a sense of performing tasks for a requester, often used in design patterns.*
-- Workhorse: *Suggests a class designed to handle heavy lifting in terms of processing work.*
-- Miner: *Suggests that the class digs through data or tasks to extract results.*
-- Craftsman: *Implies a focus on skillfully completing tasks with attention to detail.*
-- Delegate: *Suggests a class that carries out tasks assigned by another entity.*
-- Runner: *Conveys the idea of executing tasks or processes in a straightforward manner.*
-- Champion: *Conveys the idea of someone who advocates for tasks and ensures they are completed.*
-- Sentinel: *Suggests a role that watches over and processes tasks, ensuring everything runs smoothly.*
-- Custodian: *Suggests a role focused on maintaining and executing tasks or data.*
-- Conductor: *Suggests a role that orchestrates and directs the execution of tasks.*
-- Navigator: *Implies guiding tasks through a process or workflow.*
-- Vanguard: *Suggests a forward-looking role that leads in completing tasks.*
-- Pathfinder: *Indicates a class that finds the best way to execute tasks or navigate through processes.*
-- Navigator: *Evokes a sense of guiding tasks through complex workflows.*
-- Mechanic: *Implies a focus on fixing or maintaining processes, ensuring tasks run smoothly.*
-- Scout: *Conveys a sense of exploring options or paths to complete tasks.*
-- Baker: *Suggests a class that combines various ingredients (data/tasks) to produce a final output.*
-- Sleuth: *Conveys a sense of investigation and problem-solving, suitable for tasks that require discovery.*
-- Pilot: *Suggests a role that guides or navigates through tasks, similar to a pilot steering a ship.*
-- Warden: *Implies oversight and management of tasks, ensuring they are executed properly.*
+- **Lower Barrier to Entry**: Ideal for users with limited programming experience, providing an easy path to develop and experiment with code.
+- **Rapid Prototyping**: Quickly prototype ideas and iterate on applications without needing to write traditional code.
+- **Data Handling**: Simplify complex data manipulation tasks with integrated tools like JSONPath, enabling users to work with data structures easily.
+- **Extensibility**: Extend the platform’s capabilities by adding custom blocks and functionality as needed.
+
+## Getting Started
+
+1. **Installation**: Simply include the VPL library in your web project or use the provided web-based editor to begin building.
+2. **Create Your First Workflow**: Start with basic blocks like HTTP requests and JSON handling to build your first interactive application.
+3. **Deploy**: Test your application directly within the platform and deploy it to your desired web environment with minimal effort.
+
+## Use Cases
+
+- **Rapid Web Application Development**: Ideal for teams or individuals looking to quickly prototype or build production-ready web applications.
+- **Learning Tool**: A great introduction to programming concepts for beginners and a useful tool for educators teaching the fundamentals of programming logic and flow control.
+- **API Integration**: Easily connect to web APIs, process data, and visualize results without needing to write complex JavaScript.
+
+## Conclusion
+
+This Visual Programming Language provides a powerful yet simple solution for building web-based applications, offering a balance between ease of use and the flexibility of JavaScript. Whether you're a beginner, educator, or experienced developer, this tool can help you quickly create and deploy functional web applications.
+
+For more information, refer to the documentation and start building today!
