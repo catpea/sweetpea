@@ -30,7 +30,13 @@ export default class SuperElement extends HTMLElement {
       'x y': () => this.updatePosition(),
       'selected': () => this.instance.selected.set(newValue==="true"?true:false),
       'debug': () => this.instance.debug.set(newValue==="true"?true:false),
-      'worker': () => this.instance.workerPath.set(newValue), //TODO: sanitize path for safe server-side work
+      'worker': () => {
+        if (!newValue) return;
+        const [category, type] = newValue.split('/');
+        console.log({category, type})
+        this.instance.workerCategory.set(category);
+        this.instance.workerType.set(type);
+      }
     };
 
     if (oldValue == newValue) return;

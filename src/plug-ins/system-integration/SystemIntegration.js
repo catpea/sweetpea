@@ -122,9 +122,7 @@ export class SystemWorker extends EventEmittter {
   async disconnected(){ // disconnect from stage
     // unsubscribe
   }
-  async stop(){ // disconnect from stage
-    // unsubscribe
-  }
+
 
   async diagnostic(){
   }

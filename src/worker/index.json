@@ -2,70 +2,80 @@
   "categories": [
 
     {
+      "id": "stage",
       "name": "Stage",
       "description": "Actions for initializing events and programs",
       "blocks": [
         {
+          "id":"comment",
+          "name": "Stage Comment",
+          "description": "Comment area of stage."
+        },
+        {
+          "id":"director",
           "name": "Stage Director",
-          "path":"stage/director",
           "description": "Listens to stage start and stop events, emitting an object when either event occurs."
         },
         {
+          "id":"parameter",
           "name": "Stage Parameter",
-          "path":"stage/parameter",
           "description": "JSON Object that can be sent by the stage director."
         }
       ]
     },
 
     {
+      "id": "data-extraction",
       "name": "Data Extraction",
       "description": "Actions for extracting data from various sources, including web scraping and processing API responses to retrieve relevant information.",
       "blocks": [
         {
+          "id":"json-path",
           "name": "JSON Path",
-          "path":"json/path",
           "description": "Extracts data from object based on given selectors."
         },
         {
+          "id":"js-function",
           "name": "Data Function",
-          "path":"script/function",
           "description": "Transforms data by applying a specified function to each item in a dataset."
         }
       ]
     },
 
     {
+      "id": "data-processing",
       "name": "Data Processing",
       "description": "Tools for parsing, transforming, and manipulating data, particularly JSON, including operations such as mapping, filtering, and aggregation.",
       "blocks": [
         {
+          "id":"json-parse",
           "name": "JSON Parse",
-          "path":"json/parse",
           "description": "Converts a JSON string into a JavaScript object for easier manipulation."
         }
       ]
     },
 
     {
+      "id": "logging-and-monitoring",
       "name": "Logging and Monitoring",
       "description": "Functions for logging activities and monitoring performance within workflows, providing insights into operation success and failures.",
       "blocks": [
         {
+          "id": "console",
           "name": "Log Activity",
-          "path": "developer/console",
           "description": "Records specified activities or events for auditing and tracking purposes."
         }
       ]
     },
 
     {
+      "id": "network-services",
       "name": "Network Services",
       "description": "Capabilities to make calls to local network services, including RESTful APIs and WebSocket connections for real-time data exchange.",
       "blocks": [
         {
-          "name": "Data Fetch from Local Service",
-          "path": "http/fetch",
+          "id": "js-fetch",
+          "name": "JavaScript Fetch from Local Service",
           "description": "Retrieves data from a specified local service over the network."
         }
       ]

@@ -12,8 +12,10 @@ export default class StageDirector extends SystemWorker {
     // Stage Director has its own connect protocol.
 
     this.stage.on('start', message => {
+
       console.log('sending start-message:control');
       this.send('start-message:control', { event: 'request' });
+
     });
     this.stage.on('stop', message => {
       console.log('sending stop-message:control');
@@ -39,7 +41,7 @@ export default class StageDirector extends SystemWorker {
   async process(input, parameters){
     const date = new Date();
     const timestamp = date.toISOString()
-    result = {timestamp, input};
+    const result = {timestamp, input};
     return result;
   }
 

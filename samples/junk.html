@@ -1,0 +1,9 @@
+<x-super id="stage-director" x="337" y="314" supervisor="system/standard" worker="stage/director" selected="false"></x-super>
+<x-super id="http-fetch" x="764" y="348" supervisor="system/standard" worker="http/fetch" data-url="./default.json" selected="false"> </x-super>
+<x-super id="json-path" x="1087" y="348" supervisor="system/standard" worker="json/path" data-query="$.store.book[*].author" selected="false"> </x-super>
+<x-super id="developer-console" x="1406" y="348" supervisor="system/standard" worker="developer/console" data-context="dir" selected="true"> </x-super>
+<x-super id="stage-parameter" x="6" y="348" supervisor="system/standard" worker="stage/parameter" selected="false" data-json="{&quot;url&quot;:&quot;./samples/json-path-example.json&quot;}"></x-super>
+<x-cable id="cable-http-fetch-to-json-path" from="http-fetch:output" to="json-path:input" selected="false"></x-cable>
+<x-cable id="cable-json-path-to-developer-console" from="json-path:output" to="developer-console:input" selected="false"></x-cable>
+<x-cable id="cable-stage-parameter-to-stage-director:start" from="stage-parameter:output" to="stage-director:start-message" selected="false"></x-cable>
+<x-cable id="cable-stage-director-to-http-fetch" from="stage-director:start-event" to="http-fetch:input" selected="false"></x-cable>

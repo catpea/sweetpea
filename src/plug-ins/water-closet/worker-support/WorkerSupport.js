@@ -19,25 +19,30 @@ export default Inheritance => class WorkerSupport extends Inheritance {
   async createWorker(){
 
 
-    // this.gc = this.workerCategory.subscribe(async workerCategory => {
-    //   const category = workerCategory;
-    //   const type = this.workerType.value;
-    //   if(category && type) this.workerPath.value = `${category}/${type}`
-    // });
+    this.gc = this.workerCategory.subscribe(async workerCategory => {
+      const category = workerCategory;
+      const type = this.workerType.value;
+      if(category && type) this.workerPath.value = `${category}/${type}`
+    });
 
-    // this.gc = this.workerType.subscribe(async workerType=>{
-    //   const category = this.workerCategory.value;
-    //   const type = workerType;
-    //   if(category && type) this.workerPath.value = `${category}/${type}`
-    // });
+    this.gc = this.workerType.subscribe(async workerType=>{
+      const category = this.workerCategory.value;
+      const type = workerType;
+      if(category && type) this.workerPath.value = `${category}/${type}`
+    });
 
     this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
+    this.gc = this.workerPath.subscribe(async workerPath => {
+      if (this.host.getAttribute('worker') !== workerPath) {
+        this.host.setAttribute('worker', workerPath);
+      }
+    });
 
     this.gc = this.WorkerClass.subscribe(async WorkerClass => {
       if (this.workerInstance.value) {
         await this.workerInstance.value.disconnect();
-        await this.workerInstance.value.disconnected()
-        await this.workerInstance.value.stop();
+        await this.workerInstance.value.disconnected();
+        console.log( this.workerInstance.value );
       }
       this.workerInstance.value = new WorkerClass({ queue: this.queue, buffer: this.buffer, stage: this.getStage().emitter, data: this.data })
     })
@@ -49,7 +54,6 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
     this.gc = ()=>this.workerInstance.value.disconnect(); // .gc will clean up on removal of element
     this.gc = ()=>this.workerInstance.value.disconnected(); // .gc will clean up on removal of element
-    this.gc = ()=>this.workerInstance.value.stop(); // .gc will clean up on removal of element
 
     await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
     return this;
@@ -64,13 +68,12 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
   listWorkerCategories() {
     const selector = '[data-slot="category-list"]';
-
     this.gc = this.workerIndex.subscribe(workerIndex => this.host.shadowRoot.querySelectorAll(selector).forEach(containerNode => {
-
-      // prepare stae of codependent
+      // prepare state of co-dependent dropdown
       this.host.shadowRoot.querySelectorAll('[data-slot="worker-list"]').forEach(containerNode => { containerNode.replaceChildren(); containerNode.disabled = true })
 
       const changeHandler = event => {
+        if (event.target.value == "--label--") return;
         this.workerType.value = null;
         this.workerCategory.value = event.target.value;
         const description = event.target[event.target.selectedIndex].dataset.description;
@@ -85,15 +88,18 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       {
         const optionNode = document.createElement("option");
         optionNode.append('Select Category:');
+        optionNode.value = "--label--";
         containerNode.appendChild(optionNode);
       }
       for (const category of workerIndex.categories) {
         const optionNode = document.createElement("option");
-        optionNode.value = category.name.toLowerCase().replace(/ /g, '-');
+        optionNode.value = category.id;
         optionNode.dataset.description = category.description;
         optionNode.append(category.name);
         containerNode.appendChild(optionNode);
       }
+      this.gc = this.workerCategory.subscribe(v=>containerNode.value=v||"--label--")
+
     }))
 
   }
@@ -103,9 +109,9 @@ export default Inheritance => class WorkerSupport extends Inheritance {
     this.gc = this.workerCategory.subscribe(workerCategory => this.host.shadowRoot.querySelectorAll(selector).forEach(containerNode => {
 
       const changeHandler = event => {
+        if (event.target.value == "--label--") return;
+
         this.workerType.value = event.target.value;
-        const path = event.target[event.target.selectedIndex].dataset.path;
-        if(path) this.workerPath.value = path;
         const description = event.target[event.target.selectedIndex].dataset.description;
         this.host.shadowRoot.querySelectorAll('[data-slot="description"]').forEach(el => { el.replaceChildren(description); })
       };
@@ -116,18 +122,21 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       containerNode.replaceChildren();
       {
         const optionNode = document.createElement("option");
+        optionNode.value = "--label--";
         optionNode.append('Select Type:');
         containerNode.appendChild(optionNode);
       }
-      const category = this.workerIndex.value.categories.find(o => o.name.toLowerCase().replace(/ /g, '-') === workerCategory);
+      const category = this.workerIndex.value.categories.find(o => o.id === workerCategory);
       for (const block of category.blocks) {
         const optionNode = document.createElement("option");
-        optionNode.value = block.name.toLowerCase().replace(/ /g, '-');
-        optionNode.dataset.path = block.path;
+        optionNode.value = block.id;
+        // optionNode.dataset.path = block.path;
         optionNode.dataset.description = block.description;
         optionNode.append(block.name);
         containerNode.appendChild(optionNode);
       }
+      this.gc = this.workerType.subscribe(v=>containerNode.value=v||"--label--")
+      // select
     }));
   }
 
@@ -165,7 +174,6 @@ export default Inheritance => class WorkerSupport extends Inheritance {
     this.gc = this.workerInstance.subscribe(workerInstance=>{ // once worker instance becomes available
       this.renderParameters(workerInstance.parameters);
     });
-
     return this;
   }
 
@@ -185,6 +193,33 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
       const contentNode = this.getStage().instance.theme.template('worker-parameters');
       const typeNode = this.getStage().instance.theme.template(`worker-parameters-${parameter.type}`);
+
+
+      if (parameter.type == 'enum') {
+
+        typeNode.querySelectorAll('[data-slot="option-list"]').forEach(containerNode => {
+
+          const changeHandler = event => {
+            this.data[parameter.name].value = event.target.value;
+          };
+
+          containerNode.addEventListener('change', changeHandler);
+          this.gc = () => containerNode.removeEventListener('change', changeHandler);
+
+          for( const option of parameter.enumeratedMembers ){
+            const optionNode = document.createElement("option");
+            optionNode.value = option.value;
+            optionNode.selected = option.selected;
+            optionNode.append(option.name);
+            containerNode.appendChild(optionNode);
+          }
+
+          // Select
+          const selection = parameter.enumeratedMembers.find(o => o.selected);
+          if(selection) this.data[parameter.name].value = selection.value;
+
+        });
+      }
 
       contentNode.querySelector('[data-slot=type]').appendChild(typeNode);
 

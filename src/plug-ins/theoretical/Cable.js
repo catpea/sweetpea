@@ -243,7 +243,14 @@ export default class Cable extends Theoretical {
         for (const mutation of mutationList) {
           if (mutation.type === "childList") {
             const portNode = programComponent.shadowRoot.getElementById(portId);
-            if(!portNode) throw new Error(`Unable to locate port #${portId} in #${componentId}`)
+            if (!portNode) {
+              // this may happen when the user changes nodes, and is expected behaviour
+              console.log(`Unable to locate port #${portId} in #${componentId}`)
+              this.host.remove(); // self destuct!
+              // throw new Error(`Unable to locate port #${portId} in #${componentId}`)
+            }
+
+
             const portExists = !!portNode;
             if(portExists){
               this.monitorPosition2(attributeName, fun);
