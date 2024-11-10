@@ -1,13 +1,21 @@
 {
   "name": "sweetpea",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Signal and Web Component Enhanced Web Apps",
   "main": "index.html",
   "scripts": {
     "save": "git add .; git commit -m 'Updated Release'; git push; npm version patch; npm publish; git push;"
   },
-  "keywords": ["visual-programming-language", "graph-editor", "flow-based-programming", "dataflow-programming", "visual-programming", "low-code", "vpl" ],
+  "keywords": [
+    "visual-programming-language",
+    "graph-editor",
+    "flow-based-programming",
+    "dataflow-programming",
+    "visual-programming",
+    "low-code",
+    "vpl"
+  ],
   "author": "@catpea",
   "license": "ISC",
   "repository": {
