@@ -240,8 +240,14 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         const [name, attribute] = boundElement.dataset.bind.split('@');
         const value = parameter[name]
 
-        switch (boundElement.tagName) {
-          case 'INPUT':
+        const mapper = {
+          INPUT: 'form',
+          TEXTAREA: 'form',
+        };
+
+        switch (mapper[boundElement.tagName]) {
+
+          case 'form':
           if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize signal value (upsert)
             // boundElement.value = this.data[name].value; // Initialize valeu of input element
 

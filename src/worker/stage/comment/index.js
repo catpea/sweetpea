@@ -1,9 +1,9 @@
 import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter} from 'system-parameters';
+import {EnumParameter, TextParameter} from 'system-parameters';
 
 export default class StageComment extends SystemWorker {
 
-  text = new StringParameter({defaultValue: ``, description: "Stage Comment" });
+  text = new TextParameter({defaultValue: ``, description: "Stage Comment" });
 
   async connected(){
     this.input.alter(v=>v.showPort=false);
