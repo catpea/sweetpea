@@ -1,5 +1,7 @@
 import Signal from 'signal';
 
+export class Parameters extends Signal { }
+
 export class Parameter extends Signal {
 
   constructor(setup){

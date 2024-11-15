@@ -88,4 +88,13 @@ export default class Signal {
   set value(v) {
     this.set(v);
   }
+
+
+
+
+  // [Symbol.iterator]() {
+  //   return this.#value[Symbol.iterator]();
+  // }
+
+
 }

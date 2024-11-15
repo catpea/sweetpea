@@ -1,11 +1,13 @@
 import location from 'location';
 
 import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter} from 'system-parameters';
+import {Parameters, StringParameter} from 'system-parameters';
 
-export default class HttpFetch extends SystemWorker {
+export default class JsFetch extends SystemWorker {
 
-  url  = new StringParameter({defaultValue: "./samples/json-path-example.json", description: "Url of file to fetch." });
+  parameters = new Parameters([
+    new StringParameter({name:'url', defaultValue: "./samples/json-path-example.json", description: "Url of file to fetch." }),
+  ]);
 
   async connected(){
   }

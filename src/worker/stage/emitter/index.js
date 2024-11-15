@@ -1,9 +1,11 @@
 import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter} from 'system-parameters';
+import {Parameters, StringParameter} from 'system-parameters';
 
 export default class StageEmitter extends SystemWorker {
 
-  event = new StringParameter({defaultValue: `start`, description: "Name of stage event to monitor" });
+  parameters = new Parameters([
+    new StringParameter({name:'event', defaultValue: `start`, description: "Name of stage event to monitor" }),
+  ]);
 
   async connected(){
     this.output.alter(v=>v.showPort=false);

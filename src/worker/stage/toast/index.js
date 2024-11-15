@@ -1,19 +1,16 @@
-import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter} from 'system-parameters';
+import { SystemWorker } from 'system-integration';
+import { Parameters, TextParameter } from 'system-parameters';
 
-export default class StageComment extends SystemWorker {
+export default class StageToast extends SystemWorker {
 
-  text = new StringParameter({defaultValue: ``, description: "Stage Comment" });
+  parameters = new Parameters([
+    new TextParameter({name: 'message', defaultValue: ``, description: "Toast message" }),
+  ]);
 
   async connected(){
     this.input.alter(v=>v.showPort=false);
     this.output.alter(v=>v.showPort=false);
   }
-
-  // async process(input, {json}){
-  //   const result = JSON.parse(json);
-  //   return result;
-  // }
 
   async transmit(number, {json}){
     this.buffer.enbuffer(JSON.parse(json));
@@ -28,29 +25,3 @@ export default class StageComment extends SystemWorker {
   }
 
 }
-
-
-// import {Actor} from 'actor';
-//
-// export default class JsonObject extends Actor {
-//
-//   static parameters = [
-//     { name:"object",   default:'{"url":"example.com"}',    type:'string', description:'JSON Object' },
-//   ];
-//
-//   constructor({ stage, worker, queue, cache }){
-//     super(...arguments);
-//     const actor = this;
-//     this.hasInput.value = false;
-//   }
-//
-//   transmit(){
-//     this.buffer.enbuffer({value:'ALL WORK ALL PLAY'});
-//     super.transmit(...arguments);
-//   }
-//
-//   async work(parameters){
-//     return {value:'WORK'}
-//   }
-//
-// }

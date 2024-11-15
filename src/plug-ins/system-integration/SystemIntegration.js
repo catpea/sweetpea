@@ -144,22 +144,22 @@ export class SystemWorker extends EventEmittter {
 
   // util
 
-  get parameters(){
-    const parameters = [];
-    const properties = Object.getOwnPropertyNames(this);
-    properties.forEach(name => {
-      const value = this[name];
-        if (value && value.subscribe) {
-        if (value instanceof Parameter) {
-          const type = value.constructor.name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/-parameter$/,'');
-          const label = name.replace(/([A-Z])/,' $1').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-          const entry = {name, type, label, ...value.value}
-          parameters.push( entry );
-        }
-      }
-    });
-    return parameters;
-  }
+  // get parameters(){
+  //   const parameters = [];
+  //   const properties = Object.getOwnPropertyNames(this);
+  //   properties.forEach(name => {
+  //     const value = this[name];
+  //       if (value && value.subscribe) {
+  //       if (value instanceof Parameter) {
+  //         const type = value.constructor.name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/-parameter$/,'');
+  //         const label = name.replace(/([A-Z])/,' $1').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  //         const entry = {name, type, label, ...value.value}
+  //         parameters.push( entry );
+  //       }
+  //     }
+  //   });
+  //   return parameters;
+  // }
 
 }
 

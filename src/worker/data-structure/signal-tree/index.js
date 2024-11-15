@@ -1,20 +1,21 @@
 import {SystemWorker} from 'system-integration';
 import {Parameters, StringParameter} from 'system-parameters';
 
-export default class StageParameter extends SystemWorker {
+export default class SignalTree extends SystemWorker {
 
   parameters = new Parameters([
-    new StringParameter({ name:'json', defaultValue: `{"url":"example.com"}`, description: "JSON Object" }),
+    new StringParameter({name: 'data', defaultValue: ``, description: "Data", rows:20 }),
   ]);
 
   async connected(){
-    this.input.alter(v=>v.showPort=false);
+    // this.input.alter(v=>v.showPort=false);
+    // this.output.alter(v=>v.showPort=false);
   }
 
-  async process(input, {json}){
-    const result = JSON.parse(json);
-    return result;
-  }
+  // async process(input, {json}){
+  //   const result = JSON.parse(json);
+  //   return result;
+  // }
 
   async transmit(number, {json}){
     this.buffer.enbuffer(JSON.parse(json));

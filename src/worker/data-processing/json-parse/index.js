@@ -1,13 +1,11 @@
 import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter} from 'system-parameters';
+import {Parameters, StringParameter} from 'system-parameters';
 
 export default class JsonParse extends SystemWorker {
 
-  json = new StringParameter({defaultValue: `{"url":"example.com"}`, description: "JSON Object" });
-
-  async connected(){
-    // this.output.alter(v=>v.showPort=false);
-  }
+  parameters = new Parameters([
+    new StringParameter({name: 'json', defaultValue: `{"url":"example.com"}`, description: "JSON Object" }),
+  ]);
 
   async process(input, {json}){
     const result = JSON.parse(json);
@@ -22,29 +20,3 @@ export default class JsonParse extends SystemWorker {
   }
 
 }
-
-
-// import {Actor} from 'actor';
-//
-// export default class JsonObject extends Actor {
-//
-//   static parameters = [
-//     { name:"object",   default:'{"url":"example.com"}',    type:'string', description:'JSON Object' },
-//   ];
-//
-//   constructor({ stage, worker, queue, cache }){
-//     super(...arguments);
-//     const actor = this;
-//     this.hasInput.value = false;
-//   }
-//
-//   transmit(){
-//     this.buffer.enbuffer({value:'ALL WORK ALL PLAY'});
-//     super.transmit(...arguments);
-//   }
-//
-//   async work(parameters){
-//     return {value:'WORK'}
-//   }
-//
-// }

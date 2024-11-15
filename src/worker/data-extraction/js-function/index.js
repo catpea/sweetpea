@@ -1,13 +1,11 @@
-import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter} from 'system-parameters';
+import { SystemWorker } from 'system-integration';
+import { Parameters, StringParameter } from 'system-parameters';
 
 export default class ScriptFunction extends SystemWorker {
 
-  script   = new StringParameter({defaultValue: `input=>{input}`, description: "JavaScript Function" });
-
-  async connected(){
-    // this.output.alter(v=>v.showPort=false);
-  }
+  parameters = new Parameters([
+    new StringParameter({name: "script", defaultValue: `input=>{input}`, description: "JavaScript Function" }),
+  ]);
 
   async process(input, {script}){
     const result = Function(`return ${script}`)();

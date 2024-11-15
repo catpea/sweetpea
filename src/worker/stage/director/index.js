@@ -1,13 +1,22 @@
 import {SystemWorker} from 'system-integration';
-import {EnumParameter, StringParameter, EventParameter} from 'system-parameters';
+import {Parameters, EventParameter} from 'system-parameters';
 
 export default class StageDirector extends SystemWorker {
 
-  start = new EventParameter({});
-  stop  = new EventParameter({});
+  parameters = new Parameters([
+    new EventParameter({name:'start'}),
+    new EventParameter({name:'stop'}),
+  ]);
 
   async connect(){
     await super.connect();
+
+    setTimeout(() => {
+      this.parameters.update(v=>([...v, new EventParameter({name:'dynamic-parameter-test'})]))
+    }, 3333);
+    setTimeout(() => {
+      this.parameters.update(v=> v.filter(o=>o.value.name !== 'dynamic-parameter-test') )
+    }, 5333);
 
     // Stage Director has its own connect protocol.
 

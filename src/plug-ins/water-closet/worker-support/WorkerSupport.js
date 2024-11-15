@@ -174,7 +174,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
   renderViewParameters(){
     this.gc = this.workerInstance.subscribe(workerInstance=>{ // once worker instance becomes available
-      this.renderParameters(workerInstance.parameters);
+      this.gc = workerInstance.parameters.subscribe(parameters=>this.renderParameters(parameters));
     });
     return this;
   }
@@ -182,22 +182,42 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
   renderParameters(parameters){
 
-    // const template = this.getStage().instance.theme.querySelector('template[id=worker-parameters]');
     const parametersSlot  = this.host.shadowRoot.querySelector('[data-slot=parameters]');
-    parametersSlot.replaceChildren(); // clear element
 
+    const existingParameters = new Set(parameters.map(v => v.value.name));
 
-    for (const parameter of parameters) {
-      // console.dir(parameter);
-      if (parameter.type === 'port') { // taken care of
-        continue;
+    for (const child of parametersSlot.children) {
+      if (existingParameters.has(child.id)) {
+        // child exists
+      }else{
+        // child removed
+       console.log('REMOVING', child, child.id);
+        parametersSlot.removeChild(child);
+      }
+    }
+
+    for (const $parameter of parameters) {
+
+      const parameter = $parameter.value;
+
+      const type =  $parameter.constructor.name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/-parameter$/,'');
+      const label = parameter.name.replace(/([A-Z])/,' $1').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+
+      if (type === 'port') { // taken care of
+        continue; // taken care of
       }
 
+      if (this.host.shadowRoot.getElementById(parameter.name)) {
+        continue; // already exists
+      }
+
+
       const contentNode = this.getStage().instance.theme.template('worker-parameters');
-      const typeNode = this.getStage().instance.theme.template(`worker-parameters-${parameter.type}`);
+      const typeNode = this.getStage().instance.theme.template(`worker-parameters-${type}`);
 
+      contentNode.firstChild.id = parameter.name;
 
-      if (parameter.type == 'enum') {
+      if (type == 'enum') {
 
         typeNode.querySelectorAll('[data-slot="option-list"]').forEach(containerNode => {
 
@@ -230,6 +250,8 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         });
       }
 
+
+
       contentNode.querySelector('[data-slot=type]').appendChild(typeNode);
 
       // WorkerSupport binding of bindings
@@ -241,6 +263,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         const value = parameter[name]
 
         const mapper = {
+          // SELECT: 'form',
           INPUT: 'form',
           TEXTAREA: 'form',
         };
@@ -249,11 +272,10 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
           case 'form':
           if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize signal value (upsert)
-            // boundElement.value = this.data[name].value; // Initialize valeu of input element
+          console.log('INITIAL DATA VALUE', this.data[parameter.name].value);
 
             // listen to input element
             const updateValue = () => this.data[parameter.name].value = boundElement.value;
-            // const updateValue = () => { console.log(`Update ${name} value "${this.data[name].value}" with bound element value "${boundElement.value}"`) }
             boundElement.addEventListener('input', updateValue);
             this.gc = () => boundElement.removeEventListener('input', updateValue);
             this.gc = this.data[parameter.name].subscribe(v => boundElement.value = v);
