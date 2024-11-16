@@ -64,9 +64,24 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
 
   async installWorkerIndex() {
-    this.workerIndex.value = await this.fetchJSON('src/worker/index.json');
+    const environment = new Set();
+
+    if(globalThis.process && globalThis.process?.versions?.nw) environment.add('NW.js')
+
+    const data = await this.fetchJSON('src/worker/index.json');
+
+    for (const category of data.categories) {
+
+      category.blocks = category.blocks.filter(block=>block.engine?!!environment.intersection(new Set(block.engine)).size:true)
+
+
+    }
+
+    this.workerIndex.value = data;
     return this;
   }
+
+
 
   listWorkerCategories() {
     const selector = '[data-slot="category-list"]';
@@ -272,7 +287,6 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
           case 'form':
           if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize signal value (upsert)
-          console.log('INITIAL DATA VALUE', this.data[parameter.name].value);
 
             // listen to input element
             const updateValue = () => this.data[parameter.name].value = boundElement.value;

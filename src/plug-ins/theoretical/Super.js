@@ -44,6 +44,7 @@ export default class Super extends Theoretical {
 
         .installVisualSelectionIndicator
         .dispatchReady
+        .showUI
         .run()
 
       },
@@ -93,6 +94,10 @@ export default class Super extends Theoretical {
 
   }
 
+
+  showUI() {
+    this.host.shadowRoot.firstChild.classList.remove('d-none')
+  }
 
 
 }

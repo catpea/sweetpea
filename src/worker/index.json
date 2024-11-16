@@ -49,6 +49,12 @@
           "id":"js-function",
           "name": "Data Function",
           "description": "Transforms data by applying a specified function to each item in a dataset."
+        },
+        {
+          "id":"nw-webview",
+          "name": "NW.js webview Tag",
+          "engine": ["NW.js"],
+          "description": "The <webview> opens a webpage in a separate process with different permissions from your app."
         }
       ]
     },

@@ -3,7 +3,7 @@
 
 
     <template id="supervisor-interface">
-      <div class="perspective movable" use="movable selectable focusable">
+      <div class="perspective movable d-none" use="movable selectable focusable">
 
         <div class="card front shadow active-card">
           <div class="card-header drag-handle focusable-handle">
@@ -78,12 +78,10 @@
       </div>
     </template>
 
-    <template id="worker-parameters-text">
+    <template id="worker-parameters-textarea">
       <div class="">
-          <x-valve id="incoming" data-direction="in" data-icon="arrow-right-circle"></x-valve>
-          <x-valve id="outgoing" data-direction="out" data-icon="arrow-right-circle"></x-valve>
-        <!-- <label for="exampleFormControlTextarea1" class="form-label" data-bind="name"></label> -->
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" data-bind="value"></textarea>
+        <label for="exampleFormControlTextarea1" class="form-label text-muted"><small data-bind="name"></small></label>
+        <textarea class="form-control font-monospace" id="exampleFormControlTextarea1" rows="6" data-bind="value" style="font-size: 0.72rem;"></textarea>
 
       </div>
     </template>

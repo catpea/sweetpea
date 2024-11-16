@@ -1,10 +1,10 @@
 import {SystemWorker} from 'system-integration';
-import {Parameters, EnumParameter, TextParameter} from 'system-parameters';
+import {Parameters, EnumParameter, TextareaParameter} from 'system-parameters';
 
 export default class StageComment extends SystemWorker {
 
   parameters = new Parameters([
-    new TextParameter({name: 'text', defaultValue: ``, description: "Stage Comment" }),
+    new TextareaParameter({name: 'text', defaultValue: ``, description: "Stage Comment" }),
   ]);
 
 

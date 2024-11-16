@@ -24,7 +24,7 @@ export class EnumParameter extends Parameter { }
 export class StringParameter extends Parameter {
 }
 
-export class TextParameter extends Parameter {
+export class TextareaParameter extends Parameter {
   constructor(setup){
     const defaults = {
       rows: 5,

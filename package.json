@@ -5,6 +5,8 @@
   "description": "Signal and Web Component Enhanced Web Apps",
   "main": "index.html",
   "scripts": {
+    "app": "~/Applications/nwjs-sdk-v0.93.0-linux-x64/nw .",
+    "web": "http-server -p 8083 -c-1 .",
     "save": "git add .; git commit -m 'Updated Release'; git push; npm version patch; npm publish; git push;"
   },
   "keywords": [
