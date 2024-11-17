@@ -3,6 +3,7 @@ import Macro from './macro/Macro.js';
 import Core from './core/Core.js';
 import Theme from './theme/Theme.js';
 import Data from './data/Data.js';
+import Cables from './cables/Cables.js';
 import DataContext from './data-context/DataContext.js';
 import ElementSearch from './element-search/ElementSearch.js';
 import Logging from './logging/Logging.js';
@@ -26,6 +27,7 @@ export default function(){
     Core,          // shared functions
     Theme,          // theme
     Data,          // shared functions
+    Cables,          // shared functions
     DataContext,   // the notion of this.context in this case based on data-* attributes
     ElementSearch, // verbose element locator that searches within the components zone of influence only
     Logging,       // .log functionality and related methods

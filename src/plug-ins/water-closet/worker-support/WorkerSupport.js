@@ -43,9 +43,9 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         await this.workerInstance.value.disconnect();
         await this.workerInstance.value.disconnected();
         await this.workerInstance.value.destroy();
-        console.log( this.workerInstance.value );
+        // console.log( this.workerInstance.value );
       }
-      this.workerInstance.value = new WorkerClass({ queue: this.queue, buffer: this.buffer, stage: this.getStage().emitter, data: this.data })
+      this.workerInstance.value = new WorkerClass({ id:this.host.id, queue: this.queue, buffer: this.buffer, stage: this.getStage().emitter, data: this.data, cables:this.cables })
     })
 
     this.gc = this.workerInstance.subscribe(async workerInstance=>{
@@ -198,7 +198,6 @@ export default Inheritance => class WorkerSupport extends Inheritance {
   renderParameters(parameters){
 
     const parametersSlot  = this.host.shadowRoot.querySelector('[data-slot=parameters]');
-
     const existingParameters = new Set(parameters.map(v => v.value.name));
 
     for (const child of parametersSlot.children) {
@@ -206,26 +205,20 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         // child exists
       }else{
         // child removed
-       console.log('REMOVING', child, child.id);
+       //console.log('REMOVING', child, child.id);
         parametersSlot.removeChild(child);
       }
     }
 
     for (const $parameter of parameters) {
-
       const parameter = $parameter.value;
+      if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize Defau;t Value
 
       const type =  $parameter.constructor.name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/-parameter$/,'');
       const label = parameter.name.replace(/([A-Z])/,' $1').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
-      if (type === 'port') { // taken care of
-        continue; // taken care of
-      }
-
-      if (this.host.shadowRoot.getElementById(parameter.name)) {
-        continue; // already exists
-      }
-
+      if (type === 'port') continue; // taken care of
+      if (this.host.shadowRoot.getElementById(parameter.name)) continue; // already exists
 
       const contentNode = this.getStage().instance.theme.template('worker-parameters');
       const typeNode = this.getStage().instance.theme.template(`worker-parameters-${type}`);
@@ -233,13 +226,10 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       contentNode.firstChild.id = parameter.name;
 
       if (type == 'enum') {
-
         typeNode.querySelectorAll('[data-slot="option-list"]').forEach(containerNode => {
-
           const changeHandler = event => {
             this.data[parameter.name].value = event.target.value;
           };
-
           containerNode.addEventListener('change', changeHandler);
           this.gc = () => containerNode.removeEventListener('change', changeHandler);
 
@@ -271,49 +261,31 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
       // WorkerSupport binding of bindings
       const boundElements = contentNode.querySelectorAll('[data-bind]');
+
+      // template has been rendered, now apply any bindings
       for (const boundElement of boundElements) {
+        const multiBind = boundElement.dataset.bind.split(',').map(o=>o.trim());
+        for (const bound of multiBind) {
+          let [parameterName, targetAttribute] = bound.split('@')
+          if (!parameterName) parameterName = targetAttribute;
+          const parameterValue = parameter[parameterName];
 
-        //NOTE: split
-        const [name, attribute] = boundElement.dataset.bind.split('@');
-        const value = parameter[name]
-
-        const mapper = {
-          // SELECT: 'form',
-          INPUT: 'form',
-          TEXTAREA: 'form',
-        };
-
-        switch (mapper[boundElement.tagName]) {
-
-          case 'form':
-          if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize signal value (upsert)
-
-            // listen to input element
-            const updateValue = () => this.data[parameter.name].value = boundElement.value;
-            boundElement.addEventListener('input', updateValue);
-            this.gc = () => boundElement.removeEventListener('input', updateValue);
-            this.gc = this.data[parameter.name].subscribe(v => boundElement.value = v);
-
-          case 'B':
-            ////console.log('B');
-          default:
-            if(attribute){
-              const template = boundElement.dataset.bindTemplate;
-              if(template){
-                //console.warn('TODO: template literals htmlz`` ');
-                const data = {[name]:value};
-                const result = interpolate(template, data);
-                ////console.log('OOO', {attribute, data, result, template});
-                boundElement.setAttribute(attribute, result);
-
-              }else{
-                boundElement.setAttribute(attribute, value);
-              }
+          if (targetAttribute) {
+            // apply to attribute
+            if (targetAttribute == 'value') {
+              // special case, bidirectional binding becasue targetAttribute is value
+              const updateValue = () => this.data[parameter.name].value = boundElement.value; boundElement.addEventListener('input', updateValue); this.gc = () => boundElement.removeEventListener('input', updateValue);
+              this.gc = this.data[parameter.name].subscribe(v => boundElement.value = v);
             }else{
-              boundElement.innerText = value;
+              // update attribute when parameter changes, this could be input type for example
+              boundElement.setAttribute(targetAttribute, boundElement.dataset.bindTemplate?interpolate(boundElement.dataset.bindTemplate, {[parameterName]:parameterValue}):parameterValue);
             }
-        } // switch
-      } // for
+
+          }else{
+            boundElement.innerText = (boundElement.dataset.bindTemplate?interpolate(boundElement.dataset.bindTemplate, {[parameterName]:parameterValue}):parameterValue)
+          }
+        } // multibind
+      } // for boundElements
 
 
 

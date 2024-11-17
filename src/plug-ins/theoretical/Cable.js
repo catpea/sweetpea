@@ -46,27 +46,26 @@ export default class Cable extends Theoretical {
 
 
   connectDataPipe(){
-    const [,fromPortId] = this.host.getAttribute('from').split(':');
-    const [,toPortId] = this.host.getAttribute('to').split(':');
+    const [fromProgramId, fromPortId] = this.host.getAttribute('from').split(':');
+    const [toProgramId,toPortId] = this.host.getAttribute('to').split(':');
 
     // NOTE: live program is required as .actor is used
     const fromProgram = this.getProgramComponent('from');
     const toProgram   = this.getProgramComponent('to');
 
     // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
-    const subscription = fromProgram.actor.on(fromPortId, packet=>{
+    this.gc = fromProgram.actor.on(fromPortId, packet=>{
       // console.info(`Cable passing message between ${fromProgram.id} and ${toProgram.id}, on ports ${fromPortId}->${toPortId} as they are connected with a cable.`, packet);
       if(packet == undefined) throw new Error('Packet is a required parameter');
       // if(packet.value == undefined) throw new Error('Packet .value is a required parameter');
         toProgram.actor.send(toPortId, packet);
     });
 
-    this.subscriptions.push( {type:'.actor', id:'from-pipe-to-pipe', subscription} );
+    fromProgram.instance.cables[fromPortId].add(toProgramId, toPortId);
+    toProgram.instance.cables[toPortId].add(fromProgramId, fromPortId);
 
-    //console.log('ttt', `${toPortId}:control`);
-    const controlSubscription = toProgram.actor.on(`${toPortId}:control`, data=>fromProgram.actor.send('control', data) )
-
-    this.subscriptions.push( {type:'.actor', id:'to-pipe-from-pipe', subscription:controlSubscription} );
+    this.gc = ()=>fromProgram.instance.cables[fromPortId].remove(toProgramId, toPortId)
+    this.gc = ()=>fromProgram.instance.cables[toPortId].remove(fromProgramId, fromPortId)
 
 
     return this;

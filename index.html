@@ -9,7 +9,8 @@
     {
       "imports": {
 
-        "dataset-store": "./src/plug-ins/dataset-store/DatasetStore.js",
+        "cable-store": "./src/plug-ins/cable-store/cableStore.js",
+        "dataset-store": "./src/plug-ins/dataset-store/datasetStore.js",
         "system-parameters": "./src/plug-ins/system-parameters/SystemParameters.js",
         "system-integration": "./src/plug-ins/system-integration/SystemIntegration.js",
 
@@ -99,21 +100,17 @@
 
 
 
+                  <x-super id="A" x="1189" y="363" supervisor="system/standard" worker="data-structure/shadow-tree" data-template="{{input}} Fused" selected="false"></x-super>
+              <x-super id="B" x="513" y="122" supervisor="system/standard" worker="data-structure/shadow-tree" data-text="" data-template="{{input}} Upper" selected="false"></x-super>
+              <x-cable id="guid-58e73e32-0b5c-4e22-abf9-3ab34c75d804" from="B:output" to="A:input" selected="false"></x-cable>
+              <x-super id="C" x="1740" y="360" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Result" data-context="warn"></x-super><x-cable id="guid-268ef243-e365-48cc-bd32-8f81e5e0a7b0" from="A:output" to="C:input" selected="false"></x-cable>
 
 
 
 
-                        <x-super id="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672" x="427" y="32" supervisor="system/standard" worker="stage/director" data-text="" selected="false"></x-super>
-                        <x-super id="guid-92e560db-8df1-49e9-a33e-dc1e84745721" x="24" y="71" supervisor="system/standard" worker="stage/parameter" data-text="" data-json="{&quot;url&quot;:&quot;./samples/json-path-example.json&quot;}" selected="false"></x-super>
-                        <x-super id="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3" x="762" y="151" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Stage Director Output:" data-context="log" selected="false"></x-super>
 
-                        <x-cable id="guid-938cee5a-4329-4a2c-a5f8-2f787bc90097" from="guid-92e560db-8df1-49e9-a33e-dc1e84745721:output" to="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-message" selected="false"></x-cable>
-                        <x-cable id="guid-b5b52451-178f-4579-b1bd-18bda31a3028" from="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-event" to="guid-b1742e3d-bf2b-4dff-9906-3bd2204c4af3:input" selected="false"></x-cable>
 
-                    <x-super id="guid-c8b532ee-65ff-43d8-af43-4d2497081566" x="93" y="438" supervisor="system/standard" worker="stage/listener" data-text="" data-event="bork" selected="false"></x-super>
-                    <x-super id="guid-deaabf37-4aad-4e85-930f-e89c24b9f280" x="567" y="427" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Bork Event Data:" data-context="warn" selected="false"></x-super>
-                    <x-cable id="guid-9b2eeaf4-68de-4c80-ad6f-30bd8ba3ff38" from="guid-c8b532ee-65ff-43d8-af43-4d2497081566:output" to="guid-deaabf37-4aad-4e85-930f-e89c24b9f280:input" selected="false"></x-cable>
-              <x-super id="guid-ddb000eb-7209-42a1-b034-9000895b7331" x="1079" y="33" supervisor="system/standard" worker="network-services/js-fetch" data-text="" data-url="uses packet" selected="false"></x-super><x-cable id="guid-fd1c0724-0a74-4ece-bfed-5c157a0caeb0" from="guid-18865fe2-de5f-43f0-abc0-3426e6e3a672:start-event" to="guid-ddb000eb-7209-42a1-b034-9000895b7331:input" selected="false"></x-cable><x-super id="guid-747dbcb6-868b-4469-9184-2b457e065630" x="1707" y="14" supervisor="system/standard" worker="data-extraction/json-path" data-text="" data-query="$.store.book[*].author" selected="false"></x-super><x-cable id="guid-22c86eec-fcc9-4a25-a39a-62a9cc97d451" from="guid-ddb000eb-7209-42a1-b034-9000895b7331:output" to="guid-747dbcb6-868b-4469-9184-2b457e065630:input" selected="false"></x-cable><x-super id="guid-e73f709d-ab69-4617-8f0f-ac5031b0d7b8" x="1398" y="119" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="Data Fetch Output:" data-context="log" selected="false"></x-super><x-cable id="guid-c716d8ca-cefc-4c88-8255-099df8643f7a" from="guid-ddb000eb-7209-42a1-b034-9000895b7331:output" to="guid-e73f709d-ab69-4617-8f0f-ac5031b0d7b8:input" selected="false"></x-cable><x-super id="guid-2f6edcf8-74a8-44c2-8bea-f136c2d89f79" x="2116" y="-154" supervisor="system/standard" worker="logging-and-monitoring/console" data-text="JSON Path extraction result:" data-context="log" selected="true"></x-super><x-cable id="guid-9a1067df-c48d-43ad-b372-817a7559063b" from="guid-747dbcb6-868b-4469-9184-2b457e065630:output" to="guid-2f6edcf8-74a8-44c2-8bea-f136c2d89f79:input" selected="false"></x-cable><x-super id="guid-e05b51b7-2b4b-41f9-882a-5aa64c84508b" x="2096" y="85" supervisor="system/standard" worker="stage/emitter" data-text="" data-event="bork" selected="false"></x-super><x-cable id="guid-d1d51886-5fcf-44fa-8e0f-ad7e966b1da7" from="guid-747dbcb6-868b-4469-9184-2b457e065630:output" to="guid-e05b51b7-2b4b-41f9-882a-5aa64c84508b:input" selected="false"></x-cable>
+              <x-super id="guid-77c9ff42-c411-4192-9d4a-438e7d7b7a8a" x="324" y="594" supervisor="system/standard" worker="data-structure/shadow-tree" data-text="" data-template="{{input}} Lower A" selected="false"></x-super><x-super id="guid-ba1b8663-3c0f-48bd-8af8-d01d38dfa810" x="-269" y="318" supervisor="system/standard" worker="data-structure/shadow-tree" data-text="" data-template="Root" selected="false"></x-super><x-cable id="guid-7729feb3-67c2-41f2-bdc0-a93fb757676c" from="guid-ba1b8663-3c0f-48bd-8af8-d01d38dfa810:output" to="B:input" selected="false"></x-cable><x-cable id="guid-1a2f4942-b1fd-47a3-81e3-70e8f75fad6d" from="guid-ba1b8663-3c0f-48bd-8af8-d01d38dfa810:output" to="guid-77c9ff42-c411-4192-9d4a-438e7d7b7a8a:input" selected="false"></x-cable><x-super id="guid-777510da-5dbd-45c8-b80c-775153fcff83" x="655" y="589" supervisor="system/standard" worker="data-structure/shadow-tree" data-text="" data-json="{&quot;url&quot;:&quot;example.com&quot;}" data-template="{{input}} Lower B" selected="false"></x-super><x-cable id="guid-125a6366-aaab-494c-a09a-4ea191ea1ebb" from="guid-777510da-5dbd-45c8-b80c-775153fcff83:output" to="A:input" selected="false"></x-cable><x-cable id="guid-01037796-4036-42be-973c-c75d74d52a35" from="guid-77c9ff42-c411-4192-9d4a-438e7d7b7a8a:output" to="guid-777510da-5dbd-45c8-b80c-775153fcff83:input" selected="false"></x-cable>
 
 
 

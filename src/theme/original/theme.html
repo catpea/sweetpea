@@ -73,7 +73,14 @@
 
     <template id="worker-parameters-string">
       <div class="form-floating">
-        <input id="floatingInput" type="text" class="form-control" data-bind="value">
+        <input id="floatingInput" type="text" class="form-control" data-bind="@value">
+        <label for="floatingInput" data-bind="name">URL</label>
+      </div>
+    </template>
+
+    <template id="worker-parameters-input">
+      <div class="form-floating">
+        <input id="floatingInput" class="form-control" data-bind="@value, @type">
         <label for="floatingInput" data-bind="name">URL</label>
       </div>
     </template>
@@ -81,7 +88,7 @@
     <template id="worker-parameters-textarea">
       <div class="">
         <label for="exampleFormControlTextarea1" class="form-label text-muted"><small data-bind="name"></small></label>
-        <textarea class="form-control font-monospace" id="exampleFormControlTextarea1" rows="6" data-bind="value" style="font-size: 0.72rem;"></textarea>
+        <textarea class="form-control font-monospace" id="exampleFormControlTextarea1" rows="6" data-bind="@value" style="font-size: 0.72rem;"></textarea>
 
       </div>
     </template>
@@ -92,7 +99,7 @@
           <label for="inputPassword6" class="col-form-label">Number</label>
         </div>
         <div class="col">
-          <input type="number" class="form-control" data-bind="value">
+          <input type="number" class="form-control" data-bind="@value">
         </div>
       </div>
     </template>

@@ -2,106 +2,45 @@ import EventEmittter from 'event-emitter';
 import {PortParameter, Parameter} from 'system-parameters';
 
 export class SystemWorker extends EventEmittter {
-
+  data; // function
   stage;
-
   queue;
   buffer;
 
-  data;
+  input = new PortParameter({description: "Input port for the node, located on the left side." });
+  output = new PortParameter({portDirection: "right", description: "Output port for the node, located on the right side." });
 
-  // primary ports
-  input = new PortParameter({enabled: true,                         description: "Input port for the node, located on the left side."   });
-  output = new PortParameter({enabled: true, portDirection: "right", description: "Output port for the node, located on the right side." });
-
-  constructor({id, queue, buffer, stage, data, cables}){
+  constructor({queue, buffer, stage, data}){
     super();
-
-    this.id  = id;   // this is the emitter
-    this.stage  = stage;   // this is the emitter
-
-    this.queue  = queue;   // Put jobs in here
-    this.buffer = buffer;  // when a job is complete it is put in the buffer
-
-    this.data   = data;    // component data
-    this.cables = cables;   // cable information
+    this.stage = stage; //NOTE: this is the emitter
+    this.queue = queue;
+    this.buffer = buffer;
+    this.data = data;
   }
 
-  async connect() {
-
-    // If no incoming connections, this is a producer
-    // take message from the scene and use it as job
-    this.gc = this.stage.on('start', message => {
-      const hasIncomingLinks = (this.cables.input.count > 0);
-      const isActingProducer = !hasIncomingLinks;
-
-      // NOTE: input simulation
-      const packet = {hasIncomingLinks, isActingProducer, source:this.id, links:this.cables.input.count, cdate: (new Date()).toISOString()}
-      if (isActingProducer) this.send('input', (message ?? packet) );
-    });
-
-    // this.gc = this.stage.on('stop', message => {
-    //   console.log('Stop');
-    // });
-
-    //
-    this.gc = this.on('input', input => {
-      this.queue.enqueue( input );
-    });
-
-
-    // When a new order is added to the queue
-        this.gc = this.queue.on('enqueue', async order => {
-
-          // console.log(`${this.constructor.name} queue order!`, order);
-
-          if(order === undefined) throw new Error('Enqueue Work order must be an object');
-          const product = await this.process(order, this.data.parameters);
-          // console.log(`${this.constructor.name} PRODUCT`, product);
-
-          // EARLY EXIT
-          if(product === undefined || product === null){
-            this.queue.remove(order.id);
-            return; // STOP RUN, nothing to pass along, not return value
-          }
-
-          // CONTINUE
-          // Store the finished product in the buffer
-          if(Array.isArray(product)){
-            for (const item of product) {
-              this.buffer.enbuffer(item);
-            }
-          }else{
-            this.buffer.enbuffer(product);
-          }
-          this.queue.remove(order.id);
-
-        });
-
-        // When a product is added to the buffer
-        this.gc = this.buffer.on('enbuffer', product => {
-          // Send the product out to another part of the system
-          this.send('output', product );
-
-          // Remove the product from the buffer since it's no longer needed
-          this.buffer.remove(product);
-        });
-
+  subscriptions = []; // {type:'list/item/value', id:'', run}
+  collectGarbage(){
+    this.subscriptions.forEach(s=>s.subscription())
   }
 
+  set gc(subscription){ // shorthand for component level garbage collection
+    this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription} );
+  }
 
-  async connect2(){
+  async connect(){
 
     // console.log('connect', this.constructor.name);
 
     // Let's make the code a bit more readable
-
+    const actor = this;
     const stage = this.stage;
     const queue = this.queue;
     const buffer = this.buffer;
 
     // When message is sent to this actor
-    this.gc = this.on('input', input => {
+    this.gc = actor.on('input', input => {
+      // console.log(`${this.constructor.name} got input packet!`, input);
+
       queue.enqueue( input );
     });
 
@@ -136,21 +75,21 @@ export class SystemWorker extends EventEmittter {
     // When a product is added to the buffer
     this.gc = buffer.on('enbuffer', product => {
       // Send the product out to another part of the system
-      this.send('output', product );
+      actor.send('output', product );
 
       // Remove the product from the buffer since it's no longer needed
       buffer.remove(product);
     });
 
     // Control protocol aka DATA PULL
-    this.gc = this.on('control', async control=>{
+    this.gc = actor.on('control', async control=>{
       // console.log(`${this.constructor.name} got control packet!`, control);
       switch(control.event) {
         case 'request':
-          await this.transmit(control.event||1, this.data.parameters);
+          await actor.transmit(control.event||1, this.data.parameters);
           break;
         case 'quiesce':
-          this.pause();
+          actor.pause();
           break;
         default:
           console.info('unknown control', control.event);
@@ -222,11 +161,6 @@ export class SystemWorker extends EventEmittter {
   //   return parameters;
   // }
 
-
-  // Garbage Manager
-  subscriptions = [];
-  collectGarbage(){ this.subscriptions.forEach(s=>s.subscription()) }
-  set gc(subscription){  this.subscriptions.push( {type:'gc-standard', id:'gc-'+this.subscriptions.length, subscription} ) }
 }
 
 export default {SystemWorker}

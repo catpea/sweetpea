@@ -37,10 +37,10 @@ export class InputParameter extends Parameter {
     const defaults = {
       type: 'input',
     }
-    super(Object.assign({},defaults,setup)); // assigns signal value,
+    super(Object.assign({}, defaults, setup)); // assigns signal value,
   }
 }
 
 export class PortParameter extends Parameter {}
 export class EventParameter extends Parameter {}
-export default { Parameter, EnumParameter, StringParameter, PortParameter, EventParameter }
+export default { Parameter, EnumParameter, StringParameter, PortParameter, EventParameter, InputParameter }

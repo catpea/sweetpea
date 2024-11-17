@@ -73,6 +73,19 @@
     },
 
     {
+      "id": "data-structure",
+      "name": "Data Structure",
+      "description": "Tools for creating data structures",
+      "blocks": [
+        {
+          "id":"shadow-tree",
+          "name": "Shadow Tree",
+          "description": "Dom Shadow Tree"
+        }
+      ]
+    },
+
+    {
       "id": "logging-and-monitoring",
       "name": "Logging and Monitoring",
       "description": "Functions for logging activities and monitoring performance within workflows, providing insights into operation success and failures.",

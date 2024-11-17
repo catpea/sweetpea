@@ -1,24 +1,6 @@
 import Signal from 'signal';
 
-export default function main (el){
-
-  const dataStore = new DataStore(el);
-
-  return new Proxy(dataStore, {
-    get(dataStore, key) {
-      if (key === 'destroy') return ()=>dataStore.destroy();
-      if (key === 'parameters') return dataStore.parameters();
-      return dataStore.getSignal(key);
-    },
-    set(dataStore, key, value) {
-      dataStore.updateSignal(key, value);
-    },
-  });
-
-} // main
-
-
-class DataStore {
+export default class DataStore {
   signals = {};
   #el;
   #observer;
@@ -72,9 +54,13 @@ class DataStore {
 
   ensureSignal(key) {
     const missing = !this.signals[key];
+
     if (missing) {
-      this.signals[key] = new Signal(this.#el.getAttribute(`data-${key}`));
+      let initialValue = this.#el.getAttribute(`data-${key}`);
+      if (initialValue === "") initialValue = undefined;
+      this.signals[key] = new Signal(initialValue);
     }
+
     this.gc = this.signals[key].subscribe(v => {
       if (v !== this.#el.getAttribute(`data-${key}`)) this.#el.setAttribute(`data-${key}`, v);
     })
