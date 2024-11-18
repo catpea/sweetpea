@@ -8,6 +8,7 @@ import DataContext from './data-context/DataContext.js';
 import ElementSearch from './element-search/ElementSearch.js';
 import Logging from './logging/Logging.js';
 import Curlies from './curlies/Curlies.js';
+import FlowSupport from './flow-support/FlowSupport.js';
 import WorkerSupport from './worker-support/WorkerSupport.js';
 import ElementView from './element-view/ElementView.js';
 import UseAttribute from './use-attribute/UseAttribute.js';
@@ -32,6 +33,7 @@ export default function(){
     ElementSearch, // verbose element locator that searches within the components zone of influence only
     Logging,       // .log functionality and related methods
     Curlies,       // Sigh, {{}} bracket expansion and interpolation
+    FlowSupport, //
     WorkerSupport, // worker Signal
     ElementView, // View and onclick="()=>" events
     UseAttribute,   // <element use="feature1, feature2"> support

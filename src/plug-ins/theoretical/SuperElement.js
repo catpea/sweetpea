@@ -8,7 +8,7 @@ export default class SuperElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['x', 'y', 'supervisor', 'worker', 'selected', 'debug'];
+    return ['x', 'y', 'supervisor', 'worker', 'flow', 'selected', 'debug'];
   }
 
   constructor() {
@@ -35,7 +35,13 @@ export default class SuperElement extends HTMLElement {
         const [category, type] = newValue.split('/');
         this.instance.workerCategory.set(category);
         this.instance.workerType.set(type);
-      }
+      },
+      'flow': () => {
+        if (!newValue) return;
+        const [category, type] = newValue.split('/');
+        this.instance.flowCategory.set(category);
+        this.instance.flowType.set(type);
+      },
     };
 
     if (oldValue == newValue) return;
@@ -66,7 +72,7 @@ export default class SuperElement extends HTMLElement {
   }
 
   get actor(){
-    return this.instance.workerInstance.value
+    return this.instance.actor;
   }
 
   get state(){

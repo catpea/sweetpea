@@ -129,6 +129,7 @@ export default class Stage extends Theoretical {
     <div class="btn-group-vertical mb-2" role="group" aria-label="First group">
       <button type="button" class="btn btn-outline-secondary" onclick="()=>this.stage.emit('start');" title="Send Start"><i class="bi bi-play"></i></button>
       <button type="button" class="btn btn-outline-secondary" onclick="()=>this.stage.emit('stop');" title="Send Stop"><i class="bi bi-stop"></i></button>
+      <button type="button" class="btn btn-outline-secondary" onclick="()=>this.stage.emit('kill');" title="Send Kill"><i class="bi bi-capsule"></i></button>
       <!-- debugger buttons
       <button type="button" class="btn btn-outline-secondary" onclick="ev=>this.say(ev)"><i class="bi bi-arrow-clockwise text-danger" ></i></button>
       <button type="button" class="btn btn-outline-secondary" onclick="console.log(this)"><i class="bi bi-arrow-90deg-down flip-horizontal" ></i></button>
@@ -371,7 +372,7 @@ export default class Stage extends Theoretical {
     x = x-panX;
     y = y-panY;
 
-    this.createSupervisor({x,y, supervisor:"system/standard", worker:"stage/comment", initialFace:'.card.worker-configuration'});
+    this.createSupervisor({x,y, supervisor:"system/standard", flow:"queue-and-buffer/just-forward", worker:"stage/comment", initialFace:'.card.worker-configuration'});
 
   }
 

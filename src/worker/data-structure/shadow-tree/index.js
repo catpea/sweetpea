@@ -10,25 +10,11 @@ export default class ShadowTree extends SystemWorker {
     new TextareaParameter({name: 'template', defaultValue: ``, description: "Web Component ", rows:20 }),
   ]);
 
-  async connected(){
-    // this.input.alter(v=>v.showPort=false);
-    // this.output.alter(v=>v.showPort=false);
-    // console.log(this.data.parameters);
-    // this.data.template.subscribe(html => {
-    //   console.log('HTML CHANGED', html);
-
-    // })
-
-  }
-
   async process(input, { template }) {
-    if (typeof input !== 'string') input = "";
-
+    if (typeof input !== 'string') input = JSON.stringify(input);
     const result = interpolate(template, { input }, new RegExp('{{([^}]+)}}', 'g'))
     return result;
-
   }
-
 
   async diagnostic(){
     const input = Math.random();
@@ -38,29 +24,3 @@ export default class ShadowTree extends SystemWorker {
   }
 
 }
-
-
-// import {Actor} from 'actor';
-//
-// export default class JsonObject extends Actor {
-//
-//   static parameters = [
-//     { name:"object",   default:'{"url":"example.com"}',    type:'string', description:'JSON Object' },
-//   ];
-//
-//   constructor({ stage, worker, queue, cache }){
-//     super(...arguments);
-//     const actor = this;
-//     this.hasInput.value = false;
-//   }
-//
-//   transmit(){
-//     this.buffer.enbuffer({value:'ALL WORK ALL PLAY'});
-//     super.transmit(...arguments);
-//   }
-//
-//   async work(parameters){
-//     return {value:'WORK'}
-//   }
-//
-// }

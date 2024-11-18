@@ -1,11 +1,12 @@
 import location from 'location';
 import masticator from 'masticator';
-import EventEmittter from 'event-emitter';
+import EventEmitter from 'event-emitter';
 import Signal from 'signal';
 import signalMerge from 'signal-merge';
 
 
 export default Inheritance => class ActorIntegration extends Inheritance {
+  actor = new EventEmitter();
 
   View;
 

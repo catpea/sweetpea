@@ -2,7 +2,7 @@ import EventEmitter from 'event-emitter';
 
 export default Inheritance => class VisualProgramming extends Inheritance {
 
-  createSupervisor({x,y,initialFace, supervisor, worker}){
+  createSupervisor({x,y,initialFace, supervisor, worker, flow}){
     const stage = this.getStage();
 
     // If x or y are missing set coordinates to middle of the screen
@@ -29,6 +29,7 @@ export default Inheritance => class VisualProgramming extends Inheritance {
 
     supervisorElement.setAttribute('supervisor', supervisor);
     supervisorElement.setAttribute('worker', worker);
+    supervisorElement.setAttribute('flow', flow);
 
     stage.appendChild(supervisorElement);
     if(initialFace) supervisorElement.instance.initialFace = initialFace;

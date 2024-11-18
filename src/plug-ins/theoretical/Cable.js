@@ -54,11 +54,16 @@ export default class Cable extends Theoretical {
     const toProgram   = this.getProgramComponent('to');
 
     // const subscription = fromProgram.actor.on(fromPortId, packet=>toProgram.actor.send(toPortId, packet));
-    this.gc = fromProgram.actor.on(fromPortId, packet=>{
-      // console.info(`Cable passing message between ${fromProgram.id} and ${toProgram.id}, on ports ${fromPortId}->${toPortId} as they are connected with a cable.`, packet);
+    this.gc = fromProgram.actor.on(fromPortId, (packet, metadata = {})=>{
+
       if(packet == undefined) throw new Error('Packet is a required parameter');
-      // if(packet.value == undefined) throw new Error('Packet .value is a required parameter');
-        toProgram.actor.send(toPortId, packet);
+
+      metadata.fromProgram = fromProgramId;
+      metadata.fromPort = fromPortId;
+      metadata.fromCable = this.host.id;
+      // console.log('Cable is forwarding', toPortId, packet, metadata);
+
+      toProgram.actor.send(toPortId, packet, metadata);
     });
 
     fromProgram.instance.cables[fromPortId].add(toProgramId, toPortId);
@@ -229,7 +234,7 @@ export default class Cable extends Theoretical {
       let [componentId, portId] = this.host.getAttribute(attributeName).split(':');
       const stage = this.getStage();
       const programComponent = stage.querySelector('#'+componentId);
-      const targetNode = programComponent.shadowRoot.querySelector('[data-slot=parameters]')
+      const targetNode = programComponent.shadowRoot.querySelector('[data-slot=worker-parameters]')
 
 
       // console.log(`monitorPosition: componentId=${componentId} portId=${portId}`);

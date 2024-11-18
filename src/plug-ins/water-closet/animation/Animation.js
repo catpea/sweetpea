@@ -1,3 +1,5 @@
+import debounce from 'debounce';
+
 export default Inheritance => class Animation extends Inheritance {
 
   frontElement;
@@ -8,6 +10,40 @@ export default Inheritance => class Animation extends Inheritance {
   targetRotation = 0;
   animationFrame = null;
 
+  equalizeCardHeights() {
+
+    //TODO: reflow this section - possibly make a faux-standalone-library
+      const container = this.searchShadow('.perspective').pop();
+      const allElements = container.querySelectorAll('.card');
+
+    const setEqualHeights = () => {
+      let maxHeight = 0;
+
+      allElements.forEach(element => {
+           element.style.height = 'auto';
+       });
+
+      allElements.forEach(element => {
+        maxHeight = Math.max(maxHeight, element.clientHeight);
+      });
+
+      allElements.forEach(element => {
+        element.style.minHeight = maxHeight + 'px';
+      });
+    }
+    const debouncedSetEqualHeights = debounce(setEqualHeights, 200); // adjust time as necessary
+    setEqualHeights();
+
+   const resizeObserver = new ResizeObserver(() => {
+               debouncedSetEqualHeights();
+           });
+    allElements.forEach(element => {
+                resizeObserver.observe(element);
+            });
+
+    this.gc = ()=>resizeObserver.disconnect()
+  }
+
   flipTo(selector, options){
 
     const container = this.searchShadow('.perspective').pop();
@@ -15,6 +51,15 @@ export default Inheritance => class Animation extends Inheritance {
     if(!frontElement) throw new Error('.active-card not found.')
     const backElement = container.querySelector(selector);
     if(!backElement) throw new Error('Card face not found.')
+
+
+    // hide all but what we need
+    container.querySelectorAll('.card').forEach(e=>e.classList.add('d-none')); // container.querySelectorAll('.card:not(.active-card)').forEach(e=>e.classList.add('d-none'));
+    frontElement.classList.remove('d-none');
+    backElement.classList.remove('d-none');
+
+
+
 
     const defaults = {
       increment: 10,

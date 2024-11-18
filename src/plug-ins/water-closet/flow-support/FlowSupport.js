@@ -5,87 +5,83 @@ import Signal from 'signal';
 
 import signalMerge from 'signal-merge';
 
-export default Inheritance => class WorkerSupport extends Inheritance {
+export default Inheritance => class FlowSupport extends Inheritance {
 
-  workerIndex = new Signal();
-  workerCategory = new Signal();
-  workerType = new Signal();
+  flowIndex = new Signal();
+  flowCategory = new Signal();
+  flowType = new Signal();
 
-  workerPath = new Signal();
-  WorkerClass = new Signal();
-  workerInstance = new Signal();
+  flowPath = new Signal();
+  FlowClass = new Signal();
+  flowInstance = new Signal();
 
-  async createWorker(){
+  async createFlow(){
 
-
-    this.gc = this.workerCategory.subscribe(async workerCategory => {
-      const category = workerCategory;
-      const type = this.workerType.value;
-      if(category && type) this.workerPath.value = `${category}/${type}`
+    this.gc = this.flowCategory.subscribe(async flowCategory => {
+      const category = flowCategory;
+      const type = this.flowType.value;
+      if(category && type) this.flowPath.value = `${category}/${type}`
     });
 
-    this.gc = this.workerType.subscribe(async workerType=>{
-      const category = this.workerCategory.value;
-      const type = workerType;
-      if(category && type) this.workerPath.value = `${category}/${type}`
+    this.gc = this.flowType.subscribe(async flowType=>{
+      const category = this.flowCategory.value;
+      const type = flowType;
+      if(category && type) this.flowPath.value = `${category}/${type}`
     });
 
-    this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
-    this.gc = this.workerPath.subscribe(async workerPath => {
-      if (this.host.getAttribute('worker') !== workerPath) {
-        this.host.setAttribute('worker', workerPath);
+    this.gc = this.flowPath.subscribe(async flowPath=>this.FlowClass.value = (await import(`${location(window.location.href)}/src/flow/${flowPath}/index.js`)).default);
+
+    this.gc = this.flowPath.subscribe(async flowPath => {
+      if (this.host.getAttribute('flow') !== flowPath) {
+        this.host.setAttribute('flow', flowPath);
       }
     });
 
-    // (Re)Create Worker Instance
-    this.gc = this.WorkerClass.subscribe(async WorkerClass => {
-      if (this.workerInstance.value) await this.workerInstance.value.stop();
-      this.workerInstance.value = new WorkerClass({ id:this.host.id, queue: this.queue, buffer: this.buffer, stage: this.getStage().emitter, data: this.data, cables:this.cables })
+    this.gc = this.FlowClass.subscribe(async FlowClass => {
+      if (this.flowInstance.value) await this.flowInstance.value.disconnect(); // disconnect previous - as we are instantiating a new one
+      const options = {
+        id: this.host.id,
+        queue: this.queue,
+        buffer: this.buffer,
+        stage: this.getStage().emitter,
+        data: this.data,
+        cables: this.cables,
+        worker: this.workerInstance.value, // calss that has function to execute
+        actor: this.actor, // bus
+      };
+      const flow = new FlowClass(options);
+      this.gc = this.workerInstance.subscribe(v => flow.worker = v);
+      this.flowInstance.value = flow;
     })
 
-    // Start Worker Instance
-    this.gc = this.workerInstance.subscribe(async workerInstance=>{
-      await workerInstance.start();
+    this.gc = this.flowInstance.subscribe(async flowInstance=>{
+     await flowInstance.connect();
     });
 
-    this.gc = ()=>this.workerInstance.value.stop(); // .gc will clean up on removal of element
+    this.gc = ()=>this.flowInstance.value.disconnect(); // .gc will clean up on removal of element
 
-    await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
+    // await new Promise(resolve=>this.gc=this.flowInstance.subscribe(v=>Boolean(v)?resolve():null));
     return this;
 
   }
 
 
-  async installWorkerIndex() {
-    const environment = new Set();
-
-    if(globalThis.process && globalThis.process?.versions?.nw) environment.add('NW.js')
-
-    const data = await this.fetchJSON('src/worker/index.json');
-
-    for (const category of data.categories) {
-
-      category.blocks = category.blocks.filter(block=>block.engine?!!environment.intersection(new Set(block.engine)).size:true)
-
-
-    }
-
-    this.workerIndex.value = data;
-    return this;
+  async installFlowIndex() {
+    this.flowIndex.value = await this.fetchJSON('src/flow/index.json');
   }
 
 
 
-  listWorkerCategories() {
-    const selector = '[data-slot="worker-category-list"]';
-    this.gc = this.workerIndex.subscribe(workerIndex => this.host.shadowRoot.querySelectorAll(selector).forEach(containerNode => {
+  listFlowCategories() {
+    const selector = '[data-slot="flow-category-list"]';
+    this.gc = this.flowIndex.subscribe(flowIndex => this.host.shadowRoot.querySelectorAll(selector).forEach(containerNode => {
       // prepare state of co-dependent dropdown
-      this.host.shadowRoot.querySelectorAll('[data-slot="worker-list"]').forEach(containerNode => { containerNode.replaceChildren(); containerNode.disabled = true })
+      this.host.shadowRoot.querySelectorAll('[data-slot="flow-list"]').forEach(containerNode => { containerNode.replaceChildren(); containerNode.disabled = true })
 
       const changeHandler = event => {
         if (event.target.value == "--label--") return;
-        this.workerType.value = null;
-        this.workerCategory.value = event.target.value;
+        this.flowType.value = null;
+        this.flowCategory.value = event.target.value;
         const description = event.target[event.target.selectedIndex].dataset.description;
         this.host.shadowRoot.querySelectorAll('[data-slot="description"]').forEach(el => { el.replaceChildren(description); })
 
@@ -97,31 +93,31 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       containerNode.replaceChildren();
       {
         const optionNode = document.createElement("option");
-        optionNode.append('Select Category:');
+        optionNode.append('Select Flow Category:');
         optionNode.value = "--label--";
         containerNode.appendChild(optionNode);
       }
-      for (const category of workerIndex.categories) {
+      for (const category of flowIndex.categories) {
         const optionNode = document.createElement("option");
         optionNode.value = category.id;
         optionNode.dataset.description = category.description;
         optionNode.append(category.name);
         containerNode.appendChild(optionNode);
       }
-      this.gc = this.workerCategory.subscribe(v=>containerNode.value=v||"--label--")
+      this.gc = this.flowCategory.subscribe(v=>containerNode.value=v||"--label--")
 
     }))
 
   }
 
-  listWorkerCategoryWorkers() {
-    const selector = '[data-slot="worker-list"]';
-    this.gc = this.workerCategory.subscribe(workerCategory => this.host.shadowRoot.querySelectorAll(selector).forEach(containerNode => {
+  listFlowCategoryFlows() {
+    const selector = '[data-slot="flow-list"]';
+    this.gc = this.flowCategory.subscribe(flowCategory => this.host.shadowRoot.querySelectorAll(selector).forEach(containerNode => {
 
       const changeHandler = event => {
         if (event.target.value == "--label--") return;
 
-        this.workerType.value = event.target.value;
+        this.flowType.value = event.target.value;
         const description = event.target[event.target.selectedIndex].dataset.description;
         this.host.shadowRoot.querySelectorAll('[data-slot="description"]').forEach(el => { el.replaceChildren(description); })
       };
@@ -133,10 +129,10 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       {
         const optionNode = document.createElement("option");
         optionNode.value = "--label--";
-        optionNode.append('Select Type:');
+        optionNode.append('Select Flow Strategy:');
         containerNode.appendChild(optionNode);
       }
-      const category = this.workerIndex.value.categories.find(o => o.id === workerCategory);
+      const category = this.flowIndex.value.categories.find(o => o.id === flowCategory);
       for (const block of category.blocks) {
         const optionNode = document.createElement("option");
         optionNode.value = block.id;
@@ -145,7 +141,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         optionNode.append(block.name);
         containerNode.appendChild(optionNode);
       }
-      this.gc = this.workerType.subscribe(v=>containerNode.value=v||"--label--")
+      this.gc = this.flowType.subscribe(v=>containerNode.value=v||"--label--")
       // select
     }));
   }
@@ -153,44 +149,19 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
 
 
-  activateInputPort(selector = `[data-feature="standard-input"]`){
-    this.gc = this.workerInstance.subscribe(workerInstance=>{
-      this.gc = workerInstance.input.subscribe(v=>this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.style.display = v.showPort?'block':'none'))
-    })
-    return this;
-  }
 
-  activateOutputPort(selector = `[data-feature="standard-output"]`){
-    this.gc = this.workerInstance.subscribe(workerInstance=>{
-      this.gc = workerInstance.output.subscribe(v=>this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.style.display = v.showPort?'block':'none'))
-    })
-    return this;
-  }
 
-  deactivateIO(selector = `[data-feature="standard-io"]`){
-    this.gc = this.workerInstance.subscribe(workerInstance=>{
-    const merged = signalMerge({ input: workerInstance.input, output: workerInstance.output }, this.subscriptions);
-    const subscription = merged.subscribe(o=>{
-      const bothInActive = o.input.showPort===false&&o.output.showPort===false;
-      this.host.shadowRoot.querySelectorAll(selector).forEach(el=>el.style.display = bothInActive?'none':'block');
-    })
-    this.subscriptions.push( {type:'signal-merge', id:selector, subscription} );
-    })
-
-    return this;
-  }
-
-  renderWorkerViewParameters(){
-    this.gc = this.workerInstance.subscribe(workerInstance=>{ // once worker instance becomes available
-      this.gc = workerInstance.parameters.subscribe(parameters=>this.#renderWorkerParameters(parameters));
+  renderFlowViewParameters(){
+    this.gc = this.flowInstance.subscribe(flowInstance=>{ // once flow instance becomes available
+      this.gc = flowInstance.parameters.subscribe(parameters=>this.#renderFlowParameters(parameters));
     });
     return this;
   }
 
 
-  #renderWorkerParameters(parameters){
+  #renderFlowParameters(parameters){
 
-    const parametersSlot  = this.host.shadowRoot.querySelector('[data-slot=worker-parameters]');
+    const parametersSlot  = this.host.shadowRoot.querySelector('[data-slot=flow-parameters]');
     const existingParameters = new Set(parameters.map(v => v.value.name));
 
     for (const child of parametersSlot.children) {
@@ -213,8 +184,8 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       if (type === 'port') continue; // taken care of
       if (this.host.shadowRoot.getElementById(parameter.name)) continue; // already exists
 
-      const contentNode = this.getStage().instance.theme.template('worker-parameters');
-      const typeNode = this.getStage().instance.theme.template(`worker-parameters-${type}`);
+      const contentNode = this.getStage().instance.theme.template('flow-parameters');
+      const typeNode = this.getStage().instance.theme.template(`flow-parameters-${type}`);
 
       contentNode.firstChild.id = parameter.name;
 
@@ -252,7 +223,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
       contentNode.querySelector('[data-slot=type]').appendChild(typeNode);
 
-      // WorkerSupport binding of bindings
+      // FlowSupport binding of bindings
       const boundElements = contentNode.querySelectorAll('[data-bind]');
 
       // template has been rendered, now apply any bindings

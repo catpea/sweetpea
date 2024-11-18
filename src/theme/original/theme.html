@@ -3,12 +3,14 @@
 
 
     <template id="supervisor-interface">
+
       <div class="perspective movable d-none" use="movable selectable focusable">
 
         <div class="card front shadow active-card">
           <div class="card-header drag-handle focusable-handle">
-            <span class="selectable-handle small" data-slot="worker-path">ddd</span>
-             <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.back')"><i class="bi bi-gear"></i></button>
+            <span class="selectable-handle small" data-slot="worker-path"></span>
+             <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50 me-1" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.worker-configuration')"><i class="bi bi-gear"></i></button>
+             <button type="button" class="btn btn-sm btn-outline-secondary float-end opacity-50 me-1" style="--bs-btn-padding-y: .09rem; --bs-btn-padding-x: .28rem; --bs-btn-font-size: .80rem;" onclick="(element, component)=>this.flip('.flow-configuration')"><i class="bi bi-command"></i></button>
           </div>
 
           <ul class="list-group list-group-flush" data-feature="standard-io">
@@ -23,7 +25,7 @@
 
 
 
-          <ul class="list-group list-group-flush" data-slot="parameters">
+          <ul class="list-group list-group-flush" data-slot="worker-parameters">
           </ul>
 
           <div class="card-footer text-wrap">
@@ -33,20 +35,16 @@
           </div>
         </div>
 
-        <div class="card back worker-configuration shadow">
+        <div class="card worker-configuration shadow">
           <div class="card-header drag-handle focusable-handle">
             <span class="selectable-handle">Configuration</span> <button type="button" class="btn btn-sm btn-outline-success float-end" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;" onclick="(element, component)=>this.flip('.front')"><i class="bi bi-check-circle"></i></button>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
-
-              <select class="form-select form-select-sm mb-2" data-slot="category-list">
+              <select class="form-select form-select-sm mb-2" data-slot="worker-category-list">
               </select>
-
               <select class="form-select form-select-sm mb-2" data-slot="worker-list">
               </select>
-
-
             </li>
             <li class="list-group-item" data-slot="description"></li>
           </ul>
@@ -57,8 +55,35 @@
           </div>
         </div>
 
+        <div class="card flow-configuration shadow">
+          <div class="card-header drag-handle focusable-handle">
+            <span class="selectable-handle">Flow</span> <button type="button" class="btn btn-sm btn-outline-success float-end" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;" onclick="(element, component)=>this.flip('.front')"><i class="bi bi-check-circle"></i></button>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" style="min-height: 5rem;">
+                <select class="form-select form-select-sm mb-2" data-slot="flow-category-list">
+                </select>
+                <select class="form-select form-select-sm mb-2" data-slot="flow-list">
+                </select>
+            </li>
+            <li class="list-group-item" data-slot="description"></li>
+          </ul>
+          <div class="card-footer text-wrap">
+            <small class="muted">
+            Configure flow strategy
+            </small>
+          </div>
+        </div>
+
       </div>
+
     </template>
+
+
+
+
+
+
 
 
     <template id="worker-parameters">

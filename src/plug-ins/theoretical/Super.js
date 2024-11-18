@@ -31,20 +31,25 @@ export default class Super extends Theoretical {
 
         .activateInputPort
         .activateOutputPort
-
-        .renderViewParameters
+        .deactivateIO
 
         .liveQueueStats
         .liveBufferStats
-        .deactivateIO
 
+        .renderWorkerViewParameters
         .installWorkerIndex
         .listWorkerCategories
-        .listCategoryWorkers
+        .listWorkerCategoryWorkers
+
+        .createFlow
+        .installFlowIndex
+        .listFlowCategories
+        .listFlowCategoryFlows
 
         .installVisualSelectionIndicator
         .dispatchReady
         .showUI
+        .equalizeCardHeights
         .run()
 
       },

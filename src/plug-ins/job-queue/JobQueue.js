@@ -9,7 +9,7 @@ export default class JobQueue  extends EventEmitter {
     super()
   }
   enqueue(job) {
-    if(!job) throw new Error('Job is a required prameter');
+    // if(!job) throw new Error('Job is a required prameter');
 
     this.#list.push(job);
     this.count.set(this.#list.length);
@@ -21,8 +21,8 @@ export default class JobQueue  extends EventEmitter {
     this.count.set(this.#list.length);
     this.emit('dequeue', job);
   }
-  remove(id){
-    this.#list.splice(this.#list.findIndex(o => o.id === id), 1);
+  remove(job) {
+    this.#list.splice(this.#list.indexOf(job), 1);
     this.count.set(this.#list.length);
   }
   [Symbol.iterator]() {
