@@ -8,7 +8,7 @@ export class Parameter extends Signal {
     const defaults = {
       description: "Parameter does not have a description",
       defaultValue: null,
-      portDirection: "left",
+      portDirection: 'out',
       showPort: true,
       enumeratedMembers: [],
     }

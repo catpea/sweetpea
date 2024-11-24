@@ -107,6 +107,12 @@
           "id": "js-fetch",
           "name": "JavaScript Fetch from Local Service",
           "description": "Retrieves data from a specified local service over the network."
+        },
+        {
+          "id": "mdns-discovery",
+          "name": "Multicast DNS Service Discovery",
+          "engine": ["NW.js"],
+          "description": "Discover mDNS services on the local network."
         }
       ]
     }

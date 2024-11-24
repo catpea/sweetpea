@@ -93,47 +93,10 @@
 
   </script>
 
-  <body>
-
+  <body oncontextmenu="return false;">
 
   <x-stage controls minimap template="stage" theme="original">
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        <x-super id="A" x="1243" y="470" supervisor="system/standard" flow="queue-and-buffer/combine-latest" worker="data-structure/shadow-tree" data-template="[{{input}}]" selected="false"></x-super>
-                    <x-super id="B" x="513" y="122" supervisor="system/standard" flow="queue-and-buffer/just-forward" worker="data-structure/shadow-tree" data-text="" data-template="{{input}} Upper" selected="false"></x-super>
-                    <x-cable id="guid-58e73e32-0b5c-4e22-abf9-3ab34c75d804" from="B:output" to="A:input" selected="false"></x-cable>
-                    <x-super id="C" x="2087" y="489" supervisor="system/standard" flow="queue-and-buffer/just-forward" worker="logging-and-monitoring/console" data-text="Result" data-context="warn" selected="true"></x-super>
-
-
-
-
-
-
-                    <x-super id="guid-77c9ff42-c411-4192-9d4a-438e7d7b7a8a" x="324" y="594" supervisor="system/standard" flow="queue-and-buffer/just-forward" worker="data-structure/shadow-tree" data-text="" data-template="{{input}} Lower A" selected="false"></x-super><x-super id="guid-ba1b8663-3c0f-48bd-8af8-d01d38dfa810" x="-269" y="318" supervisor="system/standard" flow="queue-and-buffer/just-forward" worker="data-structure/shadow-tree" data-text="" data-template="Root" selected="false"></x-super><x-cable id="guid-7729feb3-67c2-41f2-bdc0-a93fb757676c" from="guid-ba1b8663-3c0f-48bd-8af8-d01d38dfa810:output" to="B:input" selected="false"></x-cable><x-cable id="guid-1a2f4942-b1fd-47a3-81e3-70e8f75fad6d" from="guid-ba1b8663-3c0f-48bd-8af8-d01d38dfa810:output" to="guid-77c9ff42-c411-4192-9d4a-438e7d7b7a8a:input" selected="false"></x-cable><x-super id="guid-777510da-5dbd-45c8-b80c-775153fcff83" x="655" y="589" supervisor="system/standard" flow="queue-and-buffer/just-forward" worker="data-structure/shadow-tree" data-text="" data-json="{&quot;url&quot;:&quot;example.com&quot;}" data-template="{{input}} Lower B" selected="false"></x-super><x-cable id="guid-125a6366-aaab-494c-a09a-4ea191ea1ebb" from="guid-777510da-5dbd-45c8-b80c-775153fcff83:output" to="A:input" selected="false"></x-cable><x-cable id="guid-01037796-4036-42be-973c-c75d74d52a35" from="guid-77c9ff42-c411-4192-9d4a-438e7d7b7a8a:output" to="guid-777510da-5dbd-45c8-b80c-775153fcff83:input" selected="false"></x-cable>
-
-
-
-
-
-        <x-super id="guid-df83ce6a-267c-46d9-bca2-27ab66027783" x="1654" y="488" supervisor="system/standard" worker="data-structure/shadow-tree" flow="queue-and-buffer/just-forward" data-template="({{input}})" selected="false"></x-super><x-cable id="guid-d0e9564e-692f-421f-a8cb-fd636a647aab" from="A:output" to="guid-df83ce6a-267c-46d9-bca2-27ab66027783:input" selected="false"></x-cable><x-cable id="guid-7b51e6dd-bd5b-409f-8d84-0027a545a12c" from="guid-df83ce6a-267c-46d9-bca2-27ab66027783:output" to="C:input" selected="false"></x-cable>
-
-
-
   </x-stage>
-
-
-
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">

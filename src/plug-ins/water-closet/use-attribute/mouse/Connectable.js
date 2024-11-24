@@ -70,8 +70,11 @@ export default class Connectable {
 
     this.#dragging = true;
 
-    this.#touchdownOffsetX = event.layerX;
-    this.#touchdownOffsetY = event.layerY;
+    // offsetX gives you the horizontal coordinate relative to the target element
+    // clientX provides the mouse position relative to the viewport
+    // pageX provides the mouse position relative to the whole document
+    this.#touchdownOffsetX = event.offsetX;
+    this.#touchdownOffsetY = event.offsetY;
 
     const [x1, y1] = this.getCoordinates();
     // console.log( event, `${x1}x${y1} ${event.screenX}x${event.screenY}`);

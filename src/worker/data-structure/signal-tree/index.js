@@ -7,7 +7,7 @@ export default class SignalTree extends SystemWorker {
     new StringParameter({name: 'data', defaultValue: ``, description: "Data", rows:20 }),
   ]);
 
-  async connected(){
+  async start(){
     // this.input.alter(v=>v.showPort=false);
     // this.output.alter(v=>v.showPort=false);
   }

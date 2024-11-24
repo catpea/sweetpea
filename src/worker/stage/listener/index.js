@@ -7,7 +7,7 @@ export default class StageListener extends SystemWorker {
     new StringParameter({name:'event', defaultValue: `start`, description: "Name of stage event to emit" }),
   ]);
 
-  async connected(){
+  async start(){
     this.input.alter(v=>v.showPort=false);
 
     this.gc = this.stage.on('*', (eventName, message) => {

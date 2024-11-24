@@ -36,7 +36,8 @@ export default class Focusable {
 
     // Selecting Elements: It retrieves the selected element and all relevant children, filtering them based on their tag name.
     const selected = this.system.searchShadow('.perspective').pop();
-    const children = Array.from(this.system.getStage().children).filter(o=>o.tagName.toLowerCase() == `${VPL_ELEMENT_PREFIX}-super`).map(o=>o.instance.searchShadow('.perspective').pop())
+    const children = Array.from(this.system.getStage().children).filter(o=>o.tagName.toLowerCase() == `${VPL_ELEMENT_PREFIX}-super`).map(o=>o.instance.searchShadow('.perspective').pop()).filter(e => e)
+
 
     // Normalizing z-index: It ensures that any elements without a defined z-index are assigned one based on their order.
     for (const [index, supervisor] of children.entries()) {
@@ -58,22 +59,8 @@ export default class Focusable {
       }
     }
 
-    // for (const [index, supervisor] of children.entries()) console.log('OOO', supervisor, supervisor.style.zIndex );
-    // console.log('OOO selected', selected, selected.style.zIndex );
   }
 
-  mouseDownHandler2(event) {
 
-   const siblings = Array.from(this.system.getStage().children).filter(item=>item!==this.system.host);
-    for (const sibling of siblings) {
-    sibling.style.zIndex = '1';
-    console.log('SIB', sibling);
-    }
-
-    this.system.host.style.zIndex = '2';
-    console.log('SIB gg', this.system.host);
-
-
-  }
 
 }

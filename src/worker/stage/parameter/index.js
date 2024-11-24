@@ -7,7 +7,7 @@ export default class StageParameter extends SystemWorker {
     new StringParameter({ name:'json', defaultValue: `{"url":"example.com"}`, description: "JSON Object" }),
   ]);
 
-  async connected(){
+  async start(){
     this.input.alter(v=>v.showPort=false);
   }
 

@@ -30,27 +30,71 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       if(category && type) this.workerPath.value = `${category}/${type}`
     });
 
-    this.gc = this.workerPath.subscribe(async workerPath=>this.WorkerClass.set((await import(`${location(window.location.href)}/src/worker/${workerPath}/index.js`)).default));
     this.gc = this.workerPath.subscribe(async workerPath => {
+      const url = `${location(window.location.href)}/src/worker/${workerPath}/index.js`;
+      const worker = await import(url);
+      this.WorkerClass.value = worker.default;
+      console.log(`Loaded ${url}`);
+
+    });
+
+    this.gc = this.workerPath.subscribe(async workerPath => {
+
       if (this.host.getAttribute('worker') !== workerPath) {
         this.host.setAttribute('worker', workerPath);
       }
+
     });
 
     // (Re)Create Worker Instance
     this.gc = this.WorkerClass.subscribe(async WorkerClass => {
-      if (this.workerInstance.value) await this.workerInstance.value.stop();
-      this.workerInstance.value = new WorkerClass({ id:this.host.id, queue: this.queue, buffer: this.buffer, stage: this.getStage().emitter, data: this.data, cables:this.cables })
+
+      if (this.workerInstance?.value){
+        await this.workerInstance.value.stop();
+        console.log(`STOPPED ${this.workerInstance.value.constructor.name}`);
+      }
+
+      const options = {
+        id: this.host.id,
+        queue: this.queue,
+        buffer: this.buffer,
+        stage: this.getStage().emitter,
+        data: this.data,
+        cables: this.cables
+      };
+
+      const type = this.workerType.value;
+      const category = this.workerCategory.value;
+      console.log(`Instantiating ${category}/${type}...`);
+       try {
+      this.workerInstance.value = new WorkerClass(options);
+       } catch (e) {
+             console.log(e);
+           }
+      //console.log(`this.workerInstance.value changed to ${this.workerInstance.value.constructor.name}`, this.workerInstance.value);
+
     })
 
     // Start Worker Instance
     this.gc = this.workerInstance.subscribe(async workerInstance=>{
-      await workerInstance.start();
+      try {
+        await workerInstance.start();
+      console.log(`STARTED ${this.workerInstance.value.constructor.name}`);
+      } catch (e) {
+        console.log(e);
+      }
     });
 
     this.gc = ()=>this.workerInstance.value.stop(); // .gc will clean up on removal of element
 
-    await new Promise(resolve=>this.gc=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null));
+    let mego;
+    await new Promise(resolve=>{
+      mego=this.workerInstance.subscribe(v=>Boolean(v)?resolve():null)
+    });
+    mego();
+
+    console.log('EXIT!');
+
     return this;
 
   }
@@ -189,6 +233,7 @@ export default Inheritance => class WorkerSupport extends Inheritance {
 
 
   #renderWorkerParameters(parameters){
+    console.log('parameters', parameters);
 
     const parametersSlot  = this.host.shadowRoot.querySelector('[data-slot=worker-parameters]');
     const existingParameters = new Set(parameters.map(v => v.value.name));
@@ -208,13 +253,15 @@ export default Inheritance => class WorkerSupport extends Inheritance {
       if(!this.data[parameter.name].value) this.data[parameter.name].value = parameter.defaultValue; // Initialize Defau;t Value
 
       const type =  $parameter.constructor.name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/-parameter$/,'');
+
       const label = parameter.name.replace(/([A-Z])/,' $1').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
-      if (type === 'port') continue; // taken care of
+      //if (type === 'port') continue; // taken care of
       if (this.host.shadowRoot.getElementById(parameter.name)) continue; // already exists
 
       const contentNode = this.getStage().instance.theme.template('worker-parameters');
       const typeNode = this.getStage().instance.theme.template(`worker-parameters-${type}`);
+      // console.log($parameter.constructor.name, `worker-parameters-${type}`, typeNode);
 
       contentNode.firstChild.id = parameter.name;
 

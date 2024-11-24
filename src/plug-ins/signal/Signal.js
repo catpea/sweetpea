@@ -35,7 +35,7 @@ export default class Signal {
       try {
         callback(this.#value);
       } catch (error) {
-        /////console.error('Error executing subscriber callback:', error);
+        console.error('Error executing subscriber callback:', error);
       }
     });
   }
@@ -43,15 +43,20 @@ export default class Signal {
 
   set(value) {
     const oldValue = this.#value;
-    this.#value = value;
-    // console.log('SET', isEqual(oldValue, this.#value), oldValue, this.#value);
-    if(!isEqual(oldValue, this.#value)) this.notify();
+    const newValue = value;
+    const changed = (oldValue !== newValue) || (!isEqual(oldValue, newValue));
+    //console.log('SET?', changed, (!isEqual(oldValue, newValue)), (oldValue !== newValue), oldValue, newValue);
+    if(changed){
+      this.#value = newValue;
+      this.notify();
+    }
   }
 
   alter(f) { // operates on instances
     const oldValue = cloneDeep(this.#value);
     f(this.#value);
     const newValue = this.#value;
+    console.log('alter?', (!isEqual(oldValue, newValue)), (oldValue !== newValue), oldValue, newValue);
     if(!isEqual(oldValue, newValue)){
       this.#value = newValue;
       this.notify();
@@ -82,7 +87,7 @@ export default class Signal {
   }
 
   get value() {
-    return this.#value;
+    return this.get();
   }
 
   set value(v) {

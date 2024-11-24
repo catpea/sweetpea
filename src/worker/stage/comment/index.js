@@ -8,7 +8,7 @@ export default class StageComment extends SystemWorker {
   ]);
 
 
-  async connected(){
+  async start(){
     this.input.alter(v=>v.showPort=false);
     this.output.alter(v=>v.showPort=false);
   }

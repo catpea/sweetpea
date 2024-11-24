@@ -41,7 +41,7 @@ export default class StageDirector extends SystemWorker {
     });
   }
 
-  async connected(){
+  async start(){
     this.input.alter(v=>v.showPort=false);
     this.output.alter(v=>v.showPort=false);
   }

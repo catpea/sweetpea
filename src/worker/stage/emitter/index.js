@@ -7,7 +7,7 @@ export default class StageEmitter extends SystemWorker {
     new StringParameter({name:'event', defaultValue: `start`, description: "Name of stage event to monitor" }),
   ]);
 
-  async connected(){
+  async start(){
     this.output.alter(v=>v.showPort=false);
     this.removeAllListeners('input');
     this.gc = this.on('input', input => {

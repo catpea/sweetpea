@@ -9,7 +9,7 @@ export default class JsFetch extends SystemWorker {
     new StringParameter({name:'url', defaultValue: "./samples/json-path-example.json", description: "Url of file to fetch." }),
   ]);
 
-  async connected(){
+  async start(){
   }
 
   async process(input, parameters){

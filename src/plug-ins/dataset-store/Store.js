@@ -16,8 +16,12 @@ export default class DataStore {
           // console.log(`mutation.attributeName: ${mutation.attributeName}`)
           if (mutation.attributeName.startsWith('data-')) {
             const [,key] = mutation.attributeName.split('-');
+            console.log({key}, Object.entries(this.signals));
+
             const incomingValue = mutation.target.getAttribute(mutation.attributeName);
-            const signalObject = Object.entries(this.signals).find(([k, v]) => key == k.toLowerCase())[1];
+            const signalObject = Object.entries(this.signals).find(([k, v]) => key == k.toLowerCase());
+            if (!signalObject) return console.warn(`mutation.attributeName ${mutation.attributeName} was not in a dataset-store`);
+
             const signalValue = signalObject.value;
             // console.log(`The ${mutation.attributeName} attribute was modified`);
             if (incomingValue !== signalValue){

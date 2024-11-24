@@ -33,6 +33,8 @@ export default class SuperElement extends HTMLElement {
       'worker': () => {
         if (!newValue) return;
         const [category, type] = newValue.split('/');
+        console.log({category, type});
+
         this.instance.workerCategory.set(category);
         this.instance.workerType.set(type);
       },

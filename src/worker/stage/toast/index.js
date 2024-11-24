@@ -7,8 +7,7 @@ export default class StageToast extends SystemWorker {
     new TextParameter({name: 'message', defaultValue: ``, description: "Toast message" }),
   ]);
 
-  async connected(){
-    this.input.alter(v=>v.showPort=false);
+  async start(){
     this.output.alter(v=>v.showPort=false);
   }
 

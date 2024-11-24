@@ -34,6 +34,10 @@ export default Inheritance => class VisualProgramming extends Inheritance {
     stage.appendChild(supervisorElement);
     if(initialFace) supervisorElement.instance.initialFace = initialFace;
 
+    this.gc = supervisorElement.instance.state.subscribe(state => {
+      if (state === 'ready') this.bringToFront(supervisorElement);
+    });
+
   }
 
 }

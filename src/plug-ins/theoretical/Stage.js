@@ -114,7 +114,7 @@ export default class Stage extends Theoretical {
           &raquo; sweetpea can run in nw.js
           &raquo; To select/deselect a component click its caption text.
           &raquo; Use <kbd>DEL</kbd> to remove selected components.
-          &raquo; Double click on the stage (knock) to cerate a new component.
+          &raquo; Right click on the stage to cerate a new component.
           &raquo; You are going to create a worker supervisor, you must then specify a worker.
         </div>
       </div>
@@ -338,15 +338,22 @@ export default class Stage extends Theoretical {
     this.host.addEventListener('touchmove',  this.#onTouchMove.bind(this));
     this.host.addEventListener('touchend',   this.#onTouchEnd.bind(this));
 
-    this.host.addEventListener('dblclick',   this.#dblClick.bind(this));
+    this.host.addEventListener('oncontextmenu',   this.#onTouchEnd.bind(this));
+
+    this.host.addEventListener('mousedown',   this.mousedown.bind(this));
 
     return this;
   }
 
-  #dblClick(e){
+  mousedown(e){
 
 
     if(e.target !== this.host) return;
+    if (e.button !== 2) return;
+
+
+
+
 
     const target = event.composedPath().find(o=>o.tagName==='BUTTON'||o===this.host);
     if(target !== this.host) return;
@@ -397,6 +404,8 @@ export default class Stage extends Theoretical {
     // Protected
     #onMouseDown(event) {
       if(event.target !== this.host) return
+      // if (event.button !== 1) return;
+
 
       const target = event.composedPath().find(o=>o.tagName==='BUTTON'||o===this.host);
       if(target !== this.host) return;

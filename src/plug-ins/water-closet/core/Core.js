@@ -86,7 +86,35 @@ export default Inheritance => class Core extends Inheritance {
 
 
 
+  bringToFront(selected) {
 
+    const children = Array.from(this.getStage().children)
+      .filter(o => o.tagName.toLowerCase() == `${VPL_ELEMENT_PREFIX}-super`)
+      .map(o => o.instance.searchShadow('.perspective').pop()) // pull up .perspective container
+      .filter(e => e);
+
+
+
+        // Normalizing z-index: It ensures that any elements without a defined z-index are assigned one based on their order.
+        for (const [index, supervisor] of children.entries()) {
+          if(supervisor.style.zIndex === '') supervisor.style.zIndex = String(index);
+        }
+
+        // Finding the Topmost z-index: It calculates the maximum z-index among the children to determine the next available z-index.
+        let top = String( Math.max( ...children.map(o=>parseInt(o.style.zIndex)) ) + 1);
+
+        // Setting the Selected Element: It updates the z-index of the selected element to be one higher than the current maximum.
+        selected.style.zIndex = top;
+
+        // Reindexing: Finally, it sorts the children by their z-index and applies a zero-based numbering scheme.
+        for (const [index, supervisor] of [...children].sort((a,b)=>parseInt(a.style.zIndex) - parseInt(b.style.zIndex) ).entries()) {
+          const oldValue = supervisor.style.zIndex;
+          const newValue = ''+index;
+          if(oldValue !== newValue){
+            supervisor.style.zIndex = newValue;
+          }
+        }
+  }
 
 
 
