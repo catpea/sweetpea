@@ -9,8 +9,14 @@ export class SystemWorker {
   input = new PortParameter({enabled: true,                         description: "Input port for the node, located on the left side."   });
   output = new PortParameter({enabled: true, portDirection: "right", description: "Output port for the node, located on the right side." });
 
-  constructor(){
-    // super();
+  constructor({ id, queue, buffer, stage, data, cables, actor }){
+    this.id = id;
+    this.queue = queue;
+    this.buffer = buffer;
+    this.stage = stage;
+    this.data = data;
+    this.cables = cables;
+    this.actor = actor;
   }
 
   async start() {

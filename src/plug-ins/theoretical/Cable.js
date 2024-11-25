@@ -383,7 +383,7 @@ export default class Cable extends Theoretical {
       if(!programComponent) throw new Error(`Unable to locate programComponent ${programComponent}`)
 
 
-      const portComponent = programComponent.shadowRoot.querySelector('#'+portId);
+      const portComponent = programComponent.shadowRoot.querySelector(`${VPL_ELEMENT_PREFIX}-valve`+'#'+portId);
      // //console.log(programComponent.shadowRoot.innerHTML);
       if(!portComponent) throw new Error(`${this.host.tagName.toLowerCase()}#${this.host.getAttribute('id')} is unable to locate portComponent named "${'#'+portId}" in ${programComponent.tagName.toLowerCase()}#${componentId}`)
 
@@ -421,6 +421,13 @@ export default class Cable extends Theoretical {
     monitorPosition2(attributeName, fun){
 
       const [programComponent, portComponent] = this.getProgramComponentAndPort(attributeName);
+      if(!programComponent) throw new Error('programComponent is required for operation')
+      if(!portComponent) throw new Error('portComponent is required for operation')
+      console.log(portComponent);
+      console.log(portComponent.shadowRoot);
+
+      if(!portComponent.shadowRoot) throw new Error('portComponent does not have shadowRoot')
+
       const portPad = portComponent.shadowRoot.querySelector('.valve');
 
       //console.log('EEE located port', programComponent.getAttribute('id'), portComponent);

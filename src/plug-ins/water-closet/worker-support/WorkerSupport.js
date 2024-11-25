@@ -60,7 +60,9 @@ export default Inheritance => class WorkerSupport extends Inheritance {
         buffer: this.buffer,
         stage: this.getStage().emitter,
         data: this.data,
-        cables: this.cables
+        cables: this.cables,
+        actor: this.actor, // bus
+
       };
 
       const type = this.workerType.value;

@@ -1,3 +1,7 @@
+## URGENT
+fix mutation detection in signal
+fix valve selector #id is used multiple times
+
 ## Phase 1
 - move stage markup to theme
 - move modal out of index

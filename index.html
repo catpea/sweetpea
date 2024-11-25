@@ -9,6 +9,11 @@
     {
       "imports": {
 
+        "async-macro": "./src/plug-ins/async-macro/macro.js",
+        "finder": "./src/plug-ins/finder/Finder.js",
+
+        "htl": "./src/plug-ins/sweetpea-htl/sweetpea-htl.js",
+
         "cable-store": "./src/plug-ins/cable-store/cableStore.js",
         "dataset-store": "./src/plug-ins/dataset-store/datasetStore.js",
         "system-parameters": "./src/plug-ins/system-parameters/SystemParameters.js",
@@ -86,6 +91,11 @@
     customElements.define(`${VPL_ELEMENT_PREFIX}-super`, SuperElement); // load super before cable
     customElements.define(`${VPL_ELEMENT_PREFIX}-cable`, CableElement); // load after super
 
+
+    import Finder from 'finder';
+    customElements.define(`app-finder`, Finder);
+
+
   </script>
 
   <script src="css/bootstrap.bundle.min.js"></script>
@@ -95,8 +105,8 @@
 
   <body oncontextmenu="return false;">
 
-  <x-stage controls minimap template="stage" theme="original">
-  </x-stage>
+  <x-stage controls minimap template="stage" theme="original"></x-stage>
+  <app-finder id="finder-1" data-label="System Browser"></app-finder>
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">

@@ -1,0 +1,19 @@
+{
+  "name": "sweetpea-htl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/esbuild index.js --bundle --platform=node --outfile=./sweetpea-htl.js --format=esm"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "esbuild": "0.23.1"
+  },
+  "dependencies": {
+    "htl": "^0.3.1"
+  }
+}
