@@ -30,6 +30,8 @@ export default class Connectable {
   }
 
   connectedCallback() {
+    console.log('SSS', this.element);
+
     this.element.style.position = 'absolute'; // Ensure the element is absolutely positioned
     this.element.addEventListener('mousedown', this.mouseDownHandler);
     document.addEventListener('mouseup', this.mouseUpHandler);
@@ -40,9 +42,22 @@ export default class Connectable {
     document.removeEventListener('mouseup', this.mouseUpHandler);
     document.removeEventListener('mousemove', this.mouseMoveHandler);
   }
+  get correctX() {
 
+    return 0;
+  }
+  get correctY() {
+    const scrollbar = window.pageYOffset;
+    const y = this.system.getStage().getBoundingClientRect().y;
+    const scale = this.element.getBoundingClientRect().width / this.element.offsetWidth;
+
+    let correct = y / scale ;
+    console.log('SSS', {correct, y, scrollbar});
+
+
+    return correct ;
+  }
   getCoordinates(){
-
     const scale = this.element.getBoundingClientRect().width / this.element.offsetWidth;
     let {x:elementX,y:elementY, width:elementW, height:elementH} = this.element.getBoundingClientRect();
     elementX = elementX / scale;
@@ -53,14 +68,12 @@ export default class Connectable {
     const centerH = elementH/2;
     let centeredX = elementX+centerW;
     let centeredY = elementY+centerH;
-
     const panZoom = this.system.findOut(this.element, `${VPL_ELEMENT_PREFIX}-stage`);
     let {x:panX,y:panY} = panZoom.pan;
     panX = panX / scale;
     panY = panY / scale;
     centeredX = centeredX - panX;
     centeredY = centeredY - panY;
-
     return [centeredX, centeredY];
   }
 
@@ -70,13 +83,32 @@ export default class Connectable {
 
     this.#dragging = true;
 
-    // offsetX gives you the horizontal coordinate relative to the target element
-    // clientX provides the mouse position relative to the viewport
-    // pageX provides the mouse position relative to the whole document
+    /*
+    clientX : The horizontal coordinate of the mouse pointer relative to the **viewport**, excluding any scroll offsets.
+    clientY - The vertical coordinate of the mouse pointer relative to the **viewport**, excluding any scroll offsets.
+
+    pageX - The horizontal coordinate of the mouse pointer relative to the **document** (including any scrolling).
+    pageY - The vertical coordinate of the mouse pointer relative to the **document** (including any scrolling).
+
+    screenX - The horizontal coordinate of the mouse pointer relative to the **screen's origin** (top-left corner of the screen).
+    screenY - The vertical coordinate of the mouse pointer relative to the **screen's origin** (top-left corner of the screen).
+
+    offsetX - The horizontal coordinate of the mouse pointer relative to the **target element** (e.g., an image or div), without any page or viewport offsets.
+    offsetY - The vertical coordinate of the mouse pointer relative to the **target element** (e.g., an image or div).
+
+    Note: The current ones are still widely used, while legacy ones like `layerX`, `layerY`, `screenLeft`, and `screenTop` are considered outdated and have been largely replaced by newer properties.
+    layerX** (legacy) - The horizontal coordinate of the mouse pointer relative to the **layer** of the event target (deprecated in modern browsers in favor of `offsetX`).
+    layerY** (legacy) - The vertical coordinate of the mouse pointer relative to the **layer** of the event target (deprecated in modern browsers in favor of `offsetY`).
+    screenLeft** (legacy) - The horizontal coordinate of the mouse pointer relative to the **screen's left edge**, similar to `screenX` (but deprecated).
+    screenTop** (legacy) - The vertical coordinate of the mouse pointer relative to the **screen's top edge**, similar to `screenY` (but deprecated).
+    */
+
+    // WHERE IN THE PORT THE CLICK WAS MADE
     this.#touchdownOffsetX = event.offsetX;
     this.#touchdownOffsetY = event.offsetY;
 
-    const [x1, y1] = this.getCoordinates();
+    let [x1, y1] = this.getCoordinates();
+
     // console.log( event, `${x1}x${y1} ${event.screenX}x${event.screenY}`);
 
     const scale = this.element.getBoundingClientRect().width / this.element.offsetWidth;
@@ -88,10 +120,10 @@ export default class Connectable {
 
     this.#svg = this.system.getStage().shadowRoot.querySelector('svg');
     this.#line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    this.#line.setAttribute('x1', x1);
-    this.#line.setAttribute('y1', y1);
-    this.#line.setAttribute('x2', x1); //NOTE: set to x1 as it is initially a point
-    this.#line.setAttribute('y2', y1); //NOTE: set to y1 as it is initially a point
+    this.#line.setAttribute('x1', x1-this.correctX);
+    this.#line.setAttribute('y1', y1-this.correctY);
+    this.#line.setAttribute('x2', x1-this.correctX); //NOTE: set to x1 as it is initially a point
+    this.#line.setAttribute('y2', y1-this.correctY); //NOTE: set to y1 as it is initially a point
     this.#line.setAttribute('stroke', this.#stroke);
     this.#line.setAttribute('stroke-width', this.#strokeWidth);
     this.#svg.appendChild(this.#line);
@@ -102,8 +134,8 @@ export default class Connectable {
 
     // Initialize previousN
     // NOTE: a sister call must be made at the end of mouseMoveHandler
-    this.#previousX = event.screenX;
-    this.#previousY = event.screenY;
+    this.#previousX = event.clientX;
+    this.#previousY = event.clientY;
 
 
 
@@ -119,8 +151,8 @@ export default class Connectable {
 
     // Calculate Relative Delta
     // NOTE: this depends on "Update previousN" and we just substract to get a -n or +n from the last few dozen miliseconds
-    let deltaX = (this.#previousX - event.screenX);
-    let deltaY = (this.#previousY - event.screenY);
+    let deltaX = (this.#previousX - event.clientX);
+    let deltaY = (this.#previousY - event.clientY);
 
     // Apply scale transformation if any to delta (which uses screen pixels)
     // NOTE: deltaN calculations use screenN which is an untransformed pixel, but we maybe zoomed in/out so we account for that.
@@ -144,15 +176,15 @@ export default class Connectable {
     this.rawX = x;
     this.rawY = y;
 
-    this.finalX = x+diffX;
-    this.finalY = y+diffY;
+    this.finalX = (x+diffX);
+    this.finalY = (y+diffY);
 
-    this.#line.setAttribute('x2', this.finalX); // initially a point
-    this.#line.setAttribute('y2', this.finalY); // initially a point
+    this.#line.setAttribute('x2', this.finalX-this.correctX); // initially a point
+    this.#line.setAttribute('y2', this.finalY-this.correctY); // initially a point
 
     // Update previousN - get ready for next update
-    this.#previousX = event.screenX;
-    this.#previousY = event.screenY;
+    this.#previousX = event.clientX;
+    this.#previousY = event.clientY;
 
     }
 

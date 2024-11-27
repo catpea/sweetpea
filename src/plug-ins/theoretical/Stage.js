@@ -364,8 +364,8 @@ export default class Stage extends Theoretical {
     let zoom = stage.zoom;
 
     // using clicked coordinates
-    let x = e.clientX;
-    let y = e.clientY;
+    let x = e.offsetX;
+    let y = e.offsetY;
 
     // transform them with zoom
     x = x / zoom;

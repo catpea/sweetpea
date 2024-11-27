@@ -213,19 +213,32 @@ export default class Cable extends Theoretical {
   }
 
 
-
-
+  correct() {
+    const scrollbarX = window.pageXOffset;
+    const scrollbarY = window.pageYOffset;
+    const x = this.getStage().getBoundingClientRect().x+scrollbarX;
+    const y = this.getStage().getBoundingClientRect().y+scrollbarY;
+    let correctX = x / this.getStage().zoom ;
+    let correctY = y / this.getStage().zoom ;
+    console.log('XXX', y,  this.getStage().zoom, correctX, correctY);
+    return { correctX, correctY };
+  }
+  get correctX() {return this.correct().correctX}
+  get correctY(){return this.correct().correctY}
 
 
 
 
     monitorSourcePosition(){
-      this.monitorPosition('from', (x,y)=>{ this.#x1.set(x); this.#y1.set(y); });
+
+
+      this.monitorPosition('from', (x,y)=>{ this.#x1.set(x-this.correctX); this.#y1.set(y-this.correctY); });
       return this;
     }
 
     monitorTargetPosition(){
-      this.monitorPosition('to', (x,y)=>{ this.#x2.set(x); this.#y2.set(y); });
+
+      this.monitorPosition('to', (x,y)=>{ this.#x2.set(x-this.correctX); this.#y2.set(y-this.correctY); });
       return this;
     }
 

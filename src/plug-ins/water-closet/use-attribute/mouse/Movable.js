@@ -1,3 +1,4 @@
+// updated screen to client
 export default class Movable {
   element;
   system;
@@ -38,8 +39,8 @@ export default class Movable {
 
     // Initialize previousN
     // NOTE: a sister call must be made at the end of mouseMoveHandler
-    this.#previousX = event.screenX;
-    this.#previousY = event.screenY;
+    this.#previousX = event.clientX;
+    this.#previousY = event.clientY;
 
     document.addEventListener('mousemove', this.mouseMoveHandler);
   }
@@ -52,8 +53,8 @@ export default class Movable {
 
       // Calculate Relative Delta
       // NOTE: this depends on "Update previousN" and we just substract to get a -n or +n from the last few dozen miliseconds
-      let deltaX = (this.#previousX - event.screenX);
-      let deltaY = (this.#previousY - event.screenY);
+      let deltaX = (this.#previousX - event.clientX);
+      let deltaY = (this.#previousY - event.clientY);
 
       // Apply scale transformation if any to delta (which uses screen pixels)
       // NOTE: deltaN calculations use screenN which is an untransformed pixel, but we maybe zoomed in/out so we account for that.
@@ -79,8 +80,8 @@ export default class Movable {
       this.system.host.setAttribute('y', y);
 
       // Update previousN - get ready for next update
-      this.#previousX = event.screenX;
-      this.#previousY = event.screenY;
+      this.#previousX = event.clientX;
+      this.#previousY = event.clientY;
 
     }
 
