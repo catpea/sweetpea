@@ -9,6 +9,8 @@
     {
       "imports": {
 
+        "xml-parser": "./src/plug-ins/xml-parser/XmlParser.js",
+
         "async-macro": "./src/plug-ins/async-macro/macro.js",
         "finder": "./src/plug-ins/finder/Finder.js",
 
@@ -75,11 +77,16 @@
 
 
 
+    import XmlParser from 'xml-parser';
+    const parser = new XmlParser();
+    const architecture = await (await fetch('./src/architecture.xml')).text();
+    const parsedObject = parser.parse(architecture);
+    console.log( parsedObject );
+
     import masticator from 'masticator';
     await masticator('css/style.css', 'css/bootstrap.min.css','css/bootstrap-icons.min.css');
 
     import {StageElement, CableElement, ValveElement, SuperElement } from 'theoretical';
-
     await StageElement.load();
     await ValveElement.load();
     await CableElement.load();
@@ -90,7 +97,6 @@
     customElements.define(`${VPL_ELEMENT_PREFIX}-valve`, ValveElement);
     customElements.define(`${VPL_ELEMENT_PREFIX}-super`, SuperElement); // load super before cable
     customElements.define(`${VPL_ELEMENT_PREFIX}-cable`, CableElement); // load after super
-
 
     import Finder from 'finder';
     customElements.define(`app-finder`, Finder);
@@ -105,8 +111,8 @@
 
   <body oncontextmenu="return false;">
 
-  <app-finder id="finder-1" data-label="System Browser"></app-finder>
   <x-stage controls minimap template="stage" theme="original"></x-stage>
+  <app-finder id="finder-1" data-label="System Browser"></app-finder>
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">

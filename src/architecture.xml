@@ -1,0 +1,117 @@
+<architecture author="catpea" version="1">
+
+  <operating-system>
+    <importmap>
+      <!-- Data Handling -->
+      <import name="xml-parser" from="./src/plug-ins/xml-parser/XmlParser.js"/>
+      <import name="dataset-store" from="./src/plug-ins/dataset-store/datasetStore.js"/>
+      <import name="system-parameters" from="./src/plug-ins/system-parameters/SystemParameters.js"/>
+      <import name="state-machine" from="./src/plug-ins/state-machine/StateMachine.js"/>
+
+      <!-- Utility -->
+      <import name="isEqual" from="./src/plug-ins/is-equal/isEqual.js"/>
+      <import name="cloneDeep" from="./src/plug-ins/clone-deep/cloneDeep.js"/>
+      <import name="debounce" from="./src/plug-ins/debounce/index.js"/>
+
+      <!-- UI and Interaction -->
+      <import name="view" from="./src/plug-ins/view/View.js"/>
+      <import name="movable" from="./src/plug-ins/mouse/Movable.js"/>
+      <import name="connectable" from="./src/plug-ins/mouse/Connectable.js"/>
+
+      <!-- System and Integration -->
+      <import name="system-integration" from="./src/plug-ins/system-integration/SystemIntegration.js"/>
+      <import name="event-emitter" from="./src/plug-ins/event-emitter/EventEmitter.js"/>
+      <import name="relay-control" from="./src/plug-ins/relay-control/RelayControl.js"/>
+
+      <!-- Workflow and Queues -->
+      <import name="work-queue" from="./src/plug-ins/work-queue/WorkQueue.js"/>
+      <import name="job-buffer" from="./src/plug-ins/job-buffer/JobBuffer.js"/>
+      <import name="job-queue" from="./src/plug-ins/job-queue/JobQueue.js"/>
+
+      <!-- Theoretical and Experimental -->
+      <import name="theoretical" from="./src/plug-ins/theoretical/index.js"/>
+      <import name="masticator" from="./src/plug-ins/masticator/index.js"/>
+
+      <!-- Miscellaneous -->
+      <import name="string-bikini" from="./src/plug-ins/string-bikini/index.js"/>
+      <import name="signal" from="./src/plug-ins/signal/Signal.js"/>
+      <import name="signal-merge" from="./src/plug-ins/signal-merge/index.js"/>
+      <import name="water-closet" from="./src/plug-ins/water-closet/WaterCloset.js"/>
+
+      <!-- Specialized -->
+      <import name="htl" from="./src/plug-ins/sweetpea-htl/sweetpea-htl.js"/>
+      <import name="cable-store" from="./src/plug-ins/cable-store/cableStore.js"/>
+      <import name="finder" from="./src/plug-ins/finder/Finder.js"/>
+      <import name="automatic-transmission" from="./src/plug-ins/automatic-transmission/AutomaticTransmission.js"/>
+
+    </importmap>
+  </operating-system>
+
+  <dependencies>
+
+  <!-- CSS Imports -->
+    <css>
+      <!-- Core Stylesheets -->
+      <import from="css/style.css"/>
+      <import from="css/bootstrap.min.css"/>
+      <import from="css/bootstrap-icons.min.css"/>
+    </css>
+
+    <!-- JS Imports -->
+    <js>
+      <!-- Core JavaScript -->
+      <import from="css/bootstrap.bundle.min.js"/>
+    </js>
+
+  </dependencies>
+
+  <applications>
+
+    <vpl>
+      <import from="stage"/>
+      <import from="valve"/>
+      <import from="super"/>
+      <import from="cable"/>
+
+      <!-- Element Imports: Define Traits and Features -->
+        <element-traits>
+          <!-- Core Functionalities -->
+          <import name="Garbage" from="garbage/Garbage.js"/>
+          <import name="Macro" from="macro/Macro.js"/>
+          <import name="Core" from="core/Core.js"/>
+          <import name="Theme" from="theme/Theme.js"/>
+          <import name="Data" from="data/Data.js"/>
+
+          <!-- Communication and Data Handling -->
+          <import name="Cables" from="cables/Cables.js"/>
+          <import name="Data Context" from="data-context/DataContext.js"/>
+          <import name="Element Search" from="element-search/ElementSearch.js"/>
+          <import name="Logging" from="logging/Logging.js"/>
+          <import name="Curlies" from="curlies/Curlies.js"/>
+
+          <!-- Workflow and Event Handling -->
+          <import name="Flow Support" from="flow-support/FlowSupport.js"/>
+          <import name="Worker Support" from="worker-support/WorkerSupport.js"/>
+          <import name="Element View" from="element-view/ElementView.js"/>
+          <import name="Use Attribute" from="use-attribute/UseAttribute.js"/>
+          <import name="Animation" from="animation/Animation.js"/>
+
+          <!-- Project and Visual Programming -->
+          <import name="Project" from="project/Project.js"/>
+          <import name="Visual Programming" from="visual-programming/VisualProgramming.js"/>
+
+          <!-- System Management and Interaction -->
+          <import name="Queue And Buffer" from="queue-and-buffer/QueueAndBuffer.js"/>
+          <import name="Actor Integration" from="actor-integration/ActorIntegration.js"/>
+          <import name="Selection Manager" from="selection-manager/SelectionManager.js"/>
+          <import name="Component Events" from="component-events/ComponentEvents.js"/>
+        </element-traits>
+    </vpl>
+
+    <finder>
+      <import from="finder"/>
+    </finder>
+
+  </applications>
+
+</architecture>

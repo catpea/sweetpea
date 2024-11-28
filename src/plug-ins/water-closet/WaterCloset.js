@@ -15,10 +15,10 @@ import UseAttribute from './use-attribute/UseAttribute.js';
 import Animation from './animation/Animation.js';
 import Project from './project/Project.js';
 import VisualProgramming from './visual-programming/VisualProgramming.js';
+import QueueAndBuffer from './queue-and-buffer/QueueAndBuffer.js';
 import ActorIntegration from './actor-integration/ActorIntegration.js';
 import SelectionManager from './selection-manager/SelectionManager.js';
 import ComponentEvents from './component-events/ComponentEvents.js';
-import QueueAndBuffer from './queue-and-buffer/QueueAndBuffer.js';
 
 export default function(){
 
@@ -48,7 +48,6 @@ export default function(){
   ];
 
   const Inheritance = plugins.reduce( (Composition, Class) => Class(Composition), class Root {} );
-
   return Inheritance;
 
 }
