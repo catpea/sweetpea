@@ -1,0 +1,645 @@
+{
+  "type": "Document",
+  "children": [
+    {
+      "type": "Element",
+      "name": "architecture",
+      "attributes": {
+        "author": "catpea",
+        "version": "1"
+      },
+      "children": [
+        {
+          "type": "Element",
+          "name": "operating-system",
+          "attributes": "",
+          "children": [
+            {
+              "type": "Element",
+              "name": "importmap",
+              "attributes": "",
+              "children": [
+                {
+                  "type": "Comment",
+                  "value": "Data Handling"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "xml-parser",
+                    "from": "./src/plug-ins/xml-parser/XmlParser.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "dataset-store",
+                    "from": "./src/plug-ins/dataset-store/datasetStore.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "system-parameters",
+                    "from": "./src/plug-ins/system-parameters/SystemParameters.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "state-machine",
+                    "from": "./src/plug-ins/state-machine/StateMachine.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "Utility"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "isEqual",
+                    "from": "./src/plug-ins/is-equal/isEqual.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "cloneDeep",
+                    "from": "./src/plug-ins/clone-deep/cloneDeep.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "debounce",
+                    "from": "./src/plug-ins/debounce/index.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "UI and Interaction"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "view",
+                    "from": "./src/plug-ins/view/View.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "movable",
+                    "from": "./src/plug-ins/mouse/Movable.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "connectable",
+                    "from": "./src/plug-ins/mouse/Connectable.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "System and Integration"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "system-integration",
+                    "from": "./src/plug-ins/system-integration/SystemIntegration.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "event-emitter",
+                    "from": "./src/plug-ins/event-emitter/EventEmitter.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "relay-control",
+                    "from": "./src/plug-ins/relay-control/RelayControl.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "Workflow and Queues"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "work-queue",
+                    "from": "./src/plug-ins/work-queue/WorkQueue.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "job-buffer",
+                    "from": "./src/plug-ins/job-buffer/JobBuffer.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "job-queue",
+                    "from": "./src/plug-ins/job-queue/JobQueue.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "Theoretical and Experimental"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "theoretical",
+                    "from": "./src/plug-ins/theoretical/index.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "masticator",
+                    "from": "./src/plug-ins/masticator/index.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "Miscellaneous"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "string-bikini",
+                    "from": "./src/plug-ins/string-bikini/index.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "signal",
+                    "from": "./src/plug-ins/signal/Signal.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "signal-merge",
+                    "from": "./src/plug-ins/signal-merge/index.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "water-closet",
+                    "from": "./src/plug-ins/water-closet/WaterCloset.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "Specialized"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "htl",
+                    "from": "./src/plug-ins/sweetpea-htl/sweetpea-htl.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "cable-store",
+                    "from": "./src/plug-ins/cable-store/cableStore.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "finder",
+                    "from": "./src/plug-ins/finder/Finder.js"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "name": "automatic-transmission",
+                    "from": "./src/plug-ins/automatic-transmission/AutomaticTransmission.js"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Element",
+          "name": "dependencies",
+          "attributes": "",
+          "children": [
+            {
+              "type": "Comment",
+              "value": "CSS Imports"
+            },
+            {
+              "type": "Element",
+              "name": "css",
+              "attributes": "",
+              "children": [
+                {
+                  "type": "Comment",
+                  "value": "Core Stylesheets"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "css/style.css"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "css/bootstrap.min.css"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "css/bootstrap-icons.min.css"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "Comment",
+              "value": "JS Imports"
+            },
+            {
+              "type": "Element",
+              "name": "js",
+              "attributes": "",
+              "children": [
+                {
+                  "type": "Comment",
+                  "value": "Core JavaScript"
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "css/bootstrap.bundle.min.js"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Element",
+          "name": "applications",
+          "attributes": "",
+          "children": [
+            {
+              "type": "Element",
+              "name": "vpl",
+              "attributes": "",
+              "children": [
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "stage"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "valve"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "super"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "cable"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "Comment",
+                  "value": "Element Imports: Define Traits and Features"
+                },
+                {
+                  "type": "Element",
+                  "name": "element-traits",
+                  "attributes": "",
+                  "children": [
+                    {
+                      "type": "Comment",
+                      "value": "Core Functionalities"
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Garbage",
+                        "from": "garbage/Garbage.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Macro",
+                        "from": "macro/Macro.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Core",
+                        "from": "core/Core.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Theme",
+                        "from": "theme/Theme.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Data",
+                        "from": "data/Data.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Comment",
+                      "value": "Communication and Data Handling"
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Cables",
+                        "from": "cables/Cables.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Data Context",
+                        "from": "data-context/DataContext.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Element Search",
+                        "from": "element-search/ElementSearch.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Logging",
+                        "from": "logging/Logging.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Curlies",
+                        "from": "curlies/Curlies.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Comment",
+                      "value": "Workflow and Event Handling"
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Flow Support",
+                        "from": "flow-support/FlowSupport.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Worker Support",
+                        "from": "worker-support/WorkerSupport.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Element View",
+                        "from": "element-view/ElementView.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Use Attribute",
+                        "from": "use-attribute/UseAttribute.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Animation",
+                        "from": "animation/Animation.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Comment",
+                      "value": "Project and Visual Programming"
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Project",
+                        "from": "project/Project.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Visual Programming",
+                        "from": "visual-programming/VisualProgramming.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Comment",
+                      "value": "System Management and Interaction"
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Queue And Buffer",
+                        "from": "queue-and-buffer/QueueAndBuffer.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Actor Integration",
+                        "from": "actor-integration/ActorIntegration.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Selection Manager",
+                        "from": "selection-manager/SelectionManager.js"
+                      },
+                      "children": []
+                    },
+                    {
+                      "type": "Element",
+                      "name": "import",
+                      "attributes": {
+                        "name": "Component Events",
+                        "from": "component-events/ComponentEvents.js"
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Element",
+              "name": "finder",
+              "attributes": "",
+              "children": [
+                {
+                  "type": "Element",
+                  "name": "import",
+                  "attributes": {
+                    "from": "finder"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
